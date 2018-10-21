@@ -3,7 +3,7 @@ Contributors: technote-space
 Tags: contact, form, contact form, file upload
 Requires at least: 3.9
 Tested up to: 4.9
-Stable tag: 1.0.0.0
+Stable tag: 1.0.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,14 +18,14 @@ This plugin needs PHP5.6 or higher.
 
 == Installation ==
 
-1. Upload the `wp-related-post-jp` folder to the `/wp-content/plugins/` directory.
+1. Upload the `contact-form-7-huge-file-upload` folder to the `/wp-content/plugins/` directory.
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Screenshots ==
 
 == Changelog ==
 
-= 1.0.0.0 =
+= 1.0.0.1 =
 
 * First release
 

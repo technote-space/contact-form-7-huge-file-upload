@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.0
+ * @version 1.0.0.1
  * @author technote-space
  * @since 1.0.0.0
  * @copyright technote All Rights Reserved
@@ -13,5 +13,68 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 }
 
 return [
+
+	9 => [
+		'Upload'           => [
+			10 => [
+				'output_max_size_settings' => [
+					'label'   => 'Whether to output upload file size settings to .htaccess file.',
+					'type'    => 'bool',
+					'default' => true,
+				],
+				'huge_file_class'          => [
+					'label'   => 'Class name to determine whether it is target or not.',
+					'default' => 'fileupload',
+				],
+				'max_chunk_size'           => [
+					'label'   => 'Max size of post data.',
+					'type'    => 'int',
+					'min'     => 100 * 1024,
+					'default' => 4 * 1024 * 1024,
+				],
+				'max_filesize'             => [
+					'label'   => 'Max size of upload file.',
+					'type'    => 'int',
+					'min'     => 1 * 1024 * 1024,
+					'default' => 300 * 1024 * 1024,
+				],
+			],
+		],
+		'Custom Post Type' => [
+			10 => [
+				'file_post_title'         => [
+					'label'   => 'Post title',
+					'default' => 'Uploaded at ${Y}/${m}/${d} ${H}:${i}:${s}',
+				],
+				'file_post_menu_position' => [
+					'label'   => 'Post menu position',
+					'type'    => 'int',
+					'default' => 5,
+					'min'     => 0,
+				],
+			],
+		],
+		'File'             => [
+			10 => [
+				'is_valid_auto_delete'  => [
+					'label'   => 'Whether to delete old tmp upload file.',
+					'type'    => 'bool',
+					'default' => true,
+				],
+				'delete_file_interval'  => [
+					'label'   => 'Interval to run process to delete old tmp upload file.',
+					'type'    => 'int',
+					'default' => 24 * 60 * 60,
+					'min'     => 60,
+				],
+				'delete_file_threshold' => [
+					'label'   => 'Threshold to determine the file is old or not.',
+					'type'    => 'int',
+					'default' => 24 * 60 * 60,
+					'min'     => 60,
+				],
+			],
+		],
+	],
 
 ];
