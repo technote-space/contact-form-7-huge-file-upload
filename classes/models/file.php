@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.2
+ * @version 1.0.0.3
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -237,6 +237,7 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			'menu_name'     => $this->app->translate( 'Files' ),
 			'all_items'     => $this->app->translate( 'All Files' ),
 			'add_new'       => $this->app->translate( 'Upload Files' ),
+			'edit_item'     => $this->app->translate( 'Edit File' ),
 			'search_items'  => $this->app->translate( 'Search Files' ),
 		] );
 	}

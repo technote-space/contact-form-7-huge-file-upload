@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cf7-hfu\n"
 "POT-Creation-Date: 2018-07-01 17:47+0900\n"
-"PO-Revision-Date: 2018-10-18 15:55+0900\n"
+"PO-Revision-Date: 2018-10-21 16:34+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -13,5 +13,65 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Language: ja\n"
 
-msgid "Search"
-msgstr "検索"
+msgid "Upload"
+msgstr "アップロード"
+
+msgid "Custom Post Type"
+msgstr "カスタム投稿タイプ"
+
+msgid "File"
+msgstr "ファイル"
+
+msgid "Whether to output upload file size settings to .htaccess file."
+msgstr "アップロードサイズに関する設定を[.htaccess]ファイルに出力するかどうか"
+
+msgid "Class name to determine whether it is target or not."
+msgstr "このプラグインで扱う対象かどうか判定ためのクラス名"
+
+msgid "Max size of post data."
+msgstr "分割ファイルサイズ"
+
+msgid "Max size of upload file."
+msgstr "最大ファイルサイズ"
+
+msgid "Post title"
+msgstr "投稿タイトル"
+
+msgid "Post menu position"
+msgstr "メニュー位置"
+
+msgid "Whether to delete old tmp upload file."
+msgstr "古い一時ファイルを削除するかどうか"
+
+msgid "Interval to run process to delete old tmp upload file."
+msgstr "古い一時ファイル削除プロセス実行間隔"
+
+msgid "Threshold to determine the file is old or not."
+msgstr "古いかどうか判定する際の閾値"
+
+msgid "File List"
+msgstr "ファイル一覧"
+
+msgid "File Name"
+msgstr "ファイル名"
+
+msgid "File Size"
+msgstr "ファイルサイズ"
+
+msgid "Download"
+msgstr "ダウンロード"
+
+msgid "Files"
+msgstr "ファイル"
+
+msgid "All Files"
+msgstr "全てのファイル"
+
+msgid "Upload Files"
+msgstr "ファイルをアップロード"
+
+msgid "Search Files"
+msgstr "ファイルを検索"
+
+msgid "Edit File"
+msgstr "ファイル情報を編集"

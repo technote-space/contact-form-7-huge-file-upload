@@ -25,7 +25,7 @@ This plugin needs PHP5.6 or higher.
 
 == Changelog ==
 
-= 1.0.0.2 =
+= 1.0.0.3 =
 
 * First release
 
