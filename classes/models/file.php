@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.3
+ * @version 1.0.0.4
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -466,7 +466,7 @@ EOS;
 			throw new \Exception( $attach_id->get_error_message() );
 		}
 		$attach_data = wp_generate_attachment_metadata( $attach_id, $params['new_file'] );
-		if ( false === wp_update_attachment_metadata( $attach_id, $attach_data ) ) {
+		if ( ! empty( $attach_data ) && false === wp_update_attachment_metadata( $attach_id, $attach_data ) ) {
 			throw new \Exception( 'Failed to update attachment metadata.' );
 		}
 		if ( false === update_attached_file( $attach_id, $params['new_file'] ) ) {
