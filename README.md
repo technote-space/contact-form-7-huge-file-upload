@@ -1,5 +1,5 @@
 # Contact Form 7 huge file upload
-Contact Form 7 の機能を拡張するプラグインです。
+Contact Form 7 の機能を拡張するプラグインです。  
 通常アップロードできないような大容量のファイルをアップロードできるようになります。
 
 # スクリーンショット
