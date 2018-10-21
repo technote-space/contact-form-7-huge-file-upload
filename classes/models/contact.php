@@ -251,7 +251,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 					throw $e;
 				}
 			} catch ( \Exception $e ) {
-				rename( $params['new_file'], $params['tmp_file'] );
+				@unlink( $params['new_file'] );
 				throw $e;
 			}
 		}
