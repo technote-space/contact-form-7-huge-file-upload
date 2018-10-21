@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.5
+ * @version 1.0.0.6
  * @author technote-space
  * @since 1.0.0.0
  * @copyright technote All Rights Reserved
@@ -72,6 +72,18 @@ return [
 		'edit_form_after_title'        => [
 			'edit_form_after_title' => [],
 		],
+		'admin_menu'                   => [
+			'setup_download_page' => [],
+		],
+		'manage_posts_columns'         => [
+			'delete_check_box' => [],
+		],
+		'post_row_actions'             => [
+			'delete_edit_links' => [],
+		],
+		'admin_init'                   => [
+			'redirect_to_download_page' => [],
+		],
 	],
 
 	'\Cf7_Hfu\Models\Capability' => [
@@ -81,8 +93,11 @@ return [
 		'${prefix}app_deactivated' => [
 			'unset_capability' => [],
 		],
-		'${prefix}changed_option' => [
+		'${prefix}changed_option'  => [
 			'reset_capability' => [],
+		],
+		'custom_menu_order'        => [
+			'filter_wp_menu_nopriv' => [],
 		],
 	],
 ];

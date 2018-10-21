@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.5
+ * @version 1.0.0.6
  * @author technote-space
  * @since 1.0.0.2
  * @copyright technote All Rights Reserved
@@ -32,26 +32,30 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 			<?php foreach ( $list as $item ): ?>
 				<?php if ( empty( $item['name'] ) ): ?>
                     <tr>
-                        <td colspan="3"><?php $instance->h( 'File has been deleted.' ); ?></td>
-                    </tr>
-				<?php elseif ( ! $item['can_edit'] ): ?>
-                    <tr>
-                        <td><?php $instance->h( $item['name'] ); ?></td>
-                        <td><?php $instance->h( $item['size'] ); ?></td>
-                        <td></td>
+                        <td colspan="3"><?php $instance->h( 'This file has been deleted.', true ); ?></td>
                     </tr>
 				<?php else: ?>
                     <tr>
-                        <td><?php $instance->url( $item['edit_link'], $item['name'], false, true ); ?></td>
+                        <td>
+							<?php if ( $item['can_edit'] ): ?>
+								<?php $instance->url( $item['edit_link'], $item['name'], false, true ); ?>
+							<?php else: ?>
+								<?php $instance->h( $item['name'] ); ?>
+							<?php endif; ?>
+                        </td>
                         <td><?php $instance->h( $item['size'] ); ?></td>
-                        <td><?php $instance->form( 'input/button', $args, [
-								'class'      => 'button-primary download-file',
-								'name'       => 'download',
-								'value'      => 'Download',
-								'attributes' => [
-									'data-url' => $item['url'],
-								],
-							] ); ?></td>
+                        <td>
+							<?php if ( $item['can_download'] ): ?>
+								<?php $instance->form( 'input/button', $args, [
+									'class'      => 'button-primary download-file',
+									'name'       => 'download',
+									'value'      => 'Download',
+									'attributes' => [
+										'data-url' => $item['url'],
+									],
+								] ); ?>
+							<?php endif; ?>
+                        </td>
                     </tr>
 				<?php endif; ?>
 			<?php endforeach; ?>

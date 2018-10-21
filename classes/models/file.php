@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.5
+ * @version 1.0.0.6
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -163,29 +163,127 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		if ( $post->post_type !== $this->get_file_post_type() ) {
 			return;
 		}
-		$list = array_map( function ( $file_id ) {
-			$post       = get_post( $file_id );
-			$access_key = empty( $post ) ? false : $this->app->post->get( 'access_key', $file_id );
-			$can_edit   = empty( $access_key ) ? false : $this->check_can_edit( $file_id );
-			$url        = empty( $access_key ) ? false : $this->get_access_url( $access_key );
-			$edit_link  = empty( $access_key ) ? false : get_edit_post_link( $file_id, 'link' );
-			$size       = empty( $access_key ) ? false : $this->get_appropriate_size_format_callback( $this->app->post->get( 'size', $file_id ), function ( $size, $norm, $unit ) {
-				return round( $size / $norm, 2 ) . $unit . 'B';
-			} );
-			$name       = empty( $post ) ? '' : $post->post_title;
 
-			return [
-				'can_edit'  => $can_edit,
-				'url'       => $url,
-				'edit_link' => $edit_link,
-				'name'      => $name,
-				'size'      => $size,
-			];
-		}, $this->get_file_ids( $post->ID ) );
 		$this->add_script_view( 'admin/script/file_list' );
 		$this->get_view( 'admin/file_list', [
-			'list' => $list,
+			'list' => $this->get_file_list( $post ),
 		], true );
+	}
+
+	/**
+	 * setup download page
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function setup_download_page() {
+		/** @var Capability $capability */
+		$capability = Capability::get_instance( $this->app );
+		if ( in_array( $this->app->user->user_role, $capability->get_downloadable_roles() ) && ! in_array( $this->app->user->user_role, $capability->get_editable_roles() ) ) {
+			$slug = $this->get_download_page_slug();
+			$this->add_style_view( 'admin/style/show_file_post', [
+				'selector' => '#toplevel_page_' . $slug,
+			] );
+			$this->add_script_view( 'admin/script/file_list' );
+			add_menu_page( 'Download', 'Download', $this->app->user->user_role, $slug, function () {
+				$post_id = $this->app->input->get( 'post_id' );
+				if ( empty( $post_id ) || ! $this->check_can_download( $post_id ) || ! ( $post = get_post( $post_id ) ) ) {
+					$list = false;
+					$post = false;
+				} else {
+					$list = $this->get_file_list( $post );
+				}
+				$this->get_view( 'admin/show_file_post', [
+					'list' => $list,
+					'post' => $post,
+				], true );
+			}, 'dashicons-admin-media' );
+		}
+	}
+
+	/**
+	 * @param array $columns
+	 * @param string $post_type
+	 *
+	 * @return array
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function delete_check_box( $columns, $post_type ) {
+		if ( $post_type === $this->get_file_post_type() ) {
+			/** @var Capability $capability */
+			$capability = Capability::get_instance( $this->app );
+			if ( ! in_array( $this->app->user->user_role, $capability->get_editable_roles() ) ) {
+				unset( $columns['cb'] );
+			}
+		}
+
+		return $columns;
+	}
+
+	/**
+	 * @param array $actions
+	 * @param \WP_Post $post
+	 *
+	 * @return array
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function delete_edit_links( $actions, $post ) {
+		if ( $post->post_type === $this->get_file_post_type() ) {
+			$post_type = get_post_type_object( $post->post_type );
+			if ( ! current_user_can( $post_type->cap->delete_posts ) ) {
+				unset( $actions['inline hide-if-no-js'] );
+				unset( $actions['edit'] );
+				unset( $actions['trash'] );
+				unset( $actions['clone'] );
+				unset( $actions['edit_as_new_draft'] );
+			}
+		}
+
+		return $actions;
+	}
+
+	/**
+	 * redirect to download page
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function redirect_to_download_page() {
+		global $pagenow;
+		if ( $pagenow !== 'post.php' || ! ( $post_id = $this->app->input->get( 'post' ) ) || ! ( $post = get_post( $post_id ) ) || $post->post_type !== $this->get_file_post_type() ) {
+			return;
+		}
+		/** @var Capability $capability */
+		$capability = Capability::get_instance( $this->app );
+		if ( in_array( $this->app->user->user_role, $capability->get_downloadable_roles() ) && ! in_array( $this->app->user->user_role, $capability->get_editable_roles() ) ) {
+			wp_safe_redirect( get_admin_url() . 'admin.php?page=' . $this->get_download_page_slug() . '&post_id=' . $post_id );
+			exit;
+		}
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 *
+	 * @return array
+	 */
+	private function get_file_list( $post ) {
+		return $list = array_map( function ( $file_id ) {
+			$post         = get_post( $file_id );
+			$access_key   = empty( $post ) ? false : $this->app->post->get( 'access_key', $file_id );
+			$can_edit     = empty( $access_key ) ? false : $this->check_can_edit( $file_id );
+			$can_download = empty( $access_key ) ? false : $this->check_can_download( $file_id );
+			$url          = empty( $access_key ) ? false : $this->get_access_url( $access_key );
+			$edit_link    = empty( $access_key ) ? false : get_edit_post_link( $file_id, 'link' );
+			$size         = empty( $access_key ) ? false : $this->get_appropriate_size_format_callback( $this->app->post->get( 'size', $file_id ), function ( $size, $norm, $unit ) {
+				return round( $size / $norm, 2 ) . $unit . 'B';
+			} );
+			$name         = empty( $post ) ? '' : $post->post_title;
+
+			return [
+				'can_edit'     => $can_edit,
+				'can_download' => $can_download,
+				'url'          => $url,
+				'edit_link'    => $edit_link,
+				'name'         => $name,
+				'size'         => $size,
+			];
+		}, $this->get_file_ids( $post->ID ) );
 	}
 
 	/**
@@ -193,6 +291,13 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 */
 	public function get_file_post_type() {
 		return $this->apply_filters( 'file_post_type', 'cf7_hfu' );
+	}
+
+	/**
+	 * @return string
+	 */
+	private function get_download_page_slug() {
+		return $this->apply_filters( 'download_page_slug', 'download-' . $this->get_file_post_type() );
 	}
 
 	/**

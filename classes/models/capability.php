@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.5
+ * @version 1.0.0.6
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -58,7 +58,7 @@ class Capability implements \Technote\Interfaces\Singleton, \Technote\Interfaces
 			$role = get_role( $role );
 			if ( $role ) {
 				foreach ( $this->get_capabilities() as $capability ) {
-					$role->add_cap( $capability, ! preg_match( '#^create_#', $capability ) && ! preg_match( '#^delete_#', $capability ) && strpos( $capability, '_others_' ) === false );
+					$role->add_cap( $capability, ! preg_match( '#^create_#', $capability ) && ! preg_match( '#^delete_#', $capability ) );
 				}
 			}
 		}
@@ -106,5 +106,25 @@ class Capability implements \Technote\Interfaces\Singleton, \Technote\Interfaces
 			$this->unset_capability();
 			$this->set_capability();
 		}
+	}
+
+	/**
+	 * @param bool $result
+	 *
+	 * @return bool
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function filter_wp_menu_nopriv( $result ) {
+		global $_wp_menu_nopriv, $_wp_submenu_nopriv, $pagenow, $typenow;
+		if ( 'edit.php' === $pagenow ) {
+			/** @var File $file */
+			$file = File::get_instance( $this->app );
+			if ( $file->get_file_post_type() === $typenow ) {
+				unset( $_wp_menu_nopriv[ $pagenow ] );
+				unset( $_wp_submenu_nopriv[ $pagenow ][ $pagenow ] );
+			}
+		}
+
+		return $result;
 	}
 }

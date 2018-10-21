@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cf7-hfu\n"
 "POT-Creation-Date: 2018-07-01 17:47+0900\n"
-"PO-Revision-Date: 2018-10-22 00:11+0900\n"
+"PO-Revision-Date: 2018-10-22 03:50+0900\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -84,3 +84,9 @@ msgstr "ファイルダをウンロード可能な権限グループ (カンマ�
 
 msgid "Logged in user's role to edit file (comma separated)."
 msgstr "ファイル情報を編集可能な権限グループ (カンマ区切り)"
+
+msgid "File not found."
+msgstr "ファイルが見つかりません"
+
+msgid "This file has been deleted."
+msgstr "このファイルは削除済みです。"
