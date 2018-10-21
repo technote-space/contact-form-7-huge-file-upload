@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.1
+ * @version 1.0.0.2
  * @author technote-space
  * @since 1.0.0.0
  * @copyright technote All Rights Reserved
@@ -68,6 +68,9 @@ return [
 		],
 		'wp_image_editors'             => [
 			'wp_image_editors' => [],
+		],
+		'edit_form_after_title'        => [
+			'edit_form_after_title' => [],
 		],
 	],
 

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.1
+ * @version 1.0.0.2
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -18,7 +18,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class File
  * @package Cf7_Hfu\Models
  */
-class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Uninstall {
+class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, \Technote\Interfaces\Uninstall {
 
 	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter, \Technote\Traits\Uninstall;
 
@@ -153,6 +153,39 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		}
 
 		return $image_editors;
+	}
+
+	/**
+	 * @param \WP_Post $post
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function edit_form_after_title( $post ) {
+		if ( $post->post_type !== $this->get_file_post_type() ) {
+			return;
+		}
+		$list = array_map( function ( $file_id ) {
+			$post         = get_post( $file_id );
+			$access_key   = empty( $post ) ? false : $this->app->post->get( 'access_key', $file_id );
+			$can_download = empty( $access_key ) ? false : $this->check_can_download( $file_id );
+			$url          = empty( $access_key ) ? false : $this->get_access_url( $access_key );
+			$edit_link    = empty( $access_key ) ? false : get_edit_post_link( $file_id, 'link' );
+			$size         = empty( $access_key ) ? false : $this->get_appropriate_size_format_callback( $this->app->post->get( 'size', $file_id ), function ( $size, $norm, $unit ) {
+				return round( $size / $norm, 2 ) . $unit . 'B';
+			} );
+			$name         = empty( $post ) ? '' : $post->post_title;
+
+			return [
+				'can_download' => $can_download,
+				'url'          => $url,
+				'edit_link'    => $edit_link,
+				'name'         => $name,
+				'size'         => $size,
+			];
+		}, $this->get_file_ids( $post->ID ) );
+		$this->add_script_view( 'admin/script/file_list' );
+		$this->get_view( 'admin/file_list', [
+			'list' => $list,
+		], true );
 	}
 
 	/**
@@ -368,13 +401,25 @@ EOS;
 	}
 
 	/**
-	 * @param $size
+	 * @param string $size
 	 *
 	 * @return int|string
 	 */
 	private function get_appropriate_size( $size ) {
+		return $this->get_appropriate_size_format_callback( $size, function ( $size, $norm, $unit ) {
+			return ceil( $size / $norm ) . $unit;
+		} );
+	}
+
+	/**
+	 * @param string $size
+	 * @param callable $callback
+	 *
+	 * @return int|string
+	 */
+	public function get_appropriate_size_format_callback( $size, $callback ) {
 		$size = trim( $size );
-		if ( ! ctype_digit( $size ) ) {
+		if ( '' === $size || ! ctype_digit( $size ) ) {
 			return $size;
 		}
 		$size -= 0;
@@ -383,13 +428,13 @@ EOS;
 		$gb   = $mb * $kb;
 		switch ( true ) {
 			case $size >= $gb:
-				return ceil( $size / $gb ) . 'G';
+				return $callback( $size, $gb, 'G' );
 			case $size >= $mb:
-				return ceil( $size / $mb ) . 'M';
+				return $callback( $size, $mb, 'M' );
 			case $size >= $kb:
-				return ceil( $size / $kb ) . 'K';
+				return $callback( $size, $kb, 'K' );
 			default:
-				return $size;
+				return $callback( $size, 1, '' );
 		}
 	}
 
@@ -430,6 +475,7 @@ EOS;
 		$params['access_url'] = $access_url;
 		$this->app->post->set( $attach_id, 'access_key', $access_key );
 		$this->app->post->set( $attach_id, 'extension', $params['extension'] );
+		$this->app->post->set( $attach_id, 'size', $params['size'] );
 
 		return $params;
 	}
