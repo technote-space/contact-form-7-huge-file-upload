@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.2
+ * @version 1.0.0.5
  * @author technote-space
  * @since 1.0.0.0
  * @copyright technote All Rights Reserved
@@ -80,6 +80,9 @@ return [
 		],
 		'${prefix}app_deactivated' => [
 			'unset_capability' => [],
+		],
+		'${prefix}changed_option' => [
+			'reset_capability' => [],
 		],
 	],
 ];

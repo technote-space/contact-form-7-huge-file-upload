@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.4
+ * @version 1.0.0.5
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -164,22 +164,22 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			return;
 		}
 		$list = array_map( function ( $file_id ) {
-			$post         = get_post( $file_id );
-			$access_key   = empty( $post ) ? false : $this->app->post->get( 'access_key', $file_id );
-			$can_download = empty( $access_key ) ? false : $this->check_can_download( $file_id );
-			$url          = empty( $access_key ) ? false : $this->get_access_url( $access_key );
-			$edit_link    = empty( $access_key ) ? false : get_edit_post_link( $file_id, 'link' );
-			$size         = empty( $access_key ) ? false : $this->get_appropriate_size_format_callback( $this->app->post->get( 'size', $file_id ), function ( $size, $norm, $unit ) {
+			$post       = get_post( $file_id );
+			$access_key = empty( $post ) ? false : $this->app->post->get( 'access_key', $file_id );
+			$can_edit   = empty( $access_key ) ? false : $this->check_can_edit( $file_id );
+			$url        = empty( $access_key ) ? false : $this->get_access_url( $access_key );
+			$edit_link  = empty( $access_key ) ? false : get_edit_post_link( $file_id, 'link' );
+			$size       = empty( $access_key ) ? false : $this->get_appropriate_size_format_callback( $this->app->post->get( 'size', $file_id ), function ( $size, $norm, $unit ) {
 				return round( $size / $norm, 2 ) . $unit . 'B';
 			} );
-			$name         = empty( $post ) ? '' : $post->post_title;
+			$name       = empty( $post ) ? '' : $post->post_title;
 
 			return [
-				'can_download' => $can_download,
-				'url'          => $url,
-				'edit_link'    => $edit_link,
-				'name'         => $name,
-				'size'         => $size,
+				'can_edit'  => $can_edit,
+				'url'       => $url,
+				'edit_link' => $edit_link,
+				'name'      => $name,
+				'size'      => $size,
 			];
 		}, $this->get_file_ids( $post->ID ) );
 		$this->add_script_view( 'admin/script/file_list' );
@@ -566,7 +566,44 @@ EOS;
 	 * @return bool
 	 */
 	private function check_can_download( $post_id ) {
-		return $this->apply_filters( 'can_download', true, $post_id, $this->app->user->user_id );
+		$can_download = true;
+		if ( $this->apply_filters( 'must_be_logged_in_to_download' ) ) {
+			if ( ! $this->app->user->logged_in ) {
+				$can_download = false;
+			} else {
+				/** @var Capability $capability */
+				$capability   = Capability::get_instance( $this->app );
+				$capabilities = $capability->get_downloadable_roles();
+				if ( ! in_array( 'all', $capabilities ) && ! in_array( $this->app->user->user_role, $capabilities ) ) {
+					$can_download = false;
+				}
+			}
+		}
+
+		return $this->apply_filters( 'can_download', $can_download, $post_id, $this->app->user->user_data );
+	}
+
+	/**
+	 * @param int $post_id
+	 *
+	 * @return bool
+	 */
+	private function check_can_edit( $post_id ) {
+		$can_edit = $this->check_can_download( $post_id );
+		if ( $can_edit ) {
+			if ( ! $this->app->user->logged_in ) {
+				$can_edit = false;
+			} else {
+				/** @var Capability $capability */
+				$capability   = Capability::get_instance( $this->app );
+				$capabilities = $capability->get_editable_roles();
+				if ( ! in_array( 'all', $capabilities ) && ! in_array( $this->app->user->user_role, $capabilities ) ) {
+					$can_edit = false;
+				}
+			}
+		}
+
+		return $this->apply_filters( 'can_edit', $can_edit, $post_id, $this->app->user->user_data );
 	}
 
 	/**
@@ -584,6 +621,14 @@ EOS;
 		}
 
 		if ( ! $this->check_can_download( $post_id ) ) {
+			if ( ! $this->app->user->logged_in && $this->apply_filters( 'must_be_logged_in_to_download' ) ) {
+				$post_id = $this->app->post->first( 'file_id', $post_id );
+				if ( ! empty( $post_id ) && ( $redirect = $this->get_edit_post_link( $post_id ) ) ) {
+					wp_redirect( $redirect );
+					exit;
+				}
+			}
+
 			return $this->get_no_image_file_info();
 		}
 
@@ -604,6 +649,24 @@ EOS;
 			$file,
 			rawurlencode( $name . '.' . $extension ),
 		];
+	}
+
+	/**
+	 * @param $post_id
+	 *
+	 * @return string|false
+	 */
+	private function get_edit_post_link( $post_id ) {
+		if ( ! $post = get_post( $post_id ) ) {
+			return false;
+		}
+		$action           = '&action=edit';
+		$post_type_object = get_post_type_object( $post->post_type );
+		if ( ! $post_type_object ) {
+			return false;
+		}
+
+		return admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) );
 	}
 
 	/**

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.1
+ * @version 1.0.0.5
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -25,6 +25,20 @@ class Capability implements \Technote\Interfaces\Singleton, \Technote\Interfaces
 	/**
 	 * @return array
 	 */
+	public function get_downloadable_roles() {
+		return array_unique( array_filter( explode( ',', $this->apply_filters( 'downloadable_roles' ) ) ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_editable_roles() {
+		return array_intersect( $this->get_downloadable_roles(), array_unique( array_filter( explode( ',', $this->apply_filters( 'editable_roles' ) ) ) ) );
+	}
+
+	/**
+	 * @return array
+	 */
 	public function get_capabilities() {
 		/** @var File $file */
 		$file = File::get_instance( $this->app );
@@ -40,10 +54,20 @@ class Capability implements \Technote\Interfaces\Singleton, \Technote\Interfaces
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function set_capability() {
-		$role = get_role( 'administrator' );
-		if ( $role ) {
-			foreach ( $this->get_capabilities() as $capability ) {
-				$role->add_cap( $capability, ! preg_match( '#^create_#', $capability ) );
+		foreach ( $this->get_downloadable_roles() as $role ) {
+			$role = get_role( $role );
+			if ( $role ) {
+				foreach ( $this->get_capabilities() as $capability ) {
+					$role->add_cap( $capability, ! preg_match( '#^create_#', $capability ) && ! preg_match( '#^delete_#', $capability ) && strpos( $capability, '_others_' ) === false );
+				}
+			}
+		}
+		foreach ( $this->get_editable_roles() as $role ) {
+			$role = get_role( $role );
+			if ( $role ) {
+				foreach ( $this->get_capabilities() as $capability ) {
+					$role->add_cap( $capability, ! preg_match( '#^create_#', $capability ) );
+				}
 			}
 		}
 	}
@@ -53,11 +77,34 @@ class Capability implements \Technote\Interfaces\Singleton, \Technote\Interfaces
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function unset_capability() {
-		$role = get_role( 'administrator' );
-		if ( $role ) {
-			foreach ( $this->get_capabilities() as $capability ) {
-				$role->remove_cap( $capability );
+		foreach ( $this->get_editable_roles() as $role ) {
+			$role = get_role( $role );
+			if ( $role ) {
+				foreach ( $this->get_capabilities() as $capability ) {
+					$role->remove_cap( $capability );
+				}
 			}
+		}
+		foreach ( $this->get_downloadable_roles() as $role ) {
+			$role = get_role( $role );
+			if ( $role ) {
+				foreach ( $this->get_capabilities() as $capability ) {
+					$role->remove_cap( $capability );
+				}
+			}
+		}
+	}
+
+	/**
+	 * @param string $key
+	 */
+	/** @noinspection PhpUnusedPrivateMethodInspection */
+	private function reset_capability( $key ) {
+		if ( in_array( $key, [
+			$this->get_filter_prefix() . 'editable_roles',
+		] ) ) {
+			$this->unset_capability();
+			$this->set_capability();
 		}
 	}
 }

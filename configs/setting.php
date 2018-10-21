@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.1
+ * @version 1.0.0.5
  * @author technote-space
  * @since 1.0.0.0
  * @copyright technote All Rights Reserved
@@ -56,22 +56,35 @@ return [
 		],
 		'File'             => [
 			10 => [
-				'is_valid_auto_delete'  => [
+				'is_valid_auto_delete'          => [
 					'label'   => 'Whether to delete old tmp upload file.',
 					'type'    => 'bool',
 					'default' => true,
 				],
-				'delete_file_interval'  => [
+				'delete_file_interval'          => [
 					'label'   => 'Interval to run process to delete old tmp upload file.',
 					'type'    => 'int',
 					'default' => 24 * 60 * 60,
 					'min'     => 60,
 				],
-				'delete_file_threshold' => [
+				'delete_file_threshold'         => [
 					'label'   => 'Threshold to determine the file is old or not.',
 					'type'    => 'int',
 					'default' => 24 * 60 * 60,
 					'min'     => 60,
+				],
+				'must_be_logged_in_to_download' => [
+					'label'   => 'User has to be logged in to download file.',
+					'type'    => 'bool',
+					'default' => true,
+				],
+				'downloadable_roles'     => [
+					'label'   => 'Logged in user\'s role to download file (comma separated).',
+					'default' => 'administrator,editor,author,contributor,subscriber',
+				],
+				'editable_roles'         => [
+					'label'   => 'Logged in user\'s role to edit file (comma separated).',
+					'default' => 'administrator',
 				],
 			],
 		],

@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.2
+ * @version 1.0.0.5
  * @author technote-space
  * @since 1.0.0.2
  * @copyright technote All Rights Reserved
@@ -34,7 +34,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
                     <tr>
                         <td colspan="3"><?php $instance->h( 'File has been deleted.' ); ?></td>
                     </tr>
-				<?php elseif ( ! $item['can_download'] ): ?>
+				<?php elseif ( ! $item['can_edit'] ): ?>
                     <tr>
                         <td><?php $instance->h( $item['name'] ); ?></td>
                         <td><?php $instance->h( $item['size'] ); ?></td>
