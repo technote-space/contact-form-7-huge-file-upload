@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.0.0.7
+ * @version 1.0.0.8
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -743,7 +743,7 @@ EOS;
 		}
 
 		$file = get_attached_file( $post_id );
-		if ( empty( $file ) ) {
+		if ( empty( $file ) || ! file_exists( $file ) ) {
 			return $this->get_no_image_file_info();
 		}
 
