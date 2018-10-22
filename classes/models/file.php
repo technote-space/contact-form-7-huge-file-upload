@@ -592,7 +592,7 @@ EOS;
 	 * @return string
 	 */
 	private function get_access_url( $access_key ) {
-		return admin_url( 'admin-ajax.php' ) . '?action=file_download&access_key=' . $access_key;
+		return admin_url( 'admin-ajax.php' ) . '?action=cf7hfu_file_download&access_key=' . $access_key;
 	}
 
 	/**
