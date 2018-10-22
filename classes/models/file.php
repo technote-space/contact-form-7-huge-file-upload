@@ -180,10 +180,10 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 		if ( in_array( $this->app->user->user_role, $capability->get_downloadable_roles() ) && ! in_array( $this->app->user->user_role, $capability->get_editable_roles() ) ) {
 			$slug = $this->get_download_page_slug();
 			$this->add_style_view( 'admin/style/show_file_post', [
-				'selector' => '#toplevel_page_' . $slug,
+				'selector' => '#menu-posts-' . $this->get_file_post_type() . ' .wp-submenu-wrap',
 			] );
 			$this->add_script_view( 'admin/script/file_list' );
-			add_menu_page( 'Download', 'Download', $this->app->user->user_role, $slug, function () {
+			add_submenu_page( 'edit.php?post_type=' . $this->get_file_post_type(), 'Download', 'Download', $this->app->user->user_role, $slug, function () {
 				$post_id = $this->app->input->get( 'post_id' );
 				if ( empty( $post_id ) || ! $this->check_can_download( $post_id ) || ! ( $post = get_post( $post_id ) ) ) {
 					$list = false;
@@ -195,7 +195,7 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 					'list' => $list,
 					'post' => $post,
 				], true );
-			}, 'dashicons-admin-media' );
+			} );
 		}
 	}
 
