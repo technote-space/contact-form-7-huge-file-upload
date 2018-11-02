@@ -108,26 +108,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function setup_assets() {
-		if ( ! is_page() ) {
-			return;
-		}
-
-		global $shortcode_tags;
-		if ( empty( $shortcode_tags ) || ! is_array( $shortcode_tags ) ) {
-			return;
-		}
-
-		$post    = get_post();
-		$content = $post->post_content;
-		if ( false === strpos( $content, '[' ) ) {
-			return;
-		}
-
-		// Find all registered tag names in $content.
-		preg_match_all( '@\[([^<>&/\[\]\x00-\x20=]++)@', $content, $matches );
-		$tagnames = array_intersect( array_keys( $shortcode_tags ), $matches[1] );
-
-		if ( ! in_array( 'contact-form-7', $tagnames ) && ! in_array( 'contact-form', $tagnames ) ) {
+		if ( ! $this->app->post->has_shortcode( [ 'contact-form-7', 'contact-form' ] ) ) {
 			return;
 		}
 
