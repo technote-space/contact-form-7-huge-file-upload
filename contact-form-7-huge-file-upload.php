@@ -4,7 +4,7 @@ Plugin Name: Contact Form 7 huge file upload
 Plugin URI:
 Description: Add function to upload huge file
 Author: technote
-Version: 1.0.1.0
+Version: 1.0.1.1
 Author URI: https://technote.space
 Text Domain: cf7-hfu
 Domain Path: /languages/
