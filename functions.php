@@ -23,3 +23,11 @@ add_filter( 'cf7_hfu-get_settings', function ( $data, $group ) {
 
 	return $data;
 }, 10, 2 );
+
+add_filter( 'cf7_hfu-get_help_contents', function ( $contents, $slug ) {
+	if ( 'setting' === $slug ) {
+		return [];
+	}
+
+	return $contents;
+}, 10, 2 );
