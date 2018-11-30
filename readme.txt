@@ -23,6 +23,10 @@ This plugin needs PHP5.6 or higher.
 
 == Screenshots ==
 
+1. Settings
+2. File Detail
+3. Mail
+
 == Changelog ==
 
 = 1.0.1.3 =
