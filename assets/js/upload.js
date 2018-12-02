@@ -118,9 +118,16 @@
                     $wrap = $target.closest('.wpcf7-form-control-wrap'),
                     progressbar_index = $wrap.attr('data-progressbar_index'),
                     $progress = progressbars[progressbar_index];
+                const name = data.paramName[0];
+                const error = data.jqXHR.responseJSON[name][0].error;
+                if (error) {
+                    // error
+                    $wrap.removeClass('uploading');
+                    alert(error);
+                    return;
+                }
                 // アップロードが完了したら
                 // 必要なデータをhiddenで持たせる
-                const name = data.paramName[0];
                 const result = data.result[name][0];
                 $progress.progressbar('value', 100);
                 $wrap.find('.cancel-btn').val('削除');
