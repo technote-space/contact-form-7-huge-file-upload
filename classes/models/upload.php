@@ -69,11 +69,6 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			exit;
 		}
 
-		if ( ! class_exists( '\UploadHandler' ) ) {
-			$library_dir = $this->app->define->plugin_dir . DS . 'library';
-			/** @noinspection PhpIncludeInspection */
-			require_once $library_dir . DS . 'jQuery-File-Upload-9.22.0' . DS . 'server' . DS . 'php' . DS . 'UploadHandler.php';
-		}
 		$param_name                             = $params['param_name'];
 		$response                               = ( new \UploadHandler( $this->get_upload_handler_params( $params ) ) )->get_response();
 		$response[ $param_name ][0]->process    = $process;
@@ -112,18 +107,19 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			return;
 		}
 
+		$assets_dir = $this->app->define->plugin_url . '/vendor/blueimp/jquery-file-upload/js/';
 		wp_enqueue_script( 'cf7_hfu-fileupload-widget',
-			$this->app->define->plugin_url . '/library/jQuery-File-Upload-9.22.0/js/vendor/jquery.ui.widget.js',
+			$assets_dir . 'vendor/jquery.ui.widget.js',
 			[
 				'jquery',
 			], false, true );
 		wp_enqueue_script( 'cf7_hfu-fileupload-iframe',
-			$this->app->define->plugin_url . '/library/jQuery-File-Upload-9.22.0/js/jquery.iframe-transport.js',
+			$assets_dir . 'jquery.iframe-transport.js',
 			[
 				'jquery',
 			], false, true );
 		wp_enqueue_script( 'cf7_hfu-fileupload',
-			$this->app->define->plugin_url . '/library/jQuery-File-Upload-9.22.0/js/jquery.fileupload.js',
+			$assets_dir . 'jquery.fileupload.js',
 			[
 				'jquery',
 				'cf7_hfu-fileupload-widget',
