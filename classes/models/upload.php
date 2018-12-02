@@ -264,7 +264,8 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		$tmp_upload_path   = md5( $process . $random . $param_name );
 		$tmp_base_dir      = "{$params['base_dir']}/tmp";
 		$tmp_upload_dir    = "{$tmp_base_dir}/{$tmp_upload_path}";
-		$accept_file_types = '/\.(gif|jpe?g|png)$/i';
+		/* contact form から submit時 ($wpcf7_id = null) の file type のチェックは Contact::check_file_type_pattern で行うためここではチェックさせない */
+		$accept_file_types = '/.+/';
 		if ( ! empty( $wpcf7_id ) ) {
 			$item = wpcf7_contact_form( $wpcf7_id );
 			if ( ! $item ) {
@@ -295,7 +296,6 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			'param_name'        => $param_name,
 			'process'           => $process,
 			'random'            => $random,
-			/* contact form から submit時 ($wpcf7_id = null) は file type のチェックは Contact::check_file_type_pattern 行うためここではチェックさせない */
 			'accept_file_types' => $accept_file_types,
 		] ), $tmp_upload_dir, $param_name, $process, $random );
 	}
