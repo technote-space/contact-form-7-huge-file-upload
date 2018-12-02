@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.1.1
+ * @version 1.1.2
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -259,11 +259,11 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return array|false
 	 */
 	public function get_upload_params( $process, $wpcf7_id, $random = '', $param_name = null ) {
-		$params            = $this->get_non_dynamic_upload_params();
-		$param_name        = ! isset( $param_name ) ? array_keys( $_FILES )[0] : $param_name;
-		$tmp_upload_path   = md5( $process . $random . $param_name );
-		$tmp_base_dir      = "{$params['base_dir']}/tmp";
-		$tmp_upload_dir    = "{$tmp_base_dir}/{$tmp_upload_path}";
+		$params          = $this->get_non_dynamic_upload_params();
+		$param_name      = ! isset( $param_name ) ? array_keys( $_FILES )[0] : $param_name;
+		$tmp_upload_path = md5( $process . $random . $param_name );
+		$tmp_base_dir    = "{$params['base_dir']}/tmp";
+		$tmp_upload_dir  = "{$tmp_base_dir}/{$tmp_upload_path}";
 		/* contact form から submit時 ($wpcf7_id = null) の file type のチェックは Contact::check_file_type_pattern で行うためここではチェックさせない */
 		$accept_file_types = '/.+/';
 		if ( ! empty( $wpcf7_id ) ) {
