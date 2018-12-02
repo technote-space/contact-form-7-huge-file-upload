@@ -251,7 +251,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			'param_name'     => $param_name,
 			'process'        => $process,
 			'random'         => $random,
-		] ) );
+		] ), $tmp_upload_dir, $param_name, $process, $random );
 	}
 
 	/**
@@ -274,7 +274,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			'tmp_base_dir' => $tmp_base_dir,
 			'upload_dir'   => $upload_dir,
 			'upload_url'   => $upload_url,
-		] );
+		], $base_dir, $tmp_base_dir, $upload_dir, $upload_url );
 	}
 
 	/**
@@ -284,16 +284,18 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 */
 	private function get_upload_handler_params( $params ) {
 		return $this->apply_filters( 'upload_handler_params', [
-			'upload_dir'     => $params['tmp_upload_dir'] . DS,
-			'upload_url'     => $params['upload_url'] . '/',
-			'param_name'     => $params['param_name'],
-			'image_versions' => [
+			'upload_dir'        => $params['tmp_upload_dir'] . DS,
+			'upload_url'        => $params['upload_url'] . '/',
+			'param_name'        => $params['param_name'],
+			'image_versions'    => [
 				'' => [
 					'auto_orient' => true,
 				],
 			],
-			'print_response' => false,
-		] );
+			'print_response'    => false,
+			/* file type のチェックは Contact::check_file_type_pattern 行うためここではチェックさせない */
+			'accept_file_types' => '/.+/',
+		], $params );
 	}
 
 	/**

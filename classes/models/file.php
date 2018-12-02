@@ -329,7 +329,7 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			'menu_icon'           => $this->get_file_post_menu_icon(),
 			'supports'            => $this->get_file_post_supports(),
 			'menu_position'       => $this->apply_filters( 'file_post_menu_position' ),
-		] );
+		], $capabilities );
 	}
 
 	/**
@@ -558,7 +558,7 @@ EOS;
 		if ( empty( $ext ) || empty( $type ) ) {
 			throw new \Exception( 'Not allowed file type.' );
 		}
-		$access_key = $this->generate_file_access_key();
+		$access_key = $this->generate_file_access_key( $params );
 		$access_url = $this->get_access_url( $access_key );
 		$attach_id  = wp_insert_attachment( [
 			'guid'           => $access_url,
@@ -650,10 +650,12 @@ EOS;
 	}
 
 	/**
+	 * @param array $params
+	 *
 	 * @return string
 	 */
-	private function generate_file_access_key() {
-		return $this->apply_filters( 'generate_file_access_key', md5( uniqid() ) );
+	private function generate_file_access_key( $params ) {
+		return $this->apply_filters( 'generate_file_access_key', md5( uniqid() ), $params );
 	}
 
 	/**
