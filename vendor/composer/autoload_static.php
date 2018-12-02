@@ -42,6 +42,7 @@ class ComposerStaticInite0d68cc0bfb780b6d24328cf9319ac3c
 
     public static $classMap = array (
         'Mobile_Detect' => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
+        'UploadHandler' => __DIR__ . '/..' . '/blueimp/jquery-file-upload/server/php/UploadHandler.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

@@ -1,7 +1,10 @@
-application: jquery-file-upload
-version: 2
-runtime: go
-api_version: go1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+libraries:
+- name: PIL
+  version: latest
 
 handlers:
 - url: /(favicon\.ico|robots\.txt)
@@ -9,4 +12,4 @@ handlers:
   upload: static/(.*)
   expiration: '1d'
 - url: /.*
-  script: _go_app
+  script: main.app

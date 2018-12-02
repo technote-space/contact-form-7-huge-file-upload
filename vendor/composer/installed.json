@@ -1,5 +1,62 @@
 [
     {
+        "name": "blueimp/jquery-file-upload",
+        "version": "v9.28.0",
+        "version_normalized": "9.28.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/vkhramtsov/jQuery-File-Upload.git",
+            "reference": "ff5accfe2e5c4a522777faa980a90cf86a636d1d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/vkhramtsov/jQuery-File-Upload/zipball/ff5accfe2e5c4a522777faa980a90cf86a636d1d",
+            "reference": "ff5accfe2e5c4a522777faa980a90cf86a636d1d",
+            "shasum": ""
+        },
+        "time": "2018-11-13T05:41:39+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "server/php/UploadHandler.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Sebastian Tschan",
+                "homepage": "https://blueimp.net"
+            }
+        ],
+        "description": "File Upload widget for jQuery.",
+        "homepage": "https://github.com/blueimp/jQuery-File-Upload",
+        "keywords": [
+            "bootstrap",
+            "chunk",
+            "cross-domain",
+            "cross-site",
+            "drag",
+            "drop",
+            "file",
+            "gae",
+            "go",
+            "jquery",
+            "multiple",
+            "php",
+            "preview",
+            "progress",
+            "python",
+            "resume",
+            "selection",
+            "upload",
+            "widget"
+        ]
+    },
+    {
         "name": "matthiasmullie/minify",
         "version": "1.3.61",
         "version_normalized": "1.3.61.0",
