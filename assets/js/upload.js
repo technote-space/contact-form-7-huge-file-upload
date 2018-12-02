@@ -32,6 +32,7 @@
                     {name: cf7_hfu.nonce_key, value: cf7_hfu.nonce_value},
                     {name: cf7_hfu.process_key, value: process},
                     {name: cf7_hfu.random_key, value: random[i]},
+                    {name: '_wpcf7', value: $('[name="_wpcf7"]').val()}
                 ];
             }
         };

@@ -72,7 +72,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 
 		$process = $this->get_upload()->get_uploaded_file_process( $name );
 		$random  = $this->get_upload()->get_uploaded_file_random_key( $name );
-		$params  = $this->get_upload()->get_upload_params( $process, $random, $name );
+		$params  = $this->get_upload()->get_upload_params( $process, null, $random, $name );
 		$data    = $this->get_file()->find_file( $params['tmp_upload_dir'] );
 		if ( false === $data ) {
 			return $result;

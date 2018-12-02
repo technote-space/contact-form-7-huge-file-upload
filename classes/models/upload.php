@@ -52,14 +52,21 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			header( 'HTTP/1.1 403 Forbidden' );
 			exit;
 		}
-		$process = $this->get_process();
-		$random  = $this->get_random();
-		if ( empty( $process ) || empty( $random ) || empty( $_FILES ) ) {
+		$process  = $this->get_process();
+		$random   = $this->get_random();
+		$wpcf7_id = $this->get_wpcf7_id();
+		if ( empty( $process ) || empty( $random ) || empty( $_FILES ) || empty( $wpcf7_id ) ) {
 			header( 'HTTP/1.1 400 Bad Request' );
 			exit;
 		}
 
-		$params = $this->get_upload_params( $process, $random );
+		$params = $this->get_upload_params( $process, $wpcf7_id, $random );
+		if ( empty( $params ) ) {
+			wp_send_json( [
+				'message' => 'The requested contact form was not found.',
+			], 404 );
+			exit;
+		}
 		try {
 			$this->get_file()->create_upload_dir( $params['base_dir'], $params['tmp_base_dir'] );
 		} catch ( \Exception $e ) {
@@ -88,12 +95,16 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		}
 		$process    = $this->get_process();
 		$random     = $this->get_random();
+		$wpcf7_id   = $this->get_wpcf7_id();
 		$param_name = $this->app->input->post( 'param_name' );
-		if ( empty( $process ) || empty( $random ) || empty( $param_name ) ) {
+		if ( empty( $process ) || empty( $random ) || empty( $param_name ) || empty( $wpcf7_id ) ) {
 			header( 'HTTP/1.1 400 Bad Request' );
 			exit;
 		}
-		$params = $this->get_upload_params( $process, $random, $param_name );
+		$params = $this->get_upload_params( $process, $wpcf7_id, $random, $param_name );
+		if ( empty( $params ) ) {
+			return;
+		}
 		$this->get_file()->remove_dir( $params['tmp_upload_dir'] );
 		wp_send_json_success();
 	}
@@ -192,6 +203,13 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	/**
 	 * @return string
 	 */
+	private function get_wpcf7_id() {
+		return $this->app->input->post( '_wpcf7' );
+	}
+
+	/**
+	 * @return string
+	 */
 	private function get_uploaded_file_random_key_slug() {
 		return $this->apply_filters( 'uploaded_flag_slug', '_cf7_hfu_uploaded' );
 	}
@@ -234,23 +252,51 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	/**
 	 * @param string $process
+	 * @param string $wpcf7_id
 	 * @param string $random
 	 * @param string $param_name
 	 *
-	 * @return array
+	 * @return array|false
 	 */
-	public function get_upload_params( $process, $random = '', $param_name = null ) {
-		$params          = $this->get_non_dynamic_upload_params();
-		$param_name      = ! isset( $param_name ) ? array_keys( $_FILES )[0] : $param_name;
-		$tmp_upload_path = md5( $process . $random . $param_name );
-		$tmp_base_dir    = "{$params['base_dir']}/tmp";
-		$tmp_upload_dir  = "{$tmp_base_dir}/{$tmp_upload_path}";
+	public function get_upload_params( $process, $wpcf7_id, $random = '', $param_name = null ) {
+		$params            = $this->get_non_dynamic_upload_params();
+		$param_name        = ! isset( $param_name ) ? array_keys( $_FILES )[0] : $param_name;
+		$tmp_upload_path   = md5( $process . $random . $param_name );
+		$tmp_base_dir      = "{$params['base_dir']}/tmp";
+		$tmp_upload_dir    = "{$tmp_base_dir}/{$tmp_upload_path}";
+		$accept_file_types = '/\.(gif|jpe?g|png)$/i';
+		if ( ! empty( $wpcf7_id ) ) {
+			$item = wpcf7_contact_form( $wpcf7_id );
+			if ( ! $item ) {
+				return false;
+			}
+			$tags               = $item->scan_form_tags();
+			$file_type_patterns = [];
+			foreach ( (array) $tags as $tag ) {
+				/** @var \WPCF7_FormTag $tag */
+				if ( empty( $tag->name ) ) {
+					continue;
+				}
+				$classes = explode( ' ', $tag->get_class_option() );
+				if ( ! in_array( $this->get_huge_file_class(), $classes ) ) {
+					continue;
+				}
+				$file_type_pattern    = wpcf7_acceptable_filetypes( $tag->get_option( 'filetypes' ), 'regex' );
+				$file_type_patterns[] = empty( $file_type_pattern ) ? '/\.(gif|jpe?g|png)$/i' : preg_quote( $file_type_pattern, '/' );
+			}
+			if ( ! empty( $file_type_patterns ) ) {
+				$file_type_patterns = array_unique( $file_type_patterns );
+				$accept_file_types  = '/\.(' . implode( ')|(', $file_type_patterns ) . ')$/i';
+			}
+		}
 
 		return $this->apply_filters( 'upload_params', array_merge( $params, [
-			'tmp_upload_dir' => $tmp_upload_dir,
-			'param_name'     => $param_name,
-			'process'        => $process,
-			'random'         => $random,
+			'tmp_upload_dir'    => $tmp_upload_dir,
+			'param_name'        => $param_name,
+			'process'           => $process,
+			'random'            => $random,
+			/* contact form から submit時 ($wpcf7_id = null) は file type のチェックは Contact::check_file_type_pattern 行うためここではチェックさせない */
+			'accept_file_types' => $accept_file_types,
 		] ), $tmp_upload_dir, $param_name, $process, $random );
 	}
 
@@ -293,8 +339,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 				],
 			],
 			'print_response'    => false,
-			/* file type のチェックは Contact::check_file_type_pattern 行うためここではチェックさせない */
-			'accept_file_types' => '/.+/',
+			'accept_file_types' => $params['accept_file_types'],
 		], $params );
 	}
 
