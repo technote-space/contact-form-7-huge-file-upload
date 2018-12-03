@@ -63,7 +63,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		$params = $this->get_upload_params( $process, $wpcf7_id, $random );
 		if ( empty( $params ) ) {
 			wp_send_json( [
-				'message' => 'The requested contact form was not found.',
+				'message' => $this->app->translate( 'The requested contact form was not found.' ),
 			], 404 );
 			exit;
 		}
@@ -120,18 +120,15 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 		$assets_dir = $this->app->define->plugin_url . '/vendor/blueimp/jquery-file-upload/js/';
 		wp_enqueue_script( 'cf7_hfu-fileupload-widget',
-			$assets_dir . 'vendor/jquery.ui.widget.js',
-			[
+			$assets_dir . 'vendor/jquery.ui.widget.js', [
 				'jquery',
 			], false, true );
 		wp_enqueue_script( 'cf7_hfu-fileupload-iframe',
-			$assets_dir . 'jquery.iframe-transport.js',
-			[
+			$assets_dir . 'jquery.iframe-transport.js', [
 				'jquery',
 			], false, true );
 		wp_enqueue_script( 'cf7_hfu-fileupload',
-			$assets_dir . 'jquery.fileupload.js',
-			[
+			$assets_dir . 'jquery.fileupload.js', [
 				'jquery',
 				'cf7_hfu-fileupload-widget',
 				'cf7_hfu-fileupload-iframe',
