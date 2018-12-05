@@ -2,7 +2,7 @@
 /**
  * Technote Views Include Script Modal
  *
- * @version 1.1.68
+ * @version 1.1.71
  * @author technote-space
  * @since 1.1.68
  * @copyright technote All Rights Reserved
