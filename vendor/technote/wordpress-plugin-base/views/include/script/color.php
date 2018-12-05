@@ -3,7 +3,7 @@
  * Technote Views Include Script Modal
  *
  * @version 1.1.68
- * @author technote
+ * @author technote-space
  * @since 1.1.68
  * @copyright technote All Rights Reserved
  * @license https://opensource.org/licenses/mit-license.html MIT License

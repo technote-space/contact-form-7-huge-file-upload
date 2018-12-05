@@ -1,5 +1,5 @@
 === Contact Form 7 huge file upload ===
-Contributors: technote-space
+Contributors: technote0space
 Tags: contact, form, contact form, file upload
 Requires at least: 3.9.3
 Tested up to: 4.9.8
