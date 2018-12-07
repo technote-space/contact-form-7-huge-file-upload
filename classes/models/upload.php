@@ -280,7 +280,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 					continue;
 				}
 				$file_type_pattern    = wpcf7_acceptable_filetypes( $tag->get_option( 'filetypes' ), 'regex' );
-				$file_type_patterns[] = empty( $file_type_pattern ) ? '/\.(gif|jpe?g|png)$/i' : preg_quote( $file_type_pattern, '/' );
+				$file_type_patterns[] = empty( $file_type_pattern ) ? 'gif|jpe?g|png' : $file_type_pattern;
 			}
 			if ( ! empty( $file_type_patterns ) ) {
 				$file_type_patterns = array_unique( $file_type_patterns );
