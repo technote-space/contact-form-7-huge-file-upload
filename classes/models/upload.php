@@ -180,7 +180,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 * @return int
 	 */
 	private function get_max_chunk_size() {
-		return $this->apply_filters( 'max_chunk_size' );
+		return $this->get_file()->parse_filesize( $this->apply_filters( 'max_chunk_size' ), $this->get_file()->get_default_max_chunk_size() );
 	}
 
 	/**
@@ -263,6 +263,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		$tmp_upload_dir  = "{$tmp_base_dir}/{$tmp_upload_path}";
 		/* contact form から submit時 ($wpcf7_id = null) の file type のチェックは Contact::check_file_type_pattern で行うためここではチェックさせない */
 		$accept_file_types = '/.+/';
+		$max_file_size     = $this->get_file()->get_default_max_filesize();
 		if ( ! empty( $wpcf7_id ) ) {
 			$item = wpcf7_contact_form( $wpcf7_id );
 			if ( ! $item ) {
@@ -272,15 +273,19 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			$file_type_patterns = [];
 			foreach ( (array) $tags as $tag ) {
 				/** @var \WPCF7_FormTag $tag */
-				if ( empty( $tag->name ) ) {
+				if ( empty( $tag->name ) || $tag->name != $param_name ) {
 					continue;
 				}
 				$classes = explode( ' ', $tag->get_class_option() );
 				if ( ! in_array( $this->get_huge_file_class(), $classes ) ) {
 					continue;
 				}
+
 				$file_type_pattern    = wpcf7_acceptable_filetypes( $tag->get_option( 'filetypes' ), 'regex' );
 				$file_type_patterns[] = empty( $file_type_pattern ) ? 'gif|jpe?g|png' : $file_type_pattern;
+				$max_file_size        = $this->get_file()->get_size_limit( $tag );
+
+				break;
 			}
 			if ( ! empty( $file_type_patterns ) ) {
 				$file_type_patterns = array_unique( $file_type_patterns );
@@ -294,6 +299,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			'process'           => $process,
 			'random'            => $random,
 			'accept_file_types' => $accept_file_types,
+			'max_file_size'     => $max_file_size,
 		] ), $tmp_upload_dir, $param_name, $process, $random );
 	}
 
@@ -337,6 +343,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			],
 			'print_response'    => false,
 			'accept_file_types' => $params['accept_file_types'],
+			'max_file_size'     => $params['max_file_size'],
 		], $params );
 	}
 

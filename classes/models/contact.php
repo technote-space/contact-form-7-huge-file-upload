@@ -193,42 +193,9 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	 * @return bool
 	 */
 	private function check_file_size( $tag, $file ) {
-		$allowed_size = $this->get_size_limit( $tag );
-		if ( $allowed_size > 0 ) {
-			$allowed_size = min( $allowed_size, $this->apply_filters( 'max_filesize' ) );
-		} else {
-			$allowed_size = $this->apply_filters( 'max_filesize' );
-		}
+		$allowed_size = $this->get_file()->get_size_limit( $tag );
 
 		return $file['size'] <= $allowed_size;
-	}
-
-	/**
-	 * @param \WPCF7_FormTag $tag
-	 *
-	 * @return int
-	 */
-	private function get_size_limit( $tag ) {
-		if ( $file_size_a = $tag->get_option( 'limit' ) ) {
-			$limit_pattern = '/^([1-9][0-9]*)([kKmM]?[bB])?$/';
-			foreach ( $file_size_a as $file_size ) {
-				if ( preg_match( $limit_pattern, $file_size, $matches ) ) {
-					$allowed_size = (int) $matches[1];
-					if ( ! empty( $matches[2] ) ) {
-						$kbmb = strtolower( $matches[2] );
-						if ( in_array( $kbmb, [ 'kb', 'k' ] ) ) {
-							$allowed_size *= 1024;
-						} elseif ( in_array( $kbmb, [ 'mb', 'm' ] ) ) {
-							$allowed_size *= 1024 * 1024;
-						}
-					}
-
-					return $allowed_size;
-				}
-			}
-		}
-
-		return 0;
 	}
 
 	/**

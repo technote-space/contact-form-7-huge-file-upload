@@ -28,15 +28,11 @@ return [
 				],
 				'max_chunk_size'           => [
 					'label'   => 'Max size of post data.',
-					'type'    => 'int',
-					'min'     => 100 * 1024,
-					'default' => 4 * 1024 * 1024,
+					'default' => '4M',
 				],
 				'max_filesize'             => [
 					'label'   => 'Max size of upload file.',
-					'type'    => 'int',
-					'min'     => 1 * 1024 * 1024,
-					'default' => 300 * 1024 * 1024,
+					'default' => '300M',
 				],
 			],
 		],
@@ -78,11 +74,11 @@ return [
 					'type'    => 'bool',
 					'default' => true,
 				],
-				'downloadable_roles'     => [
+				'downloadable_roles'            => [
 					'label'   => 'Logged in user\'s role to download file (comma separated).',
 					'default' => 'administrator,editor,author,contributor,subscriber',
 				],
-				'editable_roles'         => [
+				'editable_roles'                => [
 					'label'   => 'Logged in user\'s role to edit file (comma separated).',
 					'default' => 'administrator',
 				],

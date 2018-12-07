@@ -57,6 +57,9 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			$this->get_filter_prefix() . 'max_filesize',
 			$this->get_filter_prefix() . 'output_max_size_settings',
 		] ) ) {
+			$this->delete_hook_cache( 'max_chunk_size' );
+			$this->delete_hook_cache( 'max_filesize' );
+			$this->delete_hook_cache( 'output_max_size_settings' );
 			try {
 				$this->recreate_htaccess();
 			} catch ( \Exception $e ) {
@@ -494,8 +497,8 @@ deny from all
 EOS;
 
 		if ( $this->apply_filters( 'output_max_size_settings' ) ) {
-			$max_chunk_size = $this->get_appropriate_size( $this->apply_filters( 'max_chunk_size' ) + 100 * 1000 ); // form data を考慮して少し大きめ
-			$max_filesize   = $this->get_appropriate_size( $this->apply_filters( 'max_filesize' ) );
+			$max_chunk_size = $this->get_appropriate_size( $this->parse_filesize( $this->apply_filters( 'max_chunk_size' ), $this->get_default_max_chunk_size() ) + 100 * 1000 ); // form data を考慮して少し大きめ
+			$max_filesize   = $this->get_appropriate_size( $this->parse_filesize( $this->apply_filters( 'max_filesize' ), $this->get_default_max_filesize() ) );
 			$contents       .= <<< EOS
 
 php_value post_max_size {$max_chunk_size}
@@ -836,6 +839,71 @@ EOS;
 		}
 
 		return false;
+	}
+
+	/**
+	 * @param \WPCF7_FormTag $tag
+	 *
+	 * @return int
+	 */
+	public function get_size_limit( $tag ) {
+		$allowed_size = 0;
+		if ( $file_size_a = $tag->get_option( 'limit' ) ) {
+			foreach ( $file_size_a as $file_size ) {
+				$file_size = $this->parse_filesize( $file_size );
+				if ( isset( $file_size ) ) {
+					$allowed_size = $file_size;
+					break;
+				}
+			}
+		}
+
+		$default = $this->parse_filesize( $this->apply_filters( 'max_filesize' ), $this->get_default_max_filesize() );
+		if ( $allowed_size > 0 ) {
+			$allowed_size = min( $allowed_size, $default );
+		} else {
+			$allowed_size = $default;
+		}
+
+		return $allowed_size;
+	}
+
+	/**
+	 * @param string $size
+	 * @param int|null $default
+	 *
+	 * @return int|null
+	 */
+	public function parse_filesize( $size, $default = null ) {
+		$limit_pattern = '/^([1-9][0-9]*)([kKmM][bB]?)?$/';
+		$result        = $default;
+		if ( preg_match( $limit_pattern, $size, $matches ) ) {
+			$result = (int) $matches[1];
+			if ( ! empty( $matches[2] ) ) {
+				$kbmb = strtolower( $matches[2] );
+				if ( in_array( $kbmb, [ 'kb', 'k' ] ) ) {
+					$result *= 1024;
+				} elseif ( in_array( $kbmb, [ 'mb', 'm' ] ) ) {
+					$result *= 1024 * 1024;
+				}
+			}
+		}
+
+		return $result;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_default_max_filesize() {
+		return $this->apply_filters( 'default_max_filesize', 1 * 1024 * 1024 );
+	}
+
+	/**
+	 * @return int
+	 */
+	public function get_default_max_chunk_size() {
+		return $this->apply_filters( 'default_max_chunk_size', 100 * 1024 );
 	}
 
 	/**
