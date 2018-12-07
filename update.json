@@ -2,8 +2,8 @@
   "name": "Contact Form 7 huge file upload",
   "slug": "contact-form-7-huge-file-upload",
   "download_url": "https://github.com/technote-space/contact-form-7-huge-file-upload/archive/master.zip",
-  "version": "1.1.5",
-  "tested": "4.9.8",
+  "version": "1.1.6",
+  "tested": "5.0.0",
   "homepage": "https://technote.space/",
   "author": "technote-space",
   "sections": {
