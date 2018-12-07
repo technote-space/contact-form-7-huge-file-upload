@@ -3,7 +3,7 @@ Contributors: technote0space
 Tags: contact, form, contact form, file upload
 Requires at least: 3.9.3
 Tested up to: 5.0.0
-Stable tag: 1.1.6
+Stable tag: 1.1.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -29,7 +29,7 @@ This plugin needs PHP5.6 or higher.
 
 == Changelog ==
 
-= 1.1.6 =
+= 1.1.7 =
 
 * First release
 

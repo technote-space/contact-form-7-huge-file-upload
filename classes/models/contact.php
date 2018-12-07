@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.1.1
+ * @version 1.1.7
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -119,7 +119,10 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	 * @throws \ReflectionException
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function wpcf7_before_send_mail( $contact_form, $abort, $submission ) {
+	private function wpcf7_before_send_mail(
+		/** @noinspection PhpUnusedParameterInspection */
+		$contact_form, $abort, $submission
+	) {
 		if ( $abort ) {
 			return $abort;
 		}

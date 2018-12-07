@@ -1,6 +1,6 @@
 <?php
 /**
- * @version 1.1.0
+ * @version 1.1.7
  * @author technote-space
  * @since 1.0.0.1
  * @copyright technote All Rights Reserved
@@ -842,6 +842,8 @@ EOS;
 	}
 
 	/**
+	 * @since 1.1.7
+	 *
 	 * @param \WPCF7_FormTag $tag
 	 *
 	 * @return int
@@ -869,6 +871,8 @@ EOS;
 	}
 
 	/**
+	 * @since 1.1.7
+	 *
 	 * @param string $size
 	 * @param int|null $default
 	 *
@@ -893,6 +897,7 @@ EOS;
 	}
 
 	/**
+	 * @since 1.1.7
 	 * @return int
 	 */
 	public function get_default_max_filesize() {
@@ -900,6 +905,7 @@ EOS;
 	}
 
 	/**
+	 * @since 1.1.7
 	 * @return int
 	 */
 	public function get_default_max_chunk_size() {
