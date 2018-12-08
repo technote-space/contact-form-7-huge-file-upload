@@ -8,7 +8,7 @@
  * @link https://technote.space
  */
 
-namespace Cf7_Hfu\Crons;
+namespace Cf7_Hfu\Classes\Crons;
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
@@ -16,9 +16,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 /**
  * Class File
- * @package Cf7_Hfu\Crons
+ * @package Cf7_Hfu\Classes\Crons
  */
-class File extends \Technote\Crons\Base {
+class File extends \Technote\Classes\Crons\Base {
 
 	/**
 	 * @return int
@@ -35,10 +35,10 @@ class File extends \Technote\Crons\Base {
 			return;
 		}
 
-		/** @var \Cf7_Hfu\Models\Upload $upload */
-		/** @var \Cf7_Hfu\Models\File $file */
-		$upload = \Cf7_Hfu\Models\Upload::get_instance( $this->app );
-		$file   = \Cf7_Hfu\Models\File::get_instance( $this->app );
+		/** @var \Cf7_Hfu\Classes\Models\Upload $upload */
+		/** @var \Cf7_Hfu\Classes\Models\File $file */
+		$upload = \Cf7_Hfu\Classes\Models\Upload::get_instance( $this->app );
+		$file   = \Cf7_Hfu\Classes\Models\File::get_instance( $this->app );
 		$params = $upload->get_non_dynamic_upload_params();
 		$file->remove_dir( $params['tmp_base_dir'], time() - $this->apply_filters( 'delete_file_threshold' ) );
 	}

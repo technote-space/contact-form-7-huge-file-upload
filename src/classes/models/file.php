@@ -8,7 +8,7 @@
  * @link https://technote.space
  */
 
-namespace Cf7_Hfu\Models;
+namespace Cf7_Hfu\Classes\Models;
 
 if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	exit;
@@ -16,7 +16,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 /**
  * Class File
- * @package Cf7_Hfu\Models
+ * @package Cf7_Hfu\Classes\Models
  */
 class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, \Technote\Interfaces\Uninstall {
 
@@ -649,7 +649,7 @@ EOS;
 	 * @return string
 	 */
 	private function get_file_post_title() {
-		return \Technote\Models\Utility::replace_time( $this->apply_filters( 'file_post_title' ) );
+		return $this->app->utility->replace_time( $this->apply_filters( 'file_post_title' ) );
 	}
 
 	/**

@@ -14,7 +14,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 
 return [
 
-	'\Cf7_Hfu\Models\Upload' => [
+	'\Cf7_Hfu\Classes\Models\Upload' => [
 		'template_redirect'                     => [
 			'setup_assets' => [],
 		],
@@ -32,7 +32,7 @@ return [
 		],
 	],
 
-	'\Cf7_Hfu\Models\Contact' => [
+	'\Cf7_Hfu\Classes\Models\Contact' => [
 		'wpcf7_validate_file'    => [
 			'wpcf7_file_validation_filter' => [ 9 ],
 		],
@@ -44,7 +44,7 @@ return [
 		],
 	],
 
-	'\Cf7_Hfu\Models\File' => [
+	'\Cf7_Hfu\Classes\Models\File' => [
 		'${prefix}changed_option'             => [
 			'changed_option' => [],
 		],
@@ -86,7 +86,7 @@ return [
 		],
 	],
 
-	'\Cf7_Hfu\Models\Capability' => [
+	'\Cf7_Hfu\Classes\Models\Capability' => [
 		'${prefix}app_activated'   => [
 			'set_capability' => [],
 		],
