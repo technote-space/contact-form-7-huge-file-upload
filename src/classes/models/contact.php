@@ -1,8 +1,9 @@
 <?php
 /**
- * @version 1.1.7
+ * @version 1.1.8
  * @author technote-space
  * @since 1.0.0.1
+ * @since 1.1.8
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
