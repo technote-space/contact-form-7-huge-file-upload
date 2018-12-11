@@ -35,7 +35,4 @@ return [
 	// update
 	'update_info_file_url' => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/master/update.json',
 
-	// text domain
-	'text_domain'          => 'cf7-hfu',
-
 ];
