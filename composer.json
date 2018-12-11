@@ -2,5 +2,10 @@
     "require": {
         "technote/wordpress-plugin-base": "^2.0",
         "blueimp/jquery-file-upload": "^9.28"
+    },
+    "config": {
+        "platform": {
+            "php": "5.6"
+        }
     }
 }
