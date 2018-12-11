@@ -12,17 +12,10 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 	return;
 }
 
-add_filter( 'cf7_hfu-get_settings', function ( $data, $group ) {
-	if ( 'Others' === $group ) {
-		foreach ( $data as $k => $v ) {
-			if ( 'assets_version' === $v ) {
-				unset( $data[ $k ] );
-			}
-		}
-	}
-
-	return $data;
-}, 10, 2 );
+add_action( 'cf7_hfu-app_initialized', function ( $app ) {
+	/** @var \Technote $app */
+	$app->setting->remove_setting( 'assets_version' );
+} );
 
 add_filter( 'cf7_hfu-get_help_contents', function ( $contents, $slug ) {
 	if ( 'setting' === $slug ) {
