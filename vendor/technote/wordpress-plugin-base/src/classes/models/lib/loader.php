@@ -2,12 +2,13 @@
 /**
  * Technote Classes Models Lib Loader
  *
- * @version 2.3.1
+ * @version 2.6.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.3.0 Changed: public properties to readonly properties
  * @since 2.3.1 Changed: not load test and uninstall if not required
+ * @since 2.6.1 Improved: refactoring
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space

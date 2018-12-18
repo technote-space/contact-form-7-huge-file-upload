@@ -2,11 +2,12 @@
 /**
  * Technote Classes Models Lib Loader Controller Api
  *
- * @version 2.6.0
+ * @version 2.6.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0
  * @since 2.6.0 Improved: control load api
+ * @since 2.6.1 Changed: stop auto load
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -47,6 +48,8 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	}
 
 	/**
+	 * @since 2.6.1
+	 *
 	 * @param bool $flag
 	 */
 	public function set_use_all_api_flag( $flag ) {
@@ -54,6 +57,8 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	}
 
 	/**
+	 * @since 2.6.1
+	 *
 	 * @param string $name
 	 */
 	public function add_use_api_name( $name ) {
@@ -124,7 +129,7 @@ class Api implements \Technote\Interfaces\Loader, \Technote\Interfaces\Nonce {
 	private function register_script_common( $get_view_params ) {
 		$functions = [];
 		$scripts   = [];
-		if ( $this->_use_all_api || ! empty( $this->_use_apis ) ) {
+		if ( ! empty( $this->_use_apis ) ) {
 			$this->_use_apis['get_nonce'] = true;
 		}
 		/** @var \Technote\Traits\Controller\Api $api */

@@ -2,13 +2,14 @@
 /**
  * Technote Classes Models Lib Utility
  *
- * @version 2.6.0
+ * @version 2.6.1
  * @author technote-space
  * @since 1.0.0
  * @since 2.0.0 Changed: static methods to non static methods
  * @since 2.1.0 Added: starts_with, ends_with methods
  * @since 2.1.0 Added: array_map method
  * @since 2.6.0 Added: doing_ajax, get_debug_backtrace methods
+ * @since 2.6.1 Added: scan dir method
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -404,7 +405,11 @@ class Utility implements \Technote\Interfaces\Singleton {
 				$path = rtrim( $dir, DS ) . DS . $file;
 				if ( is_file( $path ) ) {
 					if ( $this->ends_with( $file, '.php' ) ) {
-						$list[] = $relative . ucfirst( $this->app->get_page_slug( $file ) );
+						if ( $split ) {
+							$list[] = [ $relative, ucfirst( $this->app->get_page_slug( $file ) ) ];
+						} else {
+							$list[] = $relative . ucfirst( $this->app->get_page_slug( $file ) );
+						}
 					}
 				} elseif ( is_dir( $path ) ) {
 					$list = array_merge( $list, $this->scan_dir_namespace_class( $path, $split, $relative . ucfirst( $file ) . '\\' ) );
