@@ -65,7 +65,7 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 				$this->recreate_htaccess();
 			} catch ( \Exception $e ) {
 				$this->app->add_message( $e->getMessage(), 'option', true );
-				$this->app->log( $e->getMessage() );
+				$this->app->log( $e );
 			}
 		}
 	}

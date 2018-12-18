@@ -86,7 +86,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 		try {
 			$params = $this->uploaded_process( $params, true );
 		} catch ( \Exception $e ) {
-			$this->app->log( $e->getMessage() );
+			$this->app->log( $e );
 			$result->invalidate( $tag, $this->app->translate( $e->getMessage() ) );
 
 			return $result;
@@ -132,7 +132,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 			try {
 				$params = $this->uploaded_process( $param );
 			} catch ( \Exception $e ) {
-				$this->app->log( $e->getMessage() );
+				$this->app->log( $e );
 				$this->set_contact_form_post_data( $submission, $name, null );
 				continue;
 			}

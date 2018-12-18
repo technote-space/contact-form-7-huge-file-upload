@@ -18,7 +18,7 @@ return [
 	'plugin_title'         => 'Contact Form 7 huge file upload',
 
 	// db version
-	'db_version'           => '0.0.0.1',
+	'db_version'           => '0.0.1',
 
 	// twitter
 	'twitter'              => 'technote15',
