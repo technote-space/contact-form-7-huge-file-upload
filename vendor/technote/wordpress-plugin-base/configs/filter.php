@@ -81,7 +81,7 @@ return [
 		'rest_api_init'     => [
 			'register_rest_api' => [],
 		],
-		'init'              => [
+		'admin_init'        => [
 			'register_ajax_api' => [],
 		],
 		'wp_footer'         => [

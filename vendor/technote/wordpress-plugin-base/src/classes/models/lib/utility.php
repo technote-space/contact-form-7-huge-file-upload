@@ -384,4 +384,34 @@ class Utility implements \Technote\Interfaces\Singleton {
 			return $type;
 		} );
 	}
+
+	/**
+	 * @param string $dir
+	 * @param bool $split
+	 * @param string $relative
+	 *
+	 * @return array
+	 */
+	public function scan_dir_namespace_class( $dir, $split = false, $relative = '' ) {
+		$dir  = rtrim( $dir, DS );
+		$list = [];
+		if ( is_dir( $dir ) ) {
+			foreach ( scandir( $dir ) as $file ) {
+				if ( $file === '.' || $file === '..' || $file === 'base.php' ) {
+					continue;
+				}
+
+				$path = rtrim( $dir, DS ) . DS . $file;
+				if ( is_file( $path ) ) {
+					if ( $this->ends_with( $file, '.php' ) ) {
+						$list[] = $relative . ucfirst( $this->app->get_page_slug( $file ) );
+					}
+				} elseif ( is_dir( $path ) ) {
+					$list = array_merge( $list, $this->scan_dir_namespace_class( $path, $split, $relative . ucfirst( $file ) . '\\' ) );
+				}
+			}
+		}
+
+		return $list;
+	}
 }

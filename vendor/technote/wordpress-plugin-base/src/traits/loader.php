@@ -27,11 +27,14 @@ trait Loader {
 
 	use Singleton, Hook, Presenter;
 
-	/** @var array */
+	/** @var array $list */
 	private $list = null;
 
-	/** @var array */
+	/** @var array $cache */
 	private $cache = [];
+
+	/** @var int $_count */
+	private $_count = null;
 
 	/**
 	 * @return string
@@ -108,9 +111,22 @@ trait Loader {
 	}
 
 	/**
+	 * @param bool $exact
+	 *
 	 * @return int
 	 */
-	public function get_loaded_count() {
+	public function get_loaded_count( $exact = true ) {
+		if ( ! $exact && ! isset( $this->list ) ) {
+			if ( ! isset( $this->_count ) ) {
+				$this->_count = 0;
+				foreach ( $this->get_namespaces() as $namespace ) {
+					$this->_count += count( $this->app->utility->scan_dir_namespace_class( $this->namespace_to_dir( $namespace ) ) );
+				}
+			}
+
+			return $this->_count;
+		}
+
 		return count( $this->get_class_list() );
 	}
 
