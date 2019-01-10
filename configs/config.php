@@ -33,6 +33,6 @@ return [
 	'menu_image'           => '',
 
 	// update
-	'update_info_file_url' => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/master/update.json',
+	'update_info_file_url' => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/develop/update.json',
 
 ];
