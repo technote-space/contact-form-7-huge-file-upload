@@ -95,6 +95,7 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 
 		list( $file, $name ) = $this->get_download_file_info();
 
+		@ob_end_clean();
 		header( 'Content-Type: application/force-download' );
 		header( 'Content-Length: ' . filesize( $file ) );
 		header( 'Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode( $name ) );
@@ -106,6 +107,7 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 			ob_end_flush();
 			fclose( $fp );
 		}
+		exit;
 	}
 
 	/**
