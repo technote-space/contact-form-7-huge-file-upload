@@ -16,24 +16,26 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
 return [
 
 	// plugin title
-	'plugin_title'         => 'Contact Form 7 huge file upload',
+	'plugin_title'                   => 'Contact Form 7 huge file upload',
 
 	// db version
-	'db_version'           => '0.0.1',
+	'db_version'                     => '0.0.1',
 
 	// twitter
-	'twitter'              => 'technote15',
+	'twitter'                        => 'technote15',
 
 	// github
-	'github'               => 'technote-space',
+	'github'                         => 'technote-space',
 
 	// contact url
-	'contact_url'          => 'https://technote.space/contact/',
+	'contact_url'                    => 'https://technote.space/contact/',
 
 	// menu image url
-	'menu_image'           => '',
+	'menu_image'                     => '',
 
 	// update
-	'update_info_file_url' => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/develop/update.json',
+	'update_info_file_url'           => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/develop/update.json',
 
+	// suppress setting help contents
+	'suppress_setting_help_contents' => true,
 ];
