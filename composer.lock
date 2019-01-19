@@ -277,16 +277,16 @@
         },
         {
             "name": "technote/wordpress-plugin-base",
-            "version": "v2.9.12",
+            "version": "v2.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/technote-space/wordpress-plugin-base.git",
-                "reference": "73e44353cc0f3761d91b9c97890f4f545f79509f"
+                "reference": "8a9674ccbcdf1de24c28c5933891de5550c8aa18"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/technote-space/wordpress-plugin-base/zipball/73e44353cc0f3761d91b9c97890f4f545f79509f",
-                "reference": "73e44353cc0f3761d91b9c97890f4f545f79509f",
+                "url": "https://api.github.com/repos/technote-space/wordpress-plugin-base/zipball/8a9674ccbcdf1de24c28c5933891de5550c8aa18",
+                "reference": "8a9674ccbcdf1de24c28c5933891de5550c8aa18",
                 "shasum": ""
             },
             "require": {
@@ -323,7 +323,7 @@
                 "plugin",
                 "wordpress"
             ],
-            "time": "2019-01-13T07:18:04+00:00"
+            "time": "2019-01-19T17:40:45+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
