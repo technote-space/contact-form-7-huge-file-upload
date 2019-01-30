@@ -1,9 +1,10 @@
 <?php
 /**
- * @version 1.1.8
+ * @version 1.3.0
  * @author technote-space
  * @since 1.0.0.1
  * @since 1.1.8
+ * @since 1.3.0 Changed: ライブラリの更新 (#12)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -11,7 +12,7 @@
 
 namespace Cf7_Hfu\Classes\Crons;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,7 +20,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class File
  * @package Cf7_Hfu\Classes\Crons
  */
-class File extends \Technote\Classes\Crons\Base {
+class File extends \WP_Framework_Cron\Classes\Crons\Base {
 
 	/**
 	 * @return int

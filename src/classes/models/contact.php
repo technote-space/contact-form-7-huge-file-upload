@@ -1,9 +1,11 @@
 <?php
 /**
- * @version 1.1.8
+ * @version 1.3.0
  * @author technote-space
  * @since 1.0.0.1
  * @since 1.1.8
+ * @since 1.3.0 Changed: ライブラリの更新 (#12)
+ * @since 1.3.0 Changed: nonceチェックの追加 (#13)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -11,7 +13,7 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,9 +21,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Contact
  * @package Cf7_Hfu\Classes\Models
  */
-class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
+class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Core\Interfaces\Nonce {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
+	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Core\Traits\Nonce, \WP_Framework_Common\Traits\Package;
 
 	/** @var File $_file */
 	private $_file = null;
@@ -33,7 +35,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	private $_params = null;
 
 	/**
-	 * @return File|\Technote\Traits\Singleton
+	 * @return File|\WP_Framework_Core\Traits\Singleton
 	 */
 	private function get_file() {
 		if ( ! isset( $this->_file ) ) {
@@ -44,7 +46,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	}
 
 	/**
-	 * @return Upload|\Technote\Traits\Singleton
+	 * @return Upload|\WP_Framework_Core\Traits\Singleton
 	 */
 	private function get_upload() {
 		if ( ! isset( $this->_upload ) ) {
@@ -55,6 +57,30 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	}
 
 	/**
+	 * @since 1.3.0 Added: #13
+	 * @return string
+	 */
+	public function get_nonce_slug() {
+		return 'contact';
+	}
+
+	/**
+	 * @since 1.3.0 Added: #13
+	 *
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	public function add_nonce_setting( $params ) {
+		$params['contact_nonce_key']   = $this->get_nonce_key();
+		$params['contact_nonce_value'] = $this->create_nonce( false );
+
+		return $params;
+	}
+
+	/**
+	 * @since 1.3.0 Changed: #13
+	 *
 	 * @param \WPCF7_Validation $result
 	 * @param \WPCF7_FormTag $tag
 	 *
@@ -68,6 +94,12 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 		}
 
 		if ( ! $this->get_upload()->is_valid_upload( $name ) ) {
+			return $result;
+		}
+
+		if ( ! $this->nonce_check( false ) ) {
+			$result->invalidate( $tag, $this->translate( 'nonce check error' ) );
+
 			return $result;
 		}
 
@@ -87,7 +119,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 			$params = $this->uploaded_process( $params, true );
 		} catch ( \Exception $e ) {
 			$this->app->log( $e );
-			$result->invalidate( $tag, $this->app->translate( $e->getMessage() ) );
+			$result->invalidate( $tag, $this->translate( $e->getMessage() ) );
 
 			return $result;
 		}

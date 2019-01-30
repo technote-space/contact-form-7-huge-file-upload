@@ -1,9 +1,10 @@
 <?php
 /**
- * @version 1.1.8
+ * @version 1.3.0
  * @author technote-space
  * @since 1.0.0.1
  * @since 1.1.8
+ * @since 1.3.0 Changed: ライブラリの更新 (#12)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -11,7 +12,7 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,9 +20,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Capability
  * @package Cf7_Hfu\Classes\Models
  */
-class Capability implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
+class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
+	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Common\Traits\Package;
 
 	/**
 	 * @return array

@@ -1,9 +1,10 @@
 <?php
 /**
- * @version 1.1.8
+ * @version 1.3.0
  * @author technote-space
  * @since 1.0.0.1
  * @since 1.1.8
+ * @since 1.3.0 Changed: ライブラリの更新 (#12)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -11,7 +12,7 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,9 +20,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class File
  * @package Cf7_Hfu\Classes\Models
  */
-class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Presenter, \Technote\Interfaces\Uninstall {
+class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Presenter\Interfaces\Presenter {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter, \Technote\Traits\Uninstall;
+	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Presenter\Traits\Presenter, \WP_Framework_Common\Traits\Package;
 
 	/** @var Upload $_upload */
 	private $_upload = null;
@@ -30,7 +31,7 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	private $_is_edit_post_file = false;
 
 	/**
-	 * @return Upload|\Technote\Traits\Singleton
+	 * @return Upload|\WP_Framework_Core\Traits\Singleton
 	 */
 	private function get_upload() {
 		if ( ! isset( $this->_upload ) ) {
@@ -343,13 +344,13 @@ class File implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook,
 	 */
 	private function get_file_post_labels() {
 		return $this->apply_filters( 'file_post_labels', [
-			'name'          => $this->app->translate( 'Files' ),
-			'singular_name' => $this->app->translate( 'File' ),
-			'menu_name'     => $this->app->translate( 'Files' ),
-			'all_items'     => $this->app->translate( 'All Files' ),
-			'add_new'       => $this->app->translate( 'Upload Files' ),
-			'edit_item'     => $this->app->translate( 'Edit File' ),
-			'search_items'  => $this->app->translate( 'Search Files' ),
+			'name'          => $this->translate( 'Files' ),
+			'singular_name' => $this->translate( 'File' ),
+			'menu_name'     => $this->translate( 'Files' ),
+			'all_items'     => $this->translate( 'All Files' ),
+			'add_new'       => $this->translate( 'Upload Files' ),
+			'edit_item'     => $this->translate( 'Edit File' ),
+			'search_items'  => $this->translate( 'Search Files' ),
 		] );
 	}
 
@@ -913,12 +914,5 @@ EOS;
 	 */
 	public function get_default_max_chunk_size() {
 		return $this->apply_filters( 'default_max_chunk_size', 100 * 1024 );
-	}
-
-	/**
-	 * uninstall
-	 */
-	public function uninstall() {
-
 	}
 }

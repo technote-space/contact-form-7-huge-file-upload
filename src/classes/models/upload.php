@@ -1,9 +1,11 @@
 <?php
 /**
- * @version 1.1.8
+ * @version 1.3.0
  * @author technote-space
  * @since 1.0.0.1
  * @since 1.1.8
+ * @since 1.3.0 Changed: ライブラリの更新 (#12)
+ * @since 1.3.0 Changed: nonceチェックの追加 (#13)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -11,7 +13,7 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,15 +21,15 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Upload
  * @package Cf7_Hfu\Classes\Models
  */
-class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Nonce, \Technote\Interfaces\Uninstall {
+class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Presenter\Interfaces\Presenter, \WP_Framework_Core\Interfaces\Nonce, \WP_Framework_Common\Interfaces\Uninstall {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Nonce, \Technote\Traits\Uninstall;
+	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Presenter\Traits\Presenter, \WP_Framework_Core\Traits\Nonce, \WP_Framework_Common\Traits\Uninstall, \WP_Framework_Common\Traits\Package;
 
 	/** @var File $_file */
 	private $_file = null;
 
 	/**
-	 * @return File|\Technote\Traits\Singleton
+	 * @return File|\WP_Framework_Core\Traits\Singleton
 	 */
 	private function get_file() {
 		if ( ! isset( $this->_file ) ) {
@@ -49,7 +51,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function upload_process() {
-		if ( ! $this->nonce_check() ) {
+		if ( ! $this->nonce_check( false ) ) {
 			header( 'HTTP/1.1 403 Forbidden' );
 			exit;
 		}
@@ -64,7 +66,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		$params = $this->get_upload_params( $process, $wpcf7_id, $random );
 		if ( empty( $params ) ) {
 			wp_send_json( [
-				'message' => $this->app->translate( 'The requested contact form was not found.' ),
+				'message' => $this->translate( 'The requested contact form was not found.' ),
 			], 404 );
 			exit;
 		}
@@ -72,7 +74,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			$this->get_file()->create_upload_dir( $params['base_dir'], $params['tmp_base_dir'] );
 		} catch ( \Exception $e ) {
 			wp_send_json( [
-				'message' => $this->app->translate( $e->getMessage() ),
+				'message' => $this->translate( $e->getMessage() ),
 			], 500 );
 			exit;
 		}
@@ -90,7 +92,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function cancel_upload() {
-		if ( ! $this->nonce_check() ) {
+		if ( ! $this->nonce_check( false ) ) {
 			header( 'HTTP/1.1 403 Forbidden' );
 			exit;
 		}
@@ -112,6 +114,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 
 	/**
 	 * setup assets
+	 * @since 1.3.0 Changed: #13
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function setup_assets() {
@@ -134,11 +137,12 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 				'cf7_hfu-fileupload-widget',
 				'cf7_hfu-fileupload-iframe',
 			], false, true );
-		wp_enqueue_script( "cf7_hfu-upload-script", $this->app->define->plugin_assets_url . '/js/upload.js', [
-			"jquery",
-			"cf7_hfu-fileupload",
+
+		$this->enqueue_script( 'cf7_hfu-upload-script', 'upload.js', [
+			'jquery',
+			'cf7_hfu-fileupload',
 		] );
-		wp_localize_script( 'cf7_hfu-upload-script', 'cf7_hfu', [
+		$params = [
 			'ajax_url'        => admin_url( 'admin-ajax.php' ),
 			'process_key'     => $this->get_process_key(),
 			'random_key'      => $this->get_random_key(),
@@ -146,8 +150,12 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			'huge_file_class' => $this->get_huge_file_class(),
 			'max_chunk_size'  => $this->get_max_chunk_size(),
 			'nonce_key'       => $this->get_nonce_key(),
-			'nonce_value'     => $this->create_nonce(),
-		] );
+			'nonce_value'     => $this->create_nonce( false ),
+		];
+		/** @var Contact $contact */
+		$contact = Contact::get_instance( $this->app );
+		$params  = $contact->add_nonce_setting( $params );
+		$this->localize_script( 'cf7_hfu-upload-script', 'cf7_hfu', $params );
 		wp_enqueue_style( 'cf7_hfu-upload-style', $this->app->define->plugin_assets_url . '/css/upload.css' );
 
 		global $wp_scripts;
