@@ -6,6 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'Mobile_Detect' => $vendorDir . '/mobiledetect/mobiledetectlib/Mobile_Detect.php',
     'UploadHandler' => $vendorDir . '/blueimp/jquery-file-upload/server/php/UploadHandler.php',
 );
