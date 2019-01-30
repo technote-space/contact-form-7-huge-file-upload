@@ -55,6 +55,25 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
+	 * @return string
+	 */
+	public function get_nonce_slug() {
+		return 'contact';
+	}
+
+	/**
+	 * @param array $params
+	 *
+	 * @return array
+	 */
+	public function add_nonce_setting( $params ) {
+		$params['contact_nonce_key']   = $this->get_nonce_key();
+		$params['contact_nonce_value'] = $this->create_nonce( false );
+
+		return $params;
+	}
+
+	/**
 	 * @param \WPCF7_Validation $result
 	 * @param \WPCF7_FormTag $tag
 	 *
@@ -68,6 +87,12 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 		}
 
 		if ( ! $this->get_upload()->is_valid_upload( $name ) ) {
+			return $result;
+		}
+
+		if ( ! $this->nonce_check( false ) ) {
+			$result->invalidate( $tag, $this->translate( 'nonce check error' ) );
+
 			return $result;
 		}
 

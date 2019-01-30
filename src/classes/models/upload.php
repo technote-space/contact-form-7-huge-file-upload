@@ -49,7 +49,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function upload_process() {
-		if ( ! $this->nonce_check() ) {
+		if ( ! $this->nonce_check( false ) ) {
 			header( 'HTTP/1.1 403 Forbidden' );
 			exit;
 		}
@@ -90,7 +90,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function cancel_upload() {
-		if ( ! $this->nonce_check() ) {
+		if ( ! $this->nonce_check( false ) ) {
 			header( 'HTTP/1.1 403 Forbidden' );
 			exit;
 		}
@@ -134,11 +134,12 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 				'cf7_hfu-fileupload-widget',
 				'cf7_hfu-fileupload-iframe',
 			], false, true );
-		wp_enqueue_script( "cf7_hfu-upload-script", $this->app->define->plugin_assets_url . '/js/upload.js', [
-			"jquery",
-			"cf7_hfu-fileupload",
+
+		$this->enqueue_script( 'cf7_hfu-upload-script', 'upload.js', [
+			'jquery',
+			'cf7_hfu-fileupload',
 		] );
-		wp_localize_script( 'cf7_hfu-upload-script', 'cf7_hfu', [
+		$params = [
 			'ajax_url'        => admin_url( 'admin-ajax.php' ),
 			'process_key'     => $this->get_process_key(),
 			'random_key'      => $this->get_random_key(),
@@ -146,8 +147,12 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 			'huge_file_class' => $this->get_huge_file_class(),
 			'max_chunk_size'  => $this->get_max_chunk_size(),
 			'nonce_key'       => $this->get_nonce_key(),
-			'nonce_value'     => $this->create_nonce(),
-		] );
+			'nonce_value'     => $this->create_nonce( false ),
+		];
+		/** @var Contact $contact */
+		$contact = Contact::get_instance( $this->app );
+		$params  = $contact->add_nonce_setting( $params );
+		$this->localize_script( 'cf7_hfu-upload-script', 'cf7_hfu', $params );
 		wp_enqueue_style( 'cf7_hfu-upload-style', $this->app->define->plugin_assets_url . '/css/upload.css' );
 
 		global $wp_scripts;
