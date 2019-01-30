@@ -1,9 +1,11 @@
 <?php
 /**
- * @version 1.1.8
+ * @version 1.3.0
  * @author technote-space
  * @since 1.0.0.1
  * @since 1.1.8
+ * @since 1.3.0 Changed: ライブラリの更新 (#12)
+ * @since 1.3.0 Changed: nonceチェックの追加 (#13)
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -112,6 +114,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 
 	/**
 	 * setup assets
+	 * @since 1.3.0 Changed: #13
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function setup_assets() {
