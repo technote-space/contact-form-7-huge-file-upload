@@ -11,7 +11,7 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,9 +19,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Contact
  * @package Cf7_Hfu\Classes\Models
  */
-class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
+class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Core\Interfaces\Nonce {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
+	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Core\Traits\Nonce, \WP_Framework_Common\Traits\Package;
 
 	/** @var File $_file */
 	private $_file = null;
@@ -33,7 +33,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	private $_params = null;
 
 	/**
-	 * @return File|\Technote\Traits\Singleton
+	 * @return File|\WP_Framework_Core\Traits\Singleton
 	 */
 	private function get_file() {
 		if ( ! isset( $this->_file ) ) {
@@ -44,7 +44,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 	}
 
 	/**
-	 * @return Upload|\Technote\Traits\Singleton
+	 * @return Upload|\WP_Framework_Core\Traits\Singleton
 	 */
 	private function get_upload() {
 		if ( ! isset( $this->_upload ) ) {
@@ -87,7 +87,7 @@ class Contact implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Ho
 			$params = $this->uploaded_process( $params, true );
 		} catch ( \Exception $e ) {
 			$this->app->log( $e );
-			$result->invalidate( $tag, $this->app->translate( $e->getMessage() ) );
+			$result->invalidate( $tag, $this->translate( $e->getMessage() ) );
 
 			return $result;
 		}

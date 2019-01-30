@@ -9,29 +9,17 @@
  * @link https://technote.space
  */
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
 return [
 
-	// plugin title
-	'plugin_title'                   => 'Contact Form 7 huge file upload',
+	// main menu title
+	'main_menu_title'                => 'Contact Form 7 huge file upload',
 
 	// db version
 	'db_version'                     => '0.0.1',
-
-	// twitter
-	'twitter'                        => 'technote15',
-
-	// github
-	'github'                         => 'technote-space',
-
-	// contact url
-	'contact_url'                    => 'https://technote.space/contact/',
-
-	// menu image url
-	'menu_image'                     => '',
 
 	// update
 	'update_info_file_url'           => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/develop/update.json',

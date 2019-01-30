@@ -11,7 +11,7 @@
 
 namespace Cf7_Hfu\Classes\Crons;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,7 +19,7 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class File
  * @package Cf7_Hfu\Classes\Crons
  */
-class File extends \Technote\Classes\Crons\Base {
+class File extends \WP_Framework_Cron\Classes\Crons\Base {
 
 	/**
 	 * @return int

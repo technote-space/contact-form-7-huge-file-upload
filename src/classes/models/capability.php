@@ -11,7 +11,7 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,9 +19,9 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Capability
  * @package Cf7_Hfu\Classes\Models
  */
-class Capability implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook {
+class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Presenter;
+	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Common\Traits\Package;
 
 	/**
 	 * @return array

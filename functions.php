@@ -8,11 +8,11 @@
  * @link https://technote.space
  */
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	return;
 }
 
-add_action( 'cf7_hfu-app_initialized', function ( $app ) {
-	/** @var \Technote $app */
+add_action( 'cf7_hfu/app_initialized', function ( $app ) {
+	/** @var \WP_Framework $app */
 	$app->setting->remove_setting( 'assets_version' );
 } );

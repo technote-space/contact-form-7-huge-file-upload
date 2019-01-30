@@ -11,7 +11,7 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
-if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
+if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
 
@@ -19,15 +19,15 @@ if ( ! defined( 'TECHNOTE_PLUGIN' ) ) {
  * Class Upload
  * @package Cf7_Hfu\Classes\Models
  */
-class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hook, \Technote\Interfaces\Nonce, \Technote\Interfaces\Uninstall {
+class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Presenter\Interfaces\Presenter, \WP_Framework_Core\Interfaces\Nonce, \WP_Framework_Common\Interfaces\Uninstall {
 
-	use \Technote\Traits\Singleton, \Technote\Traits\Hook, \Technote\Traits\Nonce, \Technote\Traits\Uninstall;
+	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Presenter\Traits\Presenter, \WP_Framework_Core\Traits\Nonce, \WP_Framework_Common\Traits\Uninstall, \WP_Framework_Common\Traits\Package;
 
 	/** @var File $_file */
 	private $_file = null;
 
 	/**
-	 * @return File|\Technote\Traits\Singleton
+	 * @return File|\WP_Framework_Core\Traits\Singleton
 	 */
 	private function get_file() {
 		if ( ! isset( $this->_file ) ) {
@@ -64,7 +64,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 		$params = $this->get_upload_params( $process, $wpcf7_id, $random );
 		if ( empty( $params ) ) {
 			wp_send_json( [
-				'message' => $this->app->translate( 'The requested contact form was not found.' ),
+				'message' => $this->translate( 'The requested contact form was not found.' ),
 			], 404 );
 			exit;
 		}
@@ -72,7 +72,7 @@ class Upload implements \Technote\Interfaces\Singleton, \Technote\Interfaces\Hoo
 			$this->get_file()->create_upload_dir( $params['base_dir'], $params['tmp_base_dir'] );
 		} catch ( \Exception $e ) {
 			wp_send_json( [
-				'message' => $this->app->translate( $e->getMessage() ),
+				'message' => $this->translate( $e->getMessage() ),
 			], 500 );
 			exit;
 		}
