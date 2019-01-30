@@ -1,3 +1,11 @@
+/**
+ * @version 1.3.0
+ * @author technote-space
+ * @since 1.0.0
+ * @copyright technote All Rights Reserved
+ * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
+ * @link https://technote.space
+ */
 (function ($) {
     $(function () {
         /**
@@ -10,6 +18,8 @@
          * @property {int} max_chunk_size
          * @property {string} nonce_key
          * @property {string} nonce_value
+         * @property {string} contact_nonce_key
+         * @property {string} contact_nonce_value
          * @method {closure} get_form_data
          * @method {object} get_cancel_upload_form_data
          */
@@ -134,6 +144,7 @@
                 $wrap.find('.cancel-btn').val('削除');
                 const html = '<input type="hidden" name="' + $target.attr('name') + '" value="' + result.process + '">' +
                     '<input type="hidden" name="' + $target.attr('name') + cf7_hfu.random_key_slug + '" value="' + result.random + '">' +
+                    '<input type="hidden" name="' + cf7_hfu.contact_nonce_key + '" value="' + cf7_hfu.contact_nonce_value + '">' +
                     '<span class="filename">' + result.name + '</span>';
                 $wrap.find('.file-data').html(html);
                 $wrap.addClass('uploaded').removeClass('uploading');
