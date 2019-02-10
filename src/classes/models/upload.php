@@ -118,7 +118,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function setup_assets() {
-		if ( ! $this->app->post->has_shortcode( [ 'contact-form-7', 'contact-form' ] ) ) {
+		if ( ! $this->app->utility->has_shortcode( [ 'contact-form-7', 'contact-form' ] ) ) {
 			return;
 		}
 
