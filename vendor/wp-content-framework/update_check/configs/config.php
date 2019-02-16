@@ -16,6 +16,6 @@ if ( ! defined( 'WP_CONTENT_FRAMEWORK' ) ) {
 return [
 
 	// update
-	'update_info_file_url'      => '',
+	'update_info_file_url' => '',
 
 ];

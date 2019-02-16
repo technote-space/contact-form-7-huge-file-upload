@@ -2,7 +2,7 @@
 /**
  * WP_Framework_Update_Check Configs Filter
  *
- * @version 0.0.1
+ * @version 0.0.2
  * @author technote-space
  * @copyright technote-space All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
@@ -15,8 +15,8 @@ if ( ! defined( 'WP_CONTENT_FRAMEWORK' ) ) {
 
 return [
 
-	'update' => [
-		'admin_init'               => [
+	'update_check' => [
+		'admin_init' => [
 			'setup_update',
 		],
 	],
