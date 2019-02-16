@@ -46,3 +46,10 @@ Contact Form 7 の機能を拡張するプラグインです。
 ### ファイルへのアクセス制限
 WordPressの権限グループごとにダウンロード権限及び編集（削除）権限を設定することが可能です。  
 ログインしていなくてもダウンロード可能な設定にすることもできます。
+
+## Author
+[GitHub (technote-space)](https://github.com/technote-space)  
+[homepage](https://technote.space)
+
+## プラグイン作成用フレームワーク
+[WP Content Framework](https://github.com/wp-content-framework/core)
