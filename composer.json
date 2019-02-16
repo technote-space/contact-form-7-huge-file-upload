@@ -2,7 +2,8 @@
     "require": {
         "wp-content-framework/core": "~0.0",
         "wp-content-framework/log": "~0.0",
-        "wp-content-framework/upgrade": "~0.0",
+        "wp-content-framework/update": "~0.0",
+        "wp-content-framework/update_check": "~0.0",
         "wp-content-framework/post": "~0.0",
         "blueimp/jquery-file-upload": "^9.28"
     },
