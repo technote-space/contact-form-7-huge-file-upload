@@ -788,7 +788,7 @@ EOS;
 	 */
 	private function get_no_image_file_info() {
 		return [
-			$this->apply_filters( 'no_image_file', $this->app->define->lib_assets_dir . DS . 'img' . DS . 'no_img.png' ),
+			$this->apply_filters( 'no_image_file', $this->get_assets_path( 'img/no_img.png' ) ),
 			'no_img.png',
 		];
 	}
