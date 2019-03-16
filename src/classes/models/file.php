@@ -653,7 +653,7 @@ EOS;
 	 * @return string
 	 */
 	private function get_file_post_title() {
-		return $this->app->utility->replace_time( $this->apply_filters( 'file_post_title' ) );
+		return $this->app->string->replace_time( $this->apply_filters( 'file_post_title' ) );
 	}
 
 	/**
