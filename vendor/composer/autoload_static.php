@@ -7,8 +7,8 @@ namespace Composer\Autoload;
 class ComposerStaticInite0d68cc0bfb780b6d24328cf9319ac3c
 {
     public static $files = array (
-        'cbd6bada88b6bca5d1b8b1b5733f514e' => __DIR__ . '/..' . '/wp-content-framework/core/autoload.php',
         '89ff252b349d4d088742a09c25f5dd74' => __DIR__ . '/..' . '/yahnis-elsts/plugin-update-checker/plugin-update-checker.php',
+        'cbd6bada88b6bca5d1b8b1b5733f514e' => __DIR__ . '/..' . '/wp-content-framework/core/autoload.php',
     );
 
     public static $prefixLengthsPsr4 = array (
