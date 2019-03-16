@@ -48,8 +48,8 @@ WordPressの権限グループごとにダウンロード権限及び編集（�
 ログインしていなくてもダウンロード可能な設定にすることもできます。
 
 ## Author
-[GitHub (technote-space)](https://github.com/technote-space)  
-[homepage](https://technote.space)
+[GitHub (Technote)](https://github.com/technote-space)  
+[Blog](https://technote.space)
 
 ## プラグイン作成用フレームワーク
 [WP Content Framework](https://github.com/wp-content-framework/core)
