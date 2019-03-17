@@ -1,10 +1,11 @@
 <?php
 /**
- * @version 1.3.3
+ * @version 1.3.5
  * @author Technote
  * @since 1.0.0.1
  * @since 1.1.8
  * @since 1.3.0 Changed: ライブラリの更新 (#12)
+ * @since 1.3.5 trivial change
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -103,9 +104,9 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 		if ( $fp = fopen( $file, 'rb' ) ) {
 			while ( ! feof( $fp ) and ( connection_status() == 0 ) ) {
 				echo fread( $fp, 1024 * 4 );
-				ob_flush();
+				@ob_flush();
 			}
-			ob_end_flush();
+			@ob_end_flush();
 			fclose( $fp );
 		}
 		exit;
