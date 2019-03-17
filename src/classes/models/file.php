@@ -1,10 +1,11 @@
 <?php
 /**
- * @version 1.3.3
+ * @version 1.3.5
  * @author Technote
  * @since 1.0.0.1
  * @since 1.1.8
  * @since 1.3.0 Changed: ライブラリの更新 (#12)
+ * @since 1.3.5 trivial change
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
