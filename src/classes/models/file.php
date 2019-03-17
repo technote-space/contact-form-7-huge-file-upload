@@ -103,9 +103,9 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 		if ( $fp = fopen( $file, 'rb' ) ) {
 			while ( ! feof( $fp ) and ( connection_status() == 0 ) ) {
 				echo fread( $fp, 1024 * 4 );
-				ob_flush();
+				@ob_flush();
 			}
-			ob_end_flush();
+			@ob_end_flush();
 			fclose( $fp );
 		}
 		exit;
