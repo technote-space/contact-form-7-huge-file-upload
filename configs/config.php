@@ -23,7 +23,7 @@ return [
 	'db_version'                     => '0.0.1',
 
 	// update
-	'update_info_file_url'           => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/develop/update.json',
+	'update_info_file_url'           => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/master/update.json',
 
 	// suppress setting help contents
 	'suppress_setting_help_contents' => true,
