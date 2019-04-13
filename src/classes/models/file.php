@@ -400,7 +400,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 		$old_file                 = $params['tmp_file'];
 		if ( ! $validation ) {
 			$this->create_save_dir( $params['upload_dir'] );
-			if ( false === @rename( $old_file, $new_file ) ) {
+			if ( false === $this->app->file->move( $old_file, $new_file, true ) ) {
 				throw new \Exception( 'Failed to move file.' );
 			}
 		}
@@ -437,8 +437,8 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	 * @throws \Exception
 	 */
 	private function create_dir( $dir ) {
-		if ( ! file_exists( $dir ) ) {
-			if ( false === mkdir( $dir, 0700, true ) ) {
+		if ( ! $this->app->file->exists( $dir ) ) {
+			if ( false === $this->app->file->mkdir_recursive( $dir, 0700 ) ) {
 				throw new \Exception( 'Failed to make dir.' );
 			}
 		}
@@ -461,8 +461,8 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	 */
 	private function create_htaccess( $dir, $contents ) {
 		$htaccess = $this->get_htaccess_file_name( $dir );
-		if ( ! file_exists( $htaccess ) ) {
-			if ( false === @file_put_contents( $htaccess, $contents, 0644 ) ) {
+		if ( ! $this->app->file->exists( $htaccess ) ) {
+			if ( false === $this->app->file->put_contents( $htaccess, $contents, 0644 ) ) {
 				throw  new \Exception( 'Failed to create .htaccess file.' );
 			}
 		}
@@ -474,8 +474,8 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	private function recreate_htaccess() {
 		$params   = $this->get_upload()->get_non_dynamic_upload_params();
 		$htaccess = $this->get_htaccess_file_name( $params['tmp_base_dir'] );
-		if ( file_exists( $htaccess ) ) {
-			unlink( $htaccess );
+		if ( $this->app->file->exists( $htaccess ) ) {
+			$this->app->file->delete( $htaccess );
 		}
 		$this->create_htaccess( $params['tmp_base_dir'], $this->get_upload_htaccess_contents() );
 	}
@@ -753,7 +753,7 @@ EOS;
 		}
 
 		$file = get_attached_file( $post_id );
-		if ( empty( $file ) || ! file_exists( $file ) ) {
+		if ( empty( $file ) || ! $this->app->file->exists( $file ) ) {
 			return $this->get_no_image_file_info();
 		}
 
@@ -801,30 +801,30 @@ EOS;
 	 * @return bool
 	 */
 	public function remove_dir( $directory_path, $threshold = false ) {
-		if ( ! is_dir( $directory_path ) ) {
+		if ( ! $this->app->file->is_dir( $directory_path ) ) {
 			return false;
 		}
 		foreach ( glob( $directory_path . '/{*,.[!.]*,..?*}', GLOB_BRACE ) as $path ) {
-			if ( is_file( $path ) ) {
+			if ( $this->app->file->is_file( $path ) ) {
 				if ( preg_match( '#\.htaccess$#', $path ) ) {
 					continue;
 				}
 				if ( false !== $threshold ) {
-					if ( filemtime( $path ) >= $threshold ) {
+					if ( $this->app->file->mtime( $path ) >= $threshold ) {
 						continue;
 					}
 				}
-				if ( ! unlink( $path ) ) {
+				if ( ! $this->app->file->delete( $path ) ) {
 					continue;
 				}
-			} elseif ( is_dir( $path ) ) {
+			} elseif ( $this->app->file->is_dir( $path ) ) {
 				if ( $this->remove_dir( $path, $threshold ) === false ) {
 					continue;
 				}
 			}
 		}
 
-		return @rmdir( $directory_path );
+		return $this->app->file->rmdir( $directory_path );
 	}
 
 	/**
@@ -834,7 +834,7 @@ EOS;
 	 */
 	public function find_file( $directory_path ) {
 		foreach ( glob( $directory_path . '/*' ) as $path ) {
-			if ( is_file( $path ) ) {
+			if ( $this->app->file->is_file( $path ) ) {
 				return [
 					'dir'  => $directory_path,
 					'file' => ltrim( str_replace( $directory_path, '', $path ), DS ),

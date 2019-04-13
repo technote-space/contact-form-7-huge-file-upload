@@ -254,7 +254,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 					throw $e;
 				}
 			} catch ( \Exception $e ) {
-				@unlink( $params['new_file'] );
+				$this->app->file->delete( $params['new_file'] );
 				throw $e;
 			}
 		}
