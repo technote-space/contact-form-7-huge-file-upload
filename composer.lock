@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "blueimp/jquery-file-upload",
-            "version": "v9.28.0",
+            "version": "v9.31.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vkhramtsov/jQuery-File-Upload.git",
-                "reference": "ff5accfe2e5c4a522777faa980a90cf86a636d1d"
+                "reference": "2485bf016e1085f0cd8308723064458cb0af5729"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vkhramtsov/jQuery-File-Upload/zipball/ff5accfe2e5c4a522777faa980a90cf86a636d1d",
-                "reference": "ff5accfe2e5c4a522777faa980a90cf86a636d1d",
+                "url": "https://api.github.com/repos/vkhramtsov/jQuery-File-Upload/zipball/2485bf016e1085f0cd8308723064458cb0af5729",
+                "reference": "2485bf016e1085f0cd8308723064458cb0af5729",
                 "shasum": ""
             },
             "type": "library",
@@ -59,7 +59,7 @@
                 "upload",
                 "widget"
             ],
-            "time": "2018-11-13T05:41:39+00:00"
+            "time": "2019-05-24T07:59:46+00:00"
         },
         {
             "name": "matthiasmullie/minify",
