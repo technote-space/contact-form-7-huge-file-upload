@@ -10,6 +10,14 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
+use Exception;
+use WP_Framework_Common\Traits\Package;
+use WP_Framework_Core\Traits\Hook;
+use WP_Framework_Core\Traits\Singleton;
+use WP_Framework_Presenter\Traits\Presenter;
+use WP_Post;
+use WPCF7_FormTag;
+
 if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
@@ -20,7 +28,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
  */
 class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Presenter\Interfaces\Presenter {
 
-	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Presenter\Traits\Presenter, \WP_Framework_Common\Traits\Package;
+	use Singleton, Hook, Presenter, Package;
 
 	/** @var Upload $_upload */
 	private $_upload = null;
@@ -29,7 +37,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	private $_is_edit_post_file = false;
 
 	/**
-	 * @return Upload|\WP_Framework_Core\Traits\Singleton
+	 * @return Upload|Singleton
 	 */
 	private function get_upload() {
 		if ( ! isset( $this->_upload ) ) {
@@ -62,7 +70,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 			$this->delete_hook_cache( 'output_max_size_settings' );
 			try {
 				$this->recreate_htaccess();
-			} catch ( \Exception $e ) {
+			} catch ( Exception $e ) {
 				$this->app->add_message( $e->getMessage(), 'option', true );
 				$this->app->log( $e );
 			}
@@ -161,7 +169,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function edit_form_after_title( $post ) {
@@ -225,7 +233,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 
 	/**
 	 * @param array $actions
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 *
 	 * @return array
 	 */
@@ -263,7 +271,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	}
 
 	/**
-	 * @param \WP_Post $post
+	 * @param WP_Post $post
 	 *
 	 * @return array
 	 */
@@ -387,7 +395,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	 * @param bool $validation
 	 *
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function move_file( $params, $validation ) {
 		$params['save_file_name'] = sha1_file( $params['tmp_file'] ) . '.' . $params['extension'];
@@ -398,7 +406,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 		if ( ! $validation ) {
 			$this->create_save_dir( $params['upload_dir'] );
 			if ( false === $this->app->file->move( $old_file, $new_file, true ) ) {
-				throw new \Exception( 'Failed to move file.' );
+				throw new Exception( 'Failed to move file.' );
 			}
 		}
 		$params['new_file'] = $new_file;
@@ -409,7 +417,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	/**
 	 * @param string $upload_dir
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function create_save_dir( $upload_dir ) {
 		$this->create_dir( $upload_dir );
@@ -419,7 +427,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	 * @param string $base_dir
 	 * @param string $tmp_base_dir
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function create_upload_dir( $base_dir, $tmp_base_dir ) {
 		$this->create_dir( $base_dir );
@@ -431,12 +439,12 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	/**
 	 * @param string $dir
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function create_dir( $dir ) {
 		if ( ! $this->app->file->exists( $dir ) ) {
 			if ( false === $this->app->file->mkdir_recursive( $dir, 0700 ) ) {
-				throw new \Exception( 'Failed to make dir.' );
+				throw new Exception( 'Failed to make dir.' );
 			}
 		}
 	}
@@ -454,19 +462,19 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	 * @param string $dir
 	 * @param string $contents
 	 *
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function create_htaccess( $dir, $contents ) {
 		$htaccess = $this->get_htaccess_file_name( $dir );
 		if ( ! $this->app->file->exists( $htaccess ) ) {
 			if ( false === $this->app->file->put_contents( $htaccess, $contents, 0644 ) ) {
-				throw  new \Exception( 'Failed to create .htaccess file.' );
+				throw  new Exception( 'Failed to create .htaccess file.' );
 			}
 		}
 	}
 
 	/**
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function recreate_htaccess() {
 		$params   = $this->get_upload()->get_non_dynamic_upload_params();
@@ -553,7 +561,7 @@ EOS;
 	 * @param array $params
 	 *
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function attach_media( $params ) {
 		require_once( ABSPATH . 'wp-admin/includes/image.php' );
@@ -561,7 +569,7 @@ EOS;
 		$ext       = $file_type['ext'];
 		$type      = $file_type['type'];
 		if ( empty( $ext ) || empty( $type ) ) {
-			throw new \Exception( 'Not allowed file type.' );
+			throw new Exception( 'Not allowed file type.' );
 		}
 		$access_key = $this->generate_file_access_key( $params );
 		$access_url = $this->get_access_url( $access_key );
@@ -573,14 +581,14 @@ EOS;
 			'post_status'    => 'inherit',
 		] );
 		if ( is_wp_error( $attach_id ) ) {
-			throw new \Exception( $attach_id->get_error_message() );
+			throw new Exception( $attach_id->get_error_message() );
 		}
 		$attach_data = wp_generate_attachment_metadata( $attach_id, $params['new_file'] );
 		if ( ! empty( $attach_data ) && false === wp_update_attachment_metadata( $attach_id, $attach_data ) ) {
-			throw new \Exception( 'Failed to update attachment metadata.' );
+			throw new Exception( 'Failed to update attachment metadata.' );
 		}
 		if ( false === update_attached_file( $attach_id, $params['new_file'] ) ) {
-			throw new \Exception( 'Failed to update attached file.' );
+			throw new Exception( 'Failed to update attached file.' );
 		}
 		$params['attach_id']  = $attach_id;
 		$params['access_url'] = $access_url;
@@ -604,7 +612,7 @@ EOS;
 	 * @param array $params
 	 *
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	public function insert_file_post( $params ) {
 		// 同じプロセスでアップロードしたファイルは同一の投稿に追加
@@ -616,13 +624,13 @@ EOS;
 				'post_status' => 'publish',
 			] ), true );
 			if ( is_wp_error( $post_id ) ) {
-				throw new \Exception( $post_id->get_error_message() );
+				throw new Exception( $post_id->get_error_message() );
 			}
 			$this->app->post->set( $post_id, 'process', $params['process'] );
 		} else {
 			$post = get_post( $post_id );
 			if ( empty( $post ) ) {
-				throw new \Exception( 'Unexpected error has occurred.' );
+				throw new Exception( 'Unexpected error has occurred.' );
 			}
 		}
 		$this->app->post->set( $post_id, 'file_id', $params['attach_id'], true );
@@ -846,7 +854,7 @@ EOS;
 	/**
 	 * @since 1.1.7
 	 *
-	 * @param \WPCF7_FormTag $tag
+	 * @param WPCF7_FormTag $tag
 	 *
 	 * @return int
 	 */

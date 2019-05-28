@@ -8,13 +8,15 @@
  * @link https://technote.space
  */
 
+use WP_Framework_Presenter\Interfaces\Presenter;
+
 if ( ! defined( 'CF7_HFU' ) ) {
 	return;
 }
-/** @var \WP_Framework_Presenter\Interfaces\Presenter $instance */
+/** @var Presenter $instance */
 /** @var array $args */
 /** @var array $list */
-/** @var \WP_Post $post */
+/** @var WP_Post $post */
 ?>
 
 <?php if ( false === $post ) : ?>

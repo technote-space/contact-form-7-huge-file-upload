@@ -10,6 +10,10 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
+use WP_Framework_Common\Traits\Package;
+use WP_Framework_Core\Traits\Hook;
+use WP_Framework_Core\Traits\Singleton;
+
 if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
@@ -20,7 +24,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
  */
 class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook {
 
-	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Common\Traits\Package;
+	use Singleton, Hook, Package;
 
 	/**
 	 * @return array

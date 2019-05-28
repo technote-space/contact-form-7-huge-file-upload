@@ -10,6 +10,18 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
+use Exception;
+use ReflectionClass;
+use ReflectionException;
+use WP_Framework_Common\Traits\Package;
+use WP_Framework_Core\Traits\Hook;
+use WP_Framework_Core\Traits\Nonce;
+use WP_Framework_Core\Traits\Singleton;
+use WPCF7_ContactForm;
+use WPCF7_FormTag;
+use WPCF7_Submission;
+use WPCF7_Validation;
+
 if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
@@ -20,7 +32,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
  */
 class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Core\Interfaces\Nonce {
 
-	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Core\Traits\Nonce, \WP_Framework_Common\Traits\Package;
+	use Singleton, Hook, Nonce, Package;
 
 	/** @var File $_file */
 	private $_file = null;
@@ -32,7 +44,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	private $_params = null;
 
 	/**
-	 * @return File|\WP_Framework_Core\Traits\Singleton
+	 * @return File|Singleton
 	 */
 	private function get_file() {
 		if ( ! isset( $this->_file ) ) {
@@ -43,7 +55,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @return Upload|\WP_Framework_Core\Traits\Singleton
+	 * @return Upload|Singleton
 	 */
 	private function get_upload() {
 		if ( ! isset( $this->_upload ) ) {
@@ -78,10 +90,10 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	/**
 	 * @since 1.3.0 Changed: #13
 	 *
-	 * @param \WPCF7_Validation $result
-	 * @param \WPCF7_FormTag $tag
+	 * @param WPCF7_Validation $result
+	 * @param WPCF7_FormTag $tag
 	 *
-	 * @return \WPCF7_Validation
+	 * @return WPCF7_Validation
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function wpcf7_file_validation_filter( $result, $tag ) {
@@ -114,7 +126,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 
 		try {
 			$params = $this->uploaded_process( $params, true );
-		} catch ( \Exception $e ) {
+		} catch ( Exception $e ) {
 			$this->app->log( $e );
 			$result->invalidate( $tag, $this->translate( $e->getMessage() ) );
 
@@ -141,12 +153,12 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @param \WPCF7_ContactForm $contact_form
+	 * @param WPCF7_ContactForm $contact_form
 	 * @param bool $abort
-	 * @param \WPCF7_Submission $submission
+	 * @param WPCF7_Submission $submission
 	 *
 	 * @return bool
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function wpcf7_before_send_mail(
@@ -160,7 +172,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 		foreach ( $this->_params as $name => $param ) {
 			try {
 				$params = $this->uploaded_process( $param );
-			} catch ( \Exception $e ) {
+			} catch ( Exception $e ) {
 				$this->app->log( $e );
 				$this->set_contact_form_post_data( $submission, $name, null );
 				continue;
@@ -172,14 +184,14 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @param \WPCF7_Submission $submission
+	 * @param WPCF7_Submission $submission
 	 * @param string $key
 	 * @param mixed $value
 	 *
-	 * @throws \ReflectionException
+	 * @throws ReflectionException
 	 */
 	private function set_contact_form_post_data( $submission, $key, $value ) {
-		$reflection = new \ReflectionClass( $submission );
+		$reflection = new ReflectionClass( $submission );
 		$property   = $reflection->getProperty( 'posted_data' );
 		$property->setAccessible( true );
 		$posted_data = $property->getValue( $submission );
@@ -207,7 +219,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @param \WPCF7_FormTag $tag
+	 * @param WPCF7_FormTag $tag
 	 * @param array $file
 	 *
 	 * @return false|int
@@ -220,7 +232,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @param \WPCF7_FormTag $tag
+	 * @param WPCF7_FormTag $tag
 	 * @param array $file
 	 *
 	 * @return bool
@@ -236,7 +248,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	 * @param bool $validation
 	 *
 	 * @return array
-	 * @throws \Exception
+	 * @throws Exception
 	 */
 	private function uploaded_process( $params, $validation = false ) {
 		$params = $this->get_file()->move_file( $params, $validation );
@@ -246,11 +258,11 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 				try {
 					$params = $this->get_file()->insert_file_post( $params );
 					$this->get_file()->remove_dir( $params['tmp_upload_dir'] );
-				} catch ( \Exception $e ) {
+				} catch ( Exception $e ) {
 					$this->get_file()->detach_media( $params );
 					throw $e;
 				}
-			} catch ( \Exception $e ) {
+			} catch ( Exception $e ) {
 				$this->app->file->delete( $params['new_file'] );
 				throw $e;
 			}

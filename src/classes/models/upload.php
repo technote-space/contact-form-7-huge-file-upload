@@ -10,6 +10,16 @@
 
 namespace Cf7_Hfu\Classes\Models;
 
+use Exception;
+use UploadHandler;
+use WP_Framework_Common\Traits\Package;
+use WP_Framework_Common\Traits\Uninstall;
+use WP_Framework_Core\Traits\Hook;
+use WP_Framework_Core\Traits\Nonce;
+use WP_Framework_Core\Traits\Singleton;
+use WP_Framework_Presenter\Traits\Presenter;
+use WPCF7_FormTag;
+
 if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
@@ -20,13 +30,13 @@ if ( ! defined( 'CF7_HFU' ) ) {
  */
 class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook, \WP_Framework_Presenter\Interfaces\Presenter, \WP_Framework_Core\Interfaces\Nonce, \WP_Framework_Common\Interfaces\Uninstall {
 
-	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Presenter\Traits\Presenter, \WP_Framework_Core\Traits\Nonce, \WP_Framework_Common\Traits\Uninstall, \WP_Framework_Common\Traits\Package;
+	use Singleton, Hook, Presenter, Nonce, Uninstall, Package;
 
 	/** @var File $_file */
 	private $_file = null;
 
 	/**
-	 * @return File|\WP_Framework_Core\Traits\Singleton
+	 * @return File|Singleton
 	 */
 	private function get_file() {
 		if ( ! isset( $this->_file ) ) {
@@ -69,7 +79,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 		}
 		try {
 			$this->get_file()->create_upload_dir( $params['base_dir'], $params['tmp_base_dir'] );
-		} catch ( \Exception $e ) {
+		} catch ( Exception $e ) {
 			wp_send_json( [
 				'message' => $this->translate( $e->getMessage() ),
 			], 500 );
@@ -77,7 +87,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 		}
 
 		$param_name                             = $params['param_name'];
-		$response                               = ( new \UploadHandler( $this->get_upload_handler_params( $params ) ) )->get_response();
+		$response                               = ( new UploadHandler( $this->get_upload_handler_params( $params ) ) )->get_response();
 		$response[ $param_name ][0]->process    = $process;
 		$response[ $param_name ][0]->random     = $random;
 		$response[ $param_name ][0]->param_name = $param_name;
@@ -278,7 +288,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 			$tags               = $item->scan_form_tags();
 			$file_type_patterns = [];
 			foreach ( (array) $tags as $tag ) {
-				/** @var \WPCF7_FormTag $tag */
+				/** @var WPCF7_FormTag $tag */
 				if ( empty( $tag->name ) || $tag->name != $param_name ) {
 					continue;
 				}

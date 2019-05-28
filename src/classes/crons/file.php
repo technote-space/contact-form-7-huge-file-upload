@@ -10,6 +10,9 @@
 
 namespace Cf7_Hfu\Classes\Crons;
 
+use Cf7_Hfu\Classes\Models\Upload;
+use WP_Framework_Cron\Classes\Crons\Base;
+
 if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
 }
@@ -18,7 +21,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
  * Class File
  * @package Cf7_Hfu\Classes\Crons
  */
-class File extends \WP_Framework_Cron\Classes\Crons\Base {
+class File extends Base {
 
 	/**
 	 * @return int
@@ -35,9 +38,9 @@ class File extends \WP_Framework_Cron\Classes\Crons\Base {
 			return;
 		}
 
-		/** @var \Cf7_Hfu\Classes\Models\Upload $upload */
+		/** @var Upload $upload */
 		/** @var \Cf7_Hfu\Classes\Models\File $file */
-		$upload = \Cf7_Hfu\Classes\Models\Upload::get_instance( $this->app );
+		$upload = Upload::get_instance( $this->app );
 		$file   = \Cf7_Hfu\Classes\Models\File::get_instance( $this->app );
 		$params = $upload->get_non_dynamic_upload_params();
 		$file->remove_dir( $params['tmp_base_dir'], time() - $this->apply_filters( 'delete_file_threshold' ) );
