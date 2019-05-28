@@ -19,9 +19,6 @@ return [
 	// main menu title
 	'main_menu_title'                => 'Contact Form 7 huge file upload',
 
-	// db version
-	'db_version'                     => '0.0.1',
-
 	// update
 	'update_info_file_url'           => 'https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/master/update.json',
 
