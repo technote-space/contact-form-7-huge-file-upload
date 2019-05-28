@@ -16,11 +16,11 @@ if ( ! defined( 'CF7_HFU' ) ) {
 ?>
 
 <script>
-    (function ($) {
-        $('#<?php $instance->id(); ?>-file_list .download-file').on('click', function () {
-            const url = $(this).data('url');
-            window.open(url, null);
-            return false;
-        });
-    })(jQuery);
+	( function( $ ) {
+		$( '#<?php $instance->id(); ?>-file_list .download-file' ).on( 'click', function() {
+			const url = $( this ).data( 'url' );
+			window.open( url, null );
+			return false;
+		} );
+	} )( jQuery );
 </script>

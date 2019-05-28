@@ -16,7 +16,6 @@ if ( ! defined( 'CF7_HFU' ) ) {
 /** @var array $args */
 /** @var array $list */
 ?>
-
 <div class="wrap" id="<?php $instance->id(); ?>-file_list">
     <h2><?php $instance->h( 'File List', true ); ?></h2>
     <table class="widefat striped">
