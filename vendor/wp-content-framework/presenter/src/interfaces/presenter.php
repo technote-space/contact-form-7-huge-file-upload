@@ -2,7 +2,7 @@
 /**
  * WP_Framework_Presenter Interfaces Presenter
  *
- * @version 0.0.16
+ * @version 0.0.19
  * @author Technote
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
@@ -11,6 +11,10 @@
 
 namespace WP_Framework_Presenter\Interfaces;
 
+use WP_Framework;
+use WP_Framework_Core\Traits\Translate;
+use WP_Post;
+
 if ( ! defined( 'WP_CONTENT_FRAMEWORK' ) ) {
 	exit;
 }
@@ -18,10 +22,17 @@ if ( ! defined( 'WP_CONTENT_FRAMEWORK' ) ) {
 /**
  * Interface Presenter
  * @package WP_Framework_Presenter\Interfaces
- * @property \WP_Framework $app
- * @mixin \WP_Framework_Core\Traits\Translate
+ * @property WP_Framework $app
+ * @mixin Translate
  */
 interface Presenter {
+
+	/**
+	 * @param string $name
+	 *
+	 * @return bool
+	 */
+	public function view_exists( $name );
 
 	/**
 	 * @param string $name
@@ -201,6 +212,15 @@ interface Presenter {
 	public function no_img( array $args = [], $echo = true );
 
 	/**
+	 * @param null|int|WP_Post $post
+	 * @param array $args
+	 * @param string|array $size
+	 *
+	 * @return string
+	 */
+	public function get_thumbnail( $post = null, array $args = [], $size = 'post-thumbnail' );
+
+	/**
 	 * @param string $path
 	 * @param int $priority
 	 * @param bool $use_upload_dir
@@ -331,5 +351,12 @@ interface Presenter {
 	 * @return string
 	 */
 	public function get_form_by_type( $type, $parse_db_type = true );
+
+	/**
+	 * @param mixed $value
+	 *
+	 * @return string
+	 */
+	public function convert_select_value( $value );
 
 }

@@ -2,7 +2,7 @@
 /**
  * WP_Framework_Admin Classes Models Admin
  *
- * @version 0.0.23
+ * @version 0.0.32
  * @author Technote
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
@@ -10,6 +10,13 @@
  */
 
 namespace WP_Framework_Admin\Classes\Models;
+
+use WP_Framework_Admin\Classes\Controllers\Admin\Base;
+use WP_Framework_Admin\Traits\Package;
+use WP_Framework_Core\Traits\Loader;
+use WP_Framework_Core\Traits\Nonce;
+use WP_Framework_Custom_Post\Interfaces\Custom_Post;
+use WP_Framework_Presenter\Traits\Presenter;
 
 if ( ! defined( 'WP_CONTENT_FRAMEWORK' ) ) {
 	exit;
@@ -21,7 +28,7 @@ if ( ! defined( 'WP_CONTENT_FRAMEWORK' ) ) {
  */
 class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Presenter\Interfaces\Presenter, \WP_Framework_Core\Interfaces\Nonce {
 
-	use \WP_Framework_Core\Traits\Loader, \WP_Framework_Presenter\Traits\Presenter, \WP_Framework_Core\Traits\Nonce, \WP_Framework_Admin\Traits\Package;
+	use Loader, Presenter, Nonce, Package;
 
 	/**
 	 * @var array $_messages
@@ -29,12 +36,12 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 	private $_messages = [];
 
 	/**
-	 * @var \WP_Framework_Admin\Classes\Controllers\Admin\Base[] $_pages
+	 * @var Base[] $_pages
 	 */
 	private $_pages = [];
 
 	/**
-	 * @var \WP_Framework_Admin\Classes\Controllers\Admin\Base[] $_hooks
+	 * @var Base[] $_hooks
 	 */
 	private $_hooks = [];
 
@@ -50,7 +57,7 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 
 		$this->_pages = [];
 		foreach ( $this->get_class_list() as $page ) {
-			/** @var \WP_Framework_Admin\Classes\Controllers\Admin\Base $page */
+			/** @var Base $page */
 			if ( $this->app->user_can( $this->apply_filters( 'admin_menu_capability', $page->get_capability(), $page ) ) ) {
 				$this->_pages[] = $page;
 			}
@@ -69,7 +76,7 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 			$this->get_admin_menu_position( $slug, $title )
 		);
 
-		/** @var \WP_Framework_Admin\Classes\Controllers\Admin\Base $_page */
+		/** @var Base $_page */
 		foreach ( $this->_pages as $_page ) {
 			$hook = add_submenu_page(
 				$slug,
@@ -124,7 +131,7 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 		}
 
 		$pages = $this->app->array->map( $this->_pages, function ( $p ) {
-			/** @var \WP_Framework_Admin\Classes\Controllers\Admin\Base $p */
+			/** @var Base $p */
 			return $this->get_page_prefix() . $p->get_page_slug();
 		} );
 		$pages = array_combine( $pages, $this->_pages );
@@ -133,14 +140,14 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 		$custom_post = \WP_Framework_Custom_Post\Classes\Models\Custom_Post::get_instance( $this->app );
 		$types       = $custom_post->get_custom_posts();
 		$types       = array_combine( $this->app->array->map( $types, function ( $p ) {
-			/** @var \WP_Framework_Custom_Post\Interfaces\Custom_Post $p */
+			/** @var Custom_Post $p */
 			return "edit.php?post_type={$p->get_post_type()}";
 		} ), $types );
 
 		$sort = [];
 		foreach ( $submenu[ $slug ] as $item ) {
 			if ( isset( $pages[ $item[2] ] ) ) {
-				/** @var \WP_Framework_Admin\Classes\Controllers\Admin\Base $p */
+				/** @var Base $p */
 				$p = $pages[ $item[2] ];
 				if ( method_exists( $p, 'get_load_priority' ) ) {
 					$priority = $p->get_load_priority();
@@ -149,7 +156,7 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 				}
 				$sort[] = $priority;
 			} elseif ( isset( $types[ $item[2] ] ) ) {
-				/** @var \WP_Framework_Custom_Post\Interfaces\Custom_Post $p */
+				/** @var Custom_Post $p */
 				$p = $types[ $item[2] ];
 				if ( method_exists( $p, 'get_load_priority' ) ) {
 					$priority = $p->get_load_priority();
@@ -182,13 +189,13 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 	/**
 	 * @param string[] $actions
 	 * @param string $plugin_file
-	 * @param array $plugin_data
+	 * @param array|null $plugin_data
 	 * @param string $context
 	 *
 	 * @return array
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function plugin_action_links( array $actions, $plugin_file, array $plugin_data, $context ) {
+	private function plugin_action_links( array $actions, $plugin_file, $plugin_data, $context ) {
 		if ( $this->app->is_theme || $plugin_file !== $this->app->define->plugin_base_name ) {
 			return $actions;
 		}
@@ -196,19 +203,19 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 		$action_links = $this->parse_config_links( $this->app->get_config( 'config', 'action_links' ), $plugin_data, $context );
 		! empty( $action_links ) and $actions = array_merge( $action_links, $actions );
 
-		return $this->apply_filters( 'plugin_action_links', $actions );
+		return $this->apply_filters( 'plugin_action_links', $actions, $plugin_file, $plugin_data, $context );
 	}
 
 	/**
 	 * @param string[] $plugin_meta
 	 * @param string $plugin_file
-	 * @param array $plugin_data
+	 * @param array|null $plugin_data
 	 * @param string $status
 	 *
 	 * @return array
 	 */
 	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function plugin_row_meta( array $plugin_meta, $plugin_file, array $plugin_data, $status ) {
+	private function plugin_row_meta( array $plugin_meta, $plugin_file, $plugin_data, $status ) {
 		if ( $this->app->is_theme || $plugin_file !== $this->app->define->plugin_base_name ) {
 			return $plugin_meta;
 		}
@@ -216,17 +223,17 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 		$plugin_row_meta = $this->parse_config_links( $this->app->get_config( 'config', 'plugin_row_meta' ), $plugin_data, $status );
 		! empty( $plugin_row_meta ) and $plugin_meta = array_merge( $plugin_meta, $plugin_row_meta );
 
-		return $this->apply_filters( 'plugin_row_meta', $plugin_meta );
+		return $this->apply_filters( 'plugin_row_meta', $plugin_meta, $plugin_file, $plugin_data, $status );
 	}
 
 	/**
 	 * @param array $links
-	 * @param $plugin_data
-	 * @param $status
+	 * @param array|null $plugin_data
+	 * @param string $status
 	 *
 	 * @return array
 	 */
-	private function parse_config_links( array $links, array $plugin_data, $status ) {
+	private function parse_config_links( array $links, $plugin_data, $status ) {
 		if ( is_array( $links ) && ! empty( $links ) ) {
 			return array_filter( $this->app->array->map( $links, function ( $setting ) use ( $plugin_data, $status ) {
 				if ( empty( $setting['url'] ) || ! isset( $setting['label'] ) ) {
@@ -287,17 +294,13 @@ class Admin implements \WP_Framework_Core\Interfaces\Loader, \WP_Framework_Prese
 	}
 
 	/**
-	 * @param \WP_Framework_Admin\Classes\Controllers\Admin\Base $page
+	 * @param Base $page
 	 */
 	private function load( $page ) {
-		if ( $this->app->user_can( $page->get_capability() ) ) {
-			$this->get_view( 'admin/include/layout', [
-				'page' => $page,
-				'slug' => $page->get_page_slug(),
-			], true );
-		} else {
-			$this->get_view( 'admin/include/error', [ 'message' => 'Forbidden.' ], true );
-		}
+		$this->get_view( 'admin/include/layout', [
+			'page' => $page,
+			'slug' => $page->get_page_slug(),
+		], true );
 	}
 
 	/**

@@ -1,16 +1,18 @@
 <?php
 /**
- * @version 1.3.0
+ * @version 1.3.7
  * @author Technote
  * @since 1.0.0.1
- * @since 1.1.8
- * @since 1.3.0 Changed: ライブラリの更新 (#12)
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
  */
 
 namespace Cf7_Hfu\Classes\Models;
+
+use WP_Framework_Common\Traits\Package;
+use WP_Framework_Core\Traits\Hook;
+use WP_Framework_Core\Traits\Singleton;
 
 if ( ! defined( 'CF7_HFU' ) ) {
 	exit;
@@ -22,7 +24,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
  */
 class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Core\Interfaces\Hook {
 
-	use \WP_Framework_Core\Traits\Singleton, \WP_Framework_Core\Traits\Hook, \WP_Framework_Common\Traits\Package;
+	use Singleton, Hook, Package;
 
 	/**
 	 * @return array
