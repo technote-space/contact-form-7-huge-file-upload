@@ -5,7 +5,7 @@
         "wp-content-framework/update": "~0.0",
         "wp-content-framework/update_check": "~0.0",
         "wp-content-framework/post": "~0.0",
-        "blueimp/jquery-file-upload": "^9.28"
+        "blueimp/jquery-file-upload": "^10.0"
     },
     "config": {
         "platform": {

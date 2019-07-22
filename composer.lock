@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "07f1660c3c2677d6be35eda007b32734",
+    "content-hash": "641991ee18e560a801b9f96e7a4d50e1",
     "packages": [
         {
             "name": "blueimp/jquery-file-upload",
-            "version": "v9.31.0",
+            "version": "v10.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vkhramtsov/jQuery-File-Upload.git",
-                "reference": "2485bf016e1085f0cd8308723064458cb0af5729"
+                "reference": "364e721a0b0d4a8580e098fa0f0ede72c0225f92"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vkhramtsov/jQuery-File-Upload/zipball/2485bf016e1085f0cd8308723064458cb0af5729",
-                "reference": "2485bf016e1085f0cd8308723064458cb0af5729",
+                "url": "https://api.github.com/repos/vkhramtsov/jQuery-File-Upload/zipball/364e721a0b0d4a8580e098fa0f0ede72c0225f92",
+                "reference": "364e721a0b0d4a8580e098fa0f0ede72c0225f92",
                 "shasum": ""
             },
             "type": "library",
@@ -59,7 +59,7 @@
                 "upload",
                 "widget"
             ],
-            "time": "2019-05-24T07:59:46+00:00"
+            "time": "2019-07-22T13:11:43+00:00"
         },
         {
             "name": "matthiasmullie/minify",
@@ -196,7 +196,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -237,7 +237,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -278,7 +278,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -316,7 +316,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -364,7 +364,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -401,7 +401,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -442,7 +442,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -482,7 +482,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -519,7 +519,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -557,7 +557,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -595,7 +595,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -633,7 +633,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
@@ -671,7 +671,7 @@
             ],
             "authors": [
                 {
-                    "name": "technote",
+                    "name": "Technote",
                     "email": "technote.space@gmail.com",
                     "homepage": "https://technote.space"
                 }
