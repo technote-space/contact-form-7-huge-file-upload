@@ -19,7 +19,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
 
 <?php if ( false === $post ) : ?>
 	<h2><?php $instance->h( 'File not found.', true ); ?></h2>
-<?php else: ?>
+<?php else : ?>
 	<h1><?php $instance->h( $post->post_title ); ?></h1>
 	<?php $instance->get_view( 'admin/file_list', $args, true ); ?>
 <?php endif; ?>

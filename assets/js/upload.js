@@ -59,13 +59,13 @@
 
 		// ロード中表示用
 		const loading = '<div class="file-uploading">' +
-		                '<div class="uploading-progress">' +
-		                '<div class="uploading-progress-label">' +
-		                '<span class="file-data-wrap">' +
-		                '<span class="file-data"></span><input type="button" value="キャンセル" class="cancel-btn"></div>' +
-		                '</span>' +
-		                '</div>' +
-		                '</div>';
+			'<div class="uploading-progress">' +
+			'<div class="uploading-progress-label">' +
+			'<span class="file-data-wrap">' +
+			'<span class="file-data"></span><input type="button" value="キャンセル" class="cancel-btn"></div>' +
+			'</span>' +
+			'</div>' +
+			'</div>';
 
 		$file_upload.each( function( i ) {
 			const $this = $( this ), $wrap = $( this ).closest( '.wpcf7-form-control-wrap' );
@@ -143,9 +143,9 @@
 				$progress.progressbar( 'value', 100 );
 				$wrap.find( '.cancel-btn' ).val( '削除' );
 				const html = '<input type="hidden" name="' + $target.attr( 'name' ) + '" value="' + result.process + '">' +
-				             '<input type="hidden" name="' + $target.attr( 'name' ) + cf7_hfu.random_key_slug + '" value="' + result.random + '">' +
-				             '<input type="hidden" name="' + cf7_hfu.contact_nonce_key + '" value="' + cf7_hfu.contact_nonce_value + '">' +
-				             '<span class="filename">' + result.name + '</span>';
+					'<input type="hidden" name="' + $target.attr( 'name' ) + cf7_hfu.random_key_slug + '" value="' + result.random + '">' +
+					'<input type="hidden" name="' + cf7_hfu.contact_nonce_key + '" value="' + cf7_hfu.contact_nonce_value + '">' +
+					'<span class="filename">' + result.name + '</span>';
 				$wrap.find( '.file-data' ).html( html );
 				$wrap.addClass( 'uploaded' ).removeClass( 'uploading' );
 			} ).on( 'fileuploadfail', function( e ) {

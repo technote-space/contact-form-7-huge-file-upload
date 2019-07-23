@@ -27,18 +27,18 @@ if ( ! defined( 'CF7_HFU' ) ) {
 			<tr>
 				<td colspan="3"><?php $instance->h( 'File not found.', true ); ?></td>
 			</tr>
-		<?php else: ?>
+		<?php else : ?>
 			<?php foreach ( $list as $item ) : ?>
 				<?php if ( empty( $item['name'] ) ) : ?>
 					<tr>
 						<td colspan="3"><?php $instance->h( 'This file has been deleted.', true ); ?></td>
 					</tr>
-				<?php else: ?>
+				<?php else : ?>
 					<tr>
 						<td>
 							<?php if ( $item['can_edit'] ) : ?>
 								<?php $instance->url( $item['edit_link'], $item['name'], false, true ); ?>
-							<?php else: ?>
+							<?php else : ?>
 								<?php $instance->h( $item['name'] ); ?>
 							<?php endif; ?>
 						</td>

@@ -16,11 +16,11 @@ if ( ! defined( 'CF7_HFU' ) ) {
 ?>
 
 <style>
-    #adminmenuwrap <?php $instance->h($selector); ?> {
-        display: none;
-    }
+	#adminmenuwrap <?php $instance->h( $selector ); ?> {
+		display: none;
+	}
 
-    .locked-info {
-        display: none;
-    }
+	.locked-info {
+		display: none;
+	}
 </style>
