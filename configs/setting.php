@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.0
  * @author Technote
- * @since 1.0.0.0
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -13,7 +11,6 @@ if ( ! defined( 'CF7_HFU' ) ) {
 }
 
 return [
-
 	9 => [
 		'Upload'           => [
 			10 => [
@@ -85,5 +82,4 @@ return [
 			],
 		],
 	],
-
 ];

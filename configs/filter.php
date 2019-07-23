@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.5
  * @author Technote
- * @since 1.0.0.0
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -13,8 +11,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
 }
 
 return [
-
-	'\Cf7_Hfu\Classes\Models\Upload' => [
+	'\Cf7_Hfu\Classes\Models\Upload'     => [
 		'template_redirect'                     => [
 			'setup_assets',
 		],
@@ -31,8 +28,7 @@ return [
 			'cancel_upload',
 		],
 	],
-
-	'\Cf7_Hfu\Classes\Models\Contact' => [
+	'\Cf7_Hfu\Classes\Models\Contact'    => [
 		'wpcf7_validate_file'    => [
 			'wpcf7_file_validation_filter' => 9,
 		],
@@ -43,8 +39,7 @@ return [
 			'wpcf7_before_send_mail' => 9,
 		],
 	],
-
-	'\Cf7_Hfu\Classes\Models\File' => [
+	'\Cf7_Hfu\Classes\Models\File'       => [
 		'${prefix}changed_option'             => [
 			'changed_option',
 		],
@@ -85,7 +80,6 @@ return [
 			'redirect_to_download_page',
 		],
 	],
-
 	'\Cf7_Hfu\Classes\Models\Capability' => [
 		'${prefix}app_activated'   => [
 			'set_capability',

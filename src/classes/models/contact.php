@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.7
  * @author Technote
- * @since 1.0.0.1
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -66,7 +64,6 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @since 1.3.0 Added: #13
 	 * @return string
 	 */
 	public function get_nonce_slug() {
@@ -74,7 +71,6 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @since 1.3.0 Added: #13
 	 *
 	 * @param array $params
 	 *
@@ -88,7 +84,6 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @since 1.3.0 Changed: #13
 	 *
 	 * @param WPCF7_Validation $result
 	 * @param WPCF7_FormTag $tag

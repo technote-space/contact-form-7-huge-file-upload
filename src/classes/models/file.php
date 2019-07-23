@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.7
  * @author Technote
- * @since 1.0.0.1
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -852,7 +850,6 @@ EOS;
 	}
 
 	/**
-	 * @since 1.1.7
 	 *
 	 * @param WPCF7_FormTag $tag
 	 *
@@ -881,7 +878,6 @@ EOS;
 	}
 
 	/**
-	 * @since 1.1.7
 	 *
 	 * @param string $size
 	 * @param int|null $default
@@ -907,7 +903,6 @@ EOS;
 	}
 
 	/**
-	 * @since 1.1.7
 	 * @return int
 	 */
 	public function get_default_max_filesize() {
@@ -915,7 +910,6 @@ EOS;
 	}
 
 	/**
-	 * @since 1.1.7
 	 * @return int
 	 */
 	public function get_default_max_chunk_size() {
