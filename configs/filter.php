@@ -40,44 +40,17 @@ return [
 		],
 	],
 	'\Cf7_Hfu\Classes\Models\File'       => [
-		'${prefix}changed_option'             => [
+		'${prefix}changed_option' => [
 			'changed_option',
 		],
-		'before_delete_post'                  => [
+		'before_delete_post'      => [
 			'delete_file',
 		],
-		'init'                                => [
+		'init'                    => [
 			'register_file_post_type' => 9,
 		],
-		'wp_ajax_cf7hfu_file_download'        => [
-			'file_download',
-		],
-		'wp_ajax_nopriv_cf7hfu_file_download' => [
-			'file_download',
-		],
-		'image_downsize'                      => [
+		'image_downsize'          => [
 			'image_downsize',
-		],
-		'admin_head-post.php'                 => [
-			'check_edit_post_file',
-		],
-		'wp_image_editors'                    => [
-			'wp_image_editors',
-		],
-		'edit_form_after_title'               => [
-			'edit_form_after_title',
-		],
-		'admin_menu'                          => [
-			'setup_download_page',
-		],
-		'manage_posts_columns'                => [
-			'delete_check_box',
-		],
-		'post_row_actions'                    => [
-			'delete_edit_links',
-		],
-		'admin_init'                          => [
-			'redirect_to_download_page',
 		],
 	],
 	'\Cf7_Hfu\Classes\Models\Capability' => [
@@ -92,6 +65,35 @@ return [
 		],
 		'custom_menu_order'        => [
 			'filter_wp_menu_nopriv',
+		],
+	],
+	'\Cf7_Hfu\Classes\Models\Download'   => [
+		'wp_ajax_cf7hfu_file_download'        => [
+			'file_download',
+		],
+		'wp_ajax_nopriv_cf7hfu_file_download' => [
+			'file_download',
+		],
+		'admin_menu'                          => [
+			'setup_download_page',
+		],
+		'manage_posts_columns'                => [
+			'delete_check_box',
+		],
+		'post_row_actions'                    => [
+			'delete_edit_links',
+		],
+		'admin_init'                          => [
+			'redirect_to_download_page',
+		],
+		'admin_head-post.php'                 => [
+			'check_edit_post_file',
+		],
+		'wp_image_editors'                    => [
+			'wp_image_editors',
+		],
+		'edit_form_after_title'               => [
+			'edit_form_after_title',
 		],
 	],
 ];

@@ -30,18 +30,18 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 
 	use Singleton, Hook, Presenter, Nonce, Uninstall, Package;
 
-	/** @var File $_file */
-	private $_file = null;
+	/** @var File $file */
+	private $file = null;
 
 	/**
 	 * @return File|Singleton
 	 */
 	private function get_file() {
-		if ( ! isset( $this->_file ) ) {
-			$this->_file = File::get_instance( $this->app );
+		if ( ! isset( $this->file ) ) {
+			$this->file = File::get_instance( $this->app );
 		}
 
-		return $this->_file;
+		return $this->file;
 	}
 
 	/**
@@ -53,35 +53,29 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 
 	/**
 	 * upload process
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function upload_process() {
 		if ( ! $this->nonce_check( false ) ) {
-			header( 'HTTP/1.1 403 Forbidden' );
-			exit;
+			$this->json_error( 403 );
 		}
 		$process  = $this->get_process();
 		$random   = $this->get_random();
 		$wpcf7_id = $this->get_wpcf7_id();
-		if ( empty( $process ) || empty( $random ) || empty( $_FILES ) || empty( $wpcf7_id ) ) {
-			header( 'HTTP/1.1 400 Bad Request' );
-			exit;
+		$files    = $this->app->input->file();
+		if ( empty( $process ) || empty( $random ) || empty( $files ) || empty( $wpcf7_id ) ) {
+			$this->json_error( 400 );
 		}
 
 		$params = $this->get_upload_params( $process, $wpcf7_id, $random );
 		if ( empty( $params ) ) {
-			wp_send_json( [
-				'message' => $this->translate( 'The requested contact form was not found.' ),
-			], 404 );
-			exit;
+			$this->json_error( 404 );
 		}
 		try {
 			$this->get_file()->create_upload_dir( $params['base_dir'], $params['tmp_base_dir'] );
 		} catch ( Exception $e ) {
-			wp_send_json( [
-				'message' => $this->translate( $e->getMessage() ),
-			], 500 );
-			exit;
+			$this->json_error( 500 );
 		}
 
 		$param_name                             = $params['param_name'];
@@ -94,20 +88,19 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 
 	/**
 	 * cancel upload
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function cancel_upload() {
 		if ( ! $this->nonce_check( false ) ) {
-			header( 'HTTP/1.1 403 Forbidden' );
-			exit;
+			$this->json_error( 403 );
 		}
 		$process    = $this->get_process();
 		$random     = $this->get_random();
 		$wpcf7_id   = $this->get_wpcf7_id();
 		$param_name = $this->app->input->post( 'param_name' );
 		if ( empty( $process ) || empty( $random ) || empty( $param_name ) || empty( $wpcf7_id ) ) {
-			header( 'HTTP/1.1 400 Bad Request' );
-			exit;
+			$this->json_error( 400 );
 		}
 		$params = $this->get_upload_params( $process, $wpcf7_id, $random, $param_name );
 		if ( empty( $params ) ) {
@@ -118,30 +111,47 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	}
 
 	/**
-	 * setup assets
-	 * @since 1.3.0 Changed: #13
+	 * @param int $code
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
+	public function json_error( $code ) {
+		status_header( $code );
+		wp_send_json_error();
+	}
+
+	/**
+	 * setup assets
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 */
 	private function setup_assets() {
 		if ( ! $this->app->utility->has_shortcode( [ 'contact-form-7', 'contact-form' ] ) ) {
 			return;
 		}
 
 		$assets_dir = $this->app->define->plugin_url . '/vendor/blueimp/jquery-file-upload/js/';
-		wp_enqueue_script( 'cf7_hfu-fileupload-widget',
-			$assets_dir . 'vendor/jquery.ui.widget.js', [
+		wp_enqueue_script(
+			'cf7_hfu-fileupload-widget',
+			$assets_dir . 'vendor/jquery.ui.widget.js',
+			[
 				'jquery',
-			], false, true );
-		wp_enqueue_script( 'cf7_hfu-fileupload-iframe',
-			$assets_dir . 'jquery.iframe-transport.js', [
+			], $this->app->get_plugin_version(), true
+		);
+		wp_enqueue_script(
+			'cf7_hfu-fileupload-iframe',
+			$assets_dir . 'jquery.iframe-transport.js',
+			[
 				'jquery',
-			], false, true );
-		wp_enqueue_script( 'cf7_hfu-fileupload',
-			$assets_dir . 'jquery.fileupload.js', [
+			], $this->app->get_plugin_version(), true
+		);
+		wp_enqueue_script(
+			'cf7_hfu-fileupload',
+			$assets_dir . 'jquery.fileupload.js',
+			[
 				'jquery',
 				'cf7_hfu-fileupload-widget',
 				'cf7_hfu-fileupload-iframe',
-			], false, true );
+			], $this->app->get_plugin_version(), true
+		);
 
 		$this->enqueue_script( 'cf7_hfu-upload-script', 'upload.js', [
 			'jquery',
@@ -161,12 +171,12 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 		$contact = Contact::get_instance( $this->app );
 		$params  = $contact->add_nonce_setting( $params );
 		$this->localize_script( 'cf7_hfu-upload-script', 'cf7_hfu', $params );
-		wp_enqueue_style( 'cf7_hfu-upload-style', $this->app->define->plugin_assets_url . '/css/upload.css' );
+		wp_enqueue_style( 'cf7_hfu-upload-style', $this->app->define->plugin_assets_url . '/css/upload.css', [], $this->app->get_plugin_version() );
 
 		global $wp_scripts;
-		$ui = $wp_scripts->query( 'jquery-ui-core' );
+		$jquery_ui = $wp_scripts->query( 'jquery-ui-core' );
 		wp_enqueue_script( 'jquery-ui-progressbar' );
-		wp_enqueue_style( 'jquery-ui-progressbar', "//ajax.googleapis.com/ajax/libs/jqueryui/{$ui->ver}/themes/smoothness/jquery-ui.min.css" );
+		wp_enqueue_style( 'jquery-ui-progressbar', "//ajax.googleapis.com/ajax/libs/jqueryui/{$jquery_ui->ver}/themes/smoothness/jquery-ui.min.css", [], $this->app->get_plugin_version() );
 	}
 
 	/**
@@ -271,7 +281,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	 */
 	public function get_upload_params( $process, $wpcf7_id, $random = '', $param_name = null ) {
 		$params          = $this->get_non_dynamic_upload_params();
-		$param_name      = ! isset( $param_name ) ? array_keys( $_FILES )[0] : $param_name;
+		$param_name      = ! isset( $param_name ) ? array_keys( $this->app->input->file() )[0] : $param_name;
 		$tmp_upload_path = md5( $process . $random . $param_name );
 		$tmp_base_dir    = "{$params['base_dir']}/tmp";
 		$tmp_upload_dir  = "{$tmp_base_dir}/{$tmp_upload_path}";
@@ -283,28 +293,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 			if ( ! $item ) {
 				return false;
 			}
-			$tags               = $item->scan_form_tags();
-			$file_type_patterns = [];
-			foreach ( (array) $tags as $tag ) {
-				/** @var WPCF7_FormTag $tag */
-				if ( empty( $tag->name ) || $tag->name != $param_name ) {
-					continue;
-				}
-				$classes = explode( ' ', $tag->get_class_option() );
-				if ( ! in_array( $this->get_huge_file_class(), $classes ) ) {
-					continue;
-				}
-
-				$file_type_pattern    = wpcf7_acceptable_filetypes( $tag->get_option( 'filetypes' ), 'regex' );
-				$file_type_patterns[] = empty( $file_type_pattern ) ? 'gif|jpe?g|png' : $file_type_pattern;
-				$max_file_size        = $this->get_file()->get_size_limit( $tag );
-
-				break;
-			}
-			if ( ! empty( $file_type_patterns ) ) {
-				$file_type_patterns = array_unique( $file_type_patterns );
-				$accept_file_types  = '/\.(' . implode( ')|(', $file_type_patterns ) . ')$/i';
-			}
+			list( $max_file_size, $accept_file_types ) = $this->process_tags( (array) $item->scan_form_tags(), $param_name, $max_file_size, $accept_file_types );
 		}
 
 		return $this->apply_filters( 'upload_params', array_merge( $params, [
@@ -318,17 +307,54 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	}
 
 	/**
+	 * @param array $tags
+	 * @param string $param_name
+	 * @param int $max_file_size
+	 * @param string $accept_file_types
+	 *
+	 * @return array
+	 */
+	private function process_tags( $tags, $param_name, $max_file_size, $accept_file_types ) {
+		foreach ( $tags as $tag ) {
+			/** @var WPCF7_FormTag $tag */
+			if ( empty( $tag->name ) || $tag->name !== $param_name ) {
+				continue;
+			}
+
+			$classes = explode( ' ', $tag->get_class_option() );
+			if ( ! in_array( $this->get_huge_file_class(), $classes, true ) ) {
+				continue;
+			}
+
+			$file_type_pattern    = wpcf7_acceptable_filetypes( $tag->get_option( 'filetypes' ), 'regex' );
+			$file_type_patterns[] = empty( $file_type_pattern ) ? 'gif|jpe?g|png' : $file_type_pattern;
+			$max_file_size        = $this->get_file()->get_size_limit( $tag );
+			break;
+		}
+
+		if ( ! empty( $file_type_patterns ) ) {
+			$file_type_patterns = array_unique( $file_type_patterns );
+			$accept_file_types  = '/\.(' . implode( ')|(', $file_type_patterns ) . ')$/i';
+		}
+
+		return [
+			$max_file_size,
+			$accept_file_types,
+		];
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_non_dynamic_upload_params() {
 		$wp_upload_dir = wp_upload_dir();
 		$url           = content_url() . '/uploads';
-		$Y             = date( 'Y' );
-		$m             = date( 'm' );
+		$year          = date( 'Y' );
+		$month         = date( 'm' );
 		$path          = $this->apply_filters( 'upload_path', 'cf7_hfu' );
 		$base_dir      = "{$wp_upload_dir['basedir']}/{$path}";
 		$tmp_base_dir  = "{$base_dir}/tmp";
-		$dir           = "{$Y}/{$m}";
+		$dir           = "{$year}/{$month}";
 		$upload_dir    = "{$base_dir}/{$dir}";
 		$upload_url    = "{$url}/{$path}/{$dir}";
 

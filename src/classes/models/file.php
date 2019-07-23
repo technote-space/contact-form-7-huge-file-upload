@@ -13,7 +13,6 @@ use WP_Framework_Common\Traits\Package;
 use WP_Framework_Core\Traits\Hook;
 use WP_Framework_Core\Traits\Singleton;
 use WP_Framework_Presenter\Traits\Presenter;
-use WP_Post;
 use WPCF7_FormTag;
 
 if ( ! defined( 'CF7_HFU' ) ) {
@@ -28,41 +27,41 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 
 	use Singleton, Hook, Presenter, Package;
 
-	/** @var Upload $_upload */
-	private $_upload = null;
-
-	/** @var bool $_is_edit_post_file */
-	private $_is_edit_post_file = false;
+	/** @var Upload $upload */
+	private $upload = null;
 
 	/**
 	 * @return Upload|Singleton
 	 */
 	private function get_upload() {
-		if ( ! isset( $this->_upload ) ) {
-			$this->_upload = Upload::get_instance( $this->app );
+		if ( ! isset( $this->upload ) ) {
+			$this->upload = Upload::get_instance( $this->app );
 		}
 
-		return $this->_upload;
+		return $this->upload;
 	}
 
 	/**
 	 * register file post type
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function register_file_post_type() {
 		register_post_type( $this->get_file_post_type(), $this->get_file_post_type_args() );
 	}
 
 	/**
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 *
 	 * @param string $key
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function changed_option( $key ) {
 		if ( in_array( $key, [
 			$this->get_filter_prefix() . 'max_chunk_size',
 			$this->get_filter_prefix() . 'max_filesize',
 			$this->get_filter_prefix() . 'output_max_size_settings',
-		] ) ) {
+		], true ) ) {
 			$this->delete_hook_cache( 'max_chunk_size' );
 			$this->delete_hook_cache( 'max_filesize' );
 			$this->delete_hook_cache( 'output_max_size_settings' );
@@ -76,9 +75,11 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	}
 
 	/**
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 *
 	 * @param int $post_id
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function delete_file( $post_id ) {
 		$post = get_post( $post_id );
 		if ( empty( $post ) || $post->post_type !== $this->get_file_post_type() ) {
@@ -93,37 +94,16 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	}
 
 	/**
-	 * file download
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function file_download() {
-
-		list( $file, $name ) = $this->get_download_file_info();
-
-		@ob_end_clean();
-		header( 'Content-Type: application/force-download' );
-		header( 'Content-Length: ' . filesize( $file ) );
-		header( 'Content-Disposition: attachment; filename*=UTF-8\'\'' . rawurlencode( $name ) );
-		if ( $fp = fopen( $file, 'rb' ) ) {
-			while ( ! feof( $fp ) and ( connection_status() == 0 ) ) {
-				echo fread( $fp, 1024 * 4 );
-				@ob_flush();
-			}
-			@ob_end_flush();
-			fclose( $fp );
-		}
-		exit;
-	}
-
-	/**
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 *
 	 * @param bool $result
-	 * @param int $id
+	 * @param int $post_id
 	 *
 	 * @return array|bool
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function image_downsize( $result, $id ) {
-		$access_key = $this->app->post->get( 'access_key', $id );
+	private function image_downsize( $result, $post_id ) {
+		$access_key = $this->app->post->get( 'access_key', $post_id );
 		if ( ! empty( $access_key ) ) {
 			return [
 				$this->get_access_url( $access_key ),
@@ -137,178 +117,10 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	}
 
 	/**
-	 * check edit post file
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function check_edit_post_file() {
-		global $post;
-		if ( empty( $post ) ) {
-			return;
-		}
-
-		$access_key = $this->app->post->get( 'access_key', $post->ID );
-		if ( ! empty( $access_key ) ) {
-			$this->_is_edit_post_file = true;
-		}
-	}
-
-	/**
-	 * @param array $image_editors
-	 *
-	 * @return array
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function wp_image_editors( $image_editors ) {
-		if ( $this->_is_edit_post_file ) {
-			return [];
-		}
-
-		return $image_editors;
-	}
-
-	/**
-	 * @param WP_Post $post
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function edit_form_after_title( $post ) {
-		if ( $post->post_type !== $this->get_file_post_type() ) {
-			return;
-		}
-
-		$this->add_script_view( 'admin/script/file_list' );
-		$this->get_view( 'admin/file_list', [
-			'list' => $this->get_file_list( $post ),
-		], true );
-	}
-
-	/**
-	 * setup download page
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function setup_download_page() {
-		/** @var Capability $capability */
-		$capability = Capability::get_instance( $this->app );
-		if ( in_array( $this->app->user->user_role, $capability->get_downloadable_roles() ) && ! in_array( $this->app->user->user_role, $capability->get_editable_roles() ) ) {
-			$slug = $this->get_download_page_slug();
-			$this->add_style_view( 'admin/style/show_file_post', [
-				'selector' => '#menu-posts-' . $this->get_file_post_type() . ' .wp-submenu-wrap',
-			] );
-			$this->add_script_view( 'admin/script/file_list' );
-			add_submenu_page( 'edit.php?post_type=' . $this->get_file_post_type(), 'Download', 'Download', $this->app->user->user_role, $slug, function () {
-				$post_id = $this->app->input->get( 'post_id' );
-				if ( empty( $post_id ) || ! $this->check_can_download( $post_id ) || ! ( $post = get_post( $post_id ) ) ) {
-					$list = false;
-					$post = false;
-				} else {
-					$list = $this->get_file_list( $post );
-				}
-				$this->get_view( 'admin/show_file_post', [
-					'list' => $list,
-					'post' => $post,
-				], true );
-			} );
-		}
-	}
-
-	/**
-	 * @param array $columns
-	 * @param string $post_type
-	 *
-	 * @return array
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function delete_check_box( $columns, $post_type ) {
-		if ( $post_type === $this->get_file_post_type() ) {
-			/** @var Capability $capability */
-			$capability = Capability::get_instance( $this->app );
-			if ( ! in_array( $this->app->user->user_role, $capability->get_editable_roles() ) ) {
-				unset( $columns['cb'] );
-			}
-		}
-
-		return $columns;
-	}
-
-	/**
-	 * @param array $actions
-	 * @param WP_Post $post
-	 *
-	 * @return array
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function delete_edit_links( $actions, $post ) {
-		if ( $post->post_type === $this->get_file_post_type() ) {
-			$post_type = get_post_type_object( $post->post_type );
-			if ( ! current_user_can( $post_type->cap->delete_posts ) ) {
-				unset( $actions['inline hide-if-no-js'] );
-				unset( $actions['edit'] );
-				unset( $actions['trash'] );
-				unset( $actions['clone'] );
-				unset( $actions['edit_as_new_draft'] );
-			}
-		}
-
-		return $actions;
-	}
-
-	/**
-	 * redirect to download page
-	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
-	private function redirect_to_download_page() {
-		global $pagenow;
-		if ( $pagenow !== 'post.php' || ! ( $post_id = $this->app->input->get( 'post' ) ) || ! ( $post = get_post( $post_id ) ) || $post->post_type !== $this->get_file_post_type() ) {
-			return;
-		}
-		/** @var Capability $capability */
-		$capability = Capability::get_instance( $this->app );
-		if ( in_array( $this->app->user->user_role, $capability->get_downloadable_roles() ) && ! in_array( $this->app->user->user_role, $capability->get_editable_roles() ) ) {
-			wp_safe_redirect( get_admin_url() . 'admin.php?page=' . $this->get_download_page_slug() . '&post_id=' . $post_id );
-			exit;
-		}
-	}
-
-	/**
-	 * @param WP_Post $post
-	 *
-	 * @return array
-	 */
-	private function get_file_list( $post ) {
-		return $list = array_map( function ( $file_id ) {
-			$post         = get_post( $file_id );
-			$access_key   = empty( $post ) ? false : $this->app->post->get( 'access_key', $file_id );
-			$can_edit     = empty( $access_key ) ? false : $this->check_can_edit( $file_id );
-			$can_download = empty( $access_key ) ? false : $this->check_can_download( $file_id );
-			$url          = empty( $access_key ) ? false : $this->get_access_url( $access_key );
-			$edit_link    = empty( $access_key ) ? false : get_edit_post_link( $file_id, 'link' );
-			$size         = empty( $access_key ) ? false : $this->get_appropriate_size_format_callback( $this->app->post->get( 'size', $file_id ), function ( $size, $norm, $unit ) {
-				return round( $size / $norm, 2 ) . $unit . 'B';
-			} );
-			$name         = empty( $post ) ? '' : $post->post_title;
-
-			return [
-				'can_edit'     => $can_edit,
-				'can_download' => $can_download,
-				'url'          => $url,
-				'edit_link'    => $edit_link,
-				'name'         => $name,
-				'size'         => $size,
-			];
-		}, $this->get_file_ids( $post->ID ) );
-	}
-
-	/**
 	 * @return string
 	 */
 	public function get_file_post_type() {
 		return $this->apply_filters( 'file_post_type', 'cf7_hfu' );
-	}
-
-	/**
-	 * @return string
-	 */
-	private function get_download_page_slug() {
-		return $this->apply_filters( 'download_page_slug', 'download-' . $this->get_file_post_type() );
 	}
 
 	/**
@@ -335,7 +147,10 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 			'capabilities'        => $capabilities,
 			'map_meta_cap'        => true,
 			'hierarchical'        => false,
-			'rewrite'             => [ 'slug' => $this->get_file_post_slug(), 'with_front' => false ],
+			'rewrite'             => [
+				'slug'       => $this->get_file_post_slug(),
+				'with_front' => false,
+			],
 			'query_var'           => true,
 			'menu_icon'           => $this->get_file_post_menu_icon(),
 			'supports'            => $this->get_file_post_supports(),
@@ -361,7 +176,7 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	/**
 	 * @return string|array
 	 */
-	public function get_file_post_capability_type() {
+	private function get_file_post_capability_type() {
 		return $this->apply_filters( 'capability_type', 'cf7_hfu' );
 	}
 
@@ -507,7 +322,8 @@ EOS;
 		if ( $this->apply_filters( 'output_max_size_settings' ) ) {
 			$max_chunk_size = $this->get_appropriate_size( $this->parse_filesize( $this->apply_filters( 'max_chunk_size' ), $this->get_default_max_chunk_size() ) + 100 * 1000 ); // form data を考慮して少し大きめ
 			$max_filesize   = $this->get_appropriate_size( $this->parse_filesize( $this->apply_filters( 'max_filesize' ), $this->get_default_max_filesize() ) );
-			$contents       .= <<< EOS
+
+			$contents .= <<< EOS
 
 php_value post_max_size {$max_chunk_size}
 php_value upload_max_filesize {$max_filesize}
@@ -540,16 +356,17 @@ EOS;
 			return $size;
 		}
 		$size -= 0;
-		$kb   = 1024;
-		$mb   = $kb * $kb;
-		$gb   = $mb * $kb;
+
+		$size_kb = 1024;
+		$size_mb = $size_kb * $size_kb;
+		$size_gb = $size_mb * $size_kb;
 		switch ( true ) {
-			case $size >= $gb:
-				return $callback( $size, $gb, 'G' );
-			case $size >= $mb:
-				return $callback( $size, $mb, 'M' );
-			case $size >= $kb:
-				return $callback( $size, $kb, 'K' );
+			case $size >= $size_gb:
+				return $callback( $size, $size_gb, 'G' );
+			case $size >= $size_mb:
+				return $callback( $size, $size_mb, 'M' );
+			case $size >= $size_kb:
+				return $callback( $size, $size_kb, 'K' );
 			default:
 				return $callback( $size, 1, '' );
 		}
@@ -562,7 +379,7 @@ EOS;
 	 * @throws Exception
 	 */
 	public function attach_media( $params ) {
-		require_once( ABSPATH . 'wp-admin/includes/image.php' );
+		require_once ABSPATH . 'wp-admin/includes/image.php';
 		$file_type = wp_check_filetype( $params['new_file'] );
 		$ext       = $file_type['ext'];
 		$type      = $file_type['type'];
@@ -602,7 +419,7 @@ EOS;
 	 *
 	 * @return string
 	 */
-	private function get_access_url( $access_key ) {
+	public function get_access_url( $access_key ) {
 		return admin_url( 'admin-ajax.php' ) . '?action=cf7hfu_file_download&access_key=' . $access_key;
 	}
 
@@ -670,134 +487,6 @@ EOS;
 	}
 
 	/**
-	 * @param $access_key
-	 *
-	 * @return false|int
-	 */
-	private function get_attached_file_post( $access_key ) {
-		return $this->app->post->first( 'access_key', $access_key );
-	}
-
-	/**
-	 * @param int $post_id
-	 *
-	 * @return bool
-	 */
-	private function check_can_download( $post_id ) {
-		$can_download = true;
-		if ( $this->apply_filters( 'must_be_logged_in_to_download' ) ) {
-			if ( ! $this->app->user->logged_in ) {
-				$can_download = false;
-			} else {
-				/** @var Capability $capability */
-				$capability   = Capability::get_instance( $this->app );
-				$capabilities = $capability->get_downloadable_roles();
-				if ( ! in_array( 'all', $capabilities ) && ! in_array( $this->app->user->user_role, $capabilities ) ) {
-					$can_download = false;
-				}
-			}
-		}
-
-		return $this->apply_filters( 'can_download', $can_download, $post_id, $this->app->user->user_data );
-	}
-
-	/**
-	 * @param int $post_id
-	 *
-	 * @return bool
-	 */
-	private function check_can_edit( $post_id ) {
-		$can_edit = $this->check_can_download( $post_id );
-		if ( $can_edit ) {
-			if ( ! $this->app->user->logged_in ) {
-				$can_edit = false;
-			} else {
-				/** @var Capability $capability */
-				$capability   = Capability::get_instance( $this->app );
-				$capabilities = $capability->get_editable_roles();
-				if ( ! in_array( 'all', $capabilities ) && ! in_array( $this->app->user->user_role, $capabilities ) ) {
-					$can_edit = false;
-				}
-			}
-		}
-
-		return $this->apply_filters( 'can_edit', $can_edit, $post_id, $this->app->user->user_data );
-	}
-
-	/**
-	 * @return array
-	 */
-	private function get_download_file_info() {
-		$access_key = $this->app->input->get( 'access_key' );
-		if ( empty( $access_key ) ) {
-			return $this->get_no_image_file_info();
-		}
-
-		$post_id = $this->get_attached_file_post( $access_key );
-		if ( empty( $post_id ) ) {
-			return $this->get_no_image_file_info();
-		}
-
-		if ( ! $this->check_can_download( $post_id ) ) {
-			if ( ! $this->app->user->logged_in && $this->apply_filters( 'must_be_logged_in_to_download' ) ) {
-				$post_id = $this->app->post->first( 'file_id', $post_id );
-				if ( ! empty( $post_id ) && ( $redirect = $this->get_edit_post_link( $post_id ) ) ) {
-					wp_redirect( $redirect );
-					exit;
-				}
-			}
-
-			return $this->get_no_image_file_info();
-		}
-
-		$post = get_post( $post_id );
-		if ( empty( $post ) ) {
-			return $this->get_no_image_file_info();
-		}
-
-		$file = get_attached_file( $post_id );
-		if ( empty( $file ) || ! $this->app->file->exists( $file ) ) {
-			return $this->get_no_image_file_info();
-		}
-
-		$name      = $post->post_title;
-		$extension = $this->app->post->get( 'extension', $post_id );
-
-		return [
-			$file,
-			rawurlencode( $name . '.' . $extension ),
-		];
-	}
-
-	/**
-	 * @param $post_id
-	 *
-	 * @return string|false
-	 */
-	private function get_edit_post_link( $post_id ) {
-		if ( ! $post = get_post( $post_id ) ) {
-			return false;
-		}
-		$action           = '&action=edit';
-		$post_type_object = get_post_type_object( $post->post_type );
-		if ( ! $post_type_object ) {
-			return false;
-		}
-
-		return admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) );
-	}
-
-	/**
-	 * @return array
-	 */
-	private function get_no_image_file_info() {
-		return [
-			$this->apply_filters( 'no_image_file', $this->get_assets_path( 'img/no_img.png' ) ),
-			'no_img.png',
-		];
-	}
-
-	/**
 	 * @param string $directory_path
 	 * @param bool|int $threshold
 	 *
@@ -807,7 +496,7 @@ EOS;
 		if ( ! $this->app->file->is_dir( $directory_path ) ) {
 			return false;
 		}
-		foreach ( glob( $directory_path . '/{*,.[!.]*,..?*}', GLOB_BRACE ) as $path ) {
+		foreach ( $this->scan_dir( $directory_path ) as $path ) {
 			if ( $this->app->file->is_file( $path ) ) {
 				if ( preg_match( '#\.htaccess$#', $path ) ) {
 					continue;
@@ -817,13 +506,9 @@ EOS;
 						continue;
 					}
 				}
-				if ( ! $this->app->file->delete( $path ) ) {
-					continue;
-				}
+				$this->app->file->delete( $path );
 			} elseif ( $this->app->file->is_dir( $path ) ) {
-				if ( $this->remove_dir( $path, $threshold ) === false ) {
-					continue;
-				}
+				$this->remove_dir( $path, $threshold );
 			}
 		}
 
@@ -831,22 +516,12 @@ EOS;
 	}
 
 	/**
-	 * @param $directory_path
+	 * @param string $dir
 	 *
-	 * @return false|array
+	 * @return array
 	 */
-	public function find_file( $directory_path ) {
-		foreach ( glob( $directory_path . '/*' ) as $path ) {
-			if ( $this->app->file->is_file( $path ) ) {
-				return [
-					'dir'  => $directory_path,
-					'file' => ltrim( str_replace( $directory_path, '', $path ), DS ),
-					'path' => $path,
-				];
-			}
-		}
-
-		return false;
+	private function scan_dir( $dir ) {
+		return glob( $dir . '/{*,.[!.]*,..?*}', GLOB_BRACE );
 	}
 
 	/**
@@ -857,7 +532,8 @@ EOS;
 	 */
 	public function get_size_limit( $tag ) {
 		$allowed_size = 0;
-		if ( $file_size_a = $tag->get_option( 'limit' ) ) {
+		$file_size_a  = $tag->get_option( 'limit' );
+		if ( $file_size_a ) {
 			foreach ( $file_size_a as $file_size ) {
 				$file_size = $this->parse_filesize( $file_size );
 				if ( isset( $file_size ) ) {
@@ -891,9 +567,9 @@ EOS;
 			$result = (int) $matches[1];
 			if ( ! empty( $matches[2] ) ) {
 				$kbmb = strtolower( $matches[2] );
-				if ( in_array( $kbmb, [ 'kb', 'k' ] ) ) {
+				if ( in_array( $kbmb, [ 'kb', 'k' ], true ) ) {
 					$result *= 1024;
-				} elseif ( in_array( $kbmb, [ 'mb', 'm' ] ) ) {
+				} elseif ( in_array( $kbmb, [ 'mb', 'm' ], true ) ) {
 					$result *= 1024 * 1024;
 				}
 			}
