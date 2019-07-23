@@ -5,6 +5,7 @@ Requires at least: 3.9.3
 Requires PHP: 5.6
 Tested up to: 5.2
 Stable tag: 1.3.7
+Donate link: https://paypal.me/technote0space
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
