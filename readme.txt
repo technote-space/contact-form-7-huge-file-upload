@@ -15,6 +15,8 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 "Contact Form 7 huge file upload" can add function to upload huge file to "Contact Form 7".
 [日本語の説明](https://technote.space/contact-form-7-huge-file-upload "Documentation in Japanese")
+[GitHub (More details)](https://github.com/technote-space/contact-form-7-huge-file-upload)
+[Issues (Reporting a new bug or feature request)](https://github.com/technote-space/contact-form-7-huge-file-upload/issues)
 
 This plugin needs PHP5.6 or higher.
 
@@ -25,15 +27,6 @@ This plugin needs PHP5.6 or higher.
 
 == Screenshots ==
 
-1. Settings
-2. File Detail
-3. Mail
-
 == Upgrade Notice ==
 
 == Changelog ==
-
-= 1.3.7 =
-
-* First release
-
