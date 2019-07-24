@@ -1,60 +1,57 @@
 /**
- * @version 1.0.0
  * @author Technote
- * @since 1.0.0
  * @copyright technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
  */
 .file-uploading {
-    display: none;
+	display: none;
 }
 
 .file-uploading .uploading-progress-label {
-    position: absolute;
-    left: 50%;
-    display: inline-block;
+	position: absolute;
+	left: 50%;
+	display: inline-block;
 }
 
 .file-uploading .uploading-progress-label .file-data-wrap {
-    margin-left: -50%;
-    display: inline-block;
+	margin-left: -50%;
+	display: inline-block;
 }
 
 .file-uploading .uploading-progress-label .file-data-wrap .file-data {
-    display: inline-block;
-    width: 300px;
-    max-width: 70%;
-    white-space: nowrap;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
-    font-size: 11px;
-    vertical-align: middle;
-    padding: 1px 3px;
-    background: #f3f4f5;
-    box-shadow: #333 1px 1px 4px;
+	display: inline-block;
+	width: 300px;
+	max-width: 70%;
+	white-space: nowrap;
+	overflow: hidden !important;
+	text-overflow: ellipsis;
+	font-size: 11px;
+	vertical-align: middle;
+	padding: 1px 3px;
+	background: #f3f4f5;
+	box-shadow: #333 1px 1px 4px;
 }
 
 .file-uploading .uploading-progress-label .file-data-wrap .cancel-btn {
-    display: inline-block;
-    font-size: 0.75em;
-    padding: 1px 10px;
-    margin-left: 4px;
-    cursor: pointer;
-    vertical-align: middle;
+	display: inline-block;
+	font-size: 0.75em;
+	padding: 1px 10px;
+	margin-left: 4px;
+	cursor: pointer;
+	vertical-align: middle;
 }
-
 
 
 .file-uploading .ui-widget-content {
-    border: 1px solid #aaa;
+	border: 1px solid #aaa;
 }
 
 .file-uploading div.ui-widget .ui-widget-header {
-    background: #ccc;
-    border: 1px solid #aaa;
+	background: #ccc;
+	border: 1px solid #aaa;
 }
 
 input[type="file"].wpcf7-form-control {
-    height: auto;
+	height: auto;
 }

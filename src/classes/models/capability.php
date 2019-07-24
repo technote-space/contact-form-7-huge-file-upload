@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.7
  * @author Technote
- * @since 1.0.0.1
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -55,8 +53,9 @@ class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framewo
 
 	/**
 	 * set capability
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function set_capability() {
 		foreach ( $this->get_downloadable_roles() as $role ) {
 			$role = get_role( $role );
@@ -78,8 +77,9 @@ class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framewo
 
 	/**
 	 * unset capability
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function unset_capability() {
 		foreach ( $this->get_editable_roles() as $role ) {
 			$role = get_role( $role );
@@ -100,24 +100,28 @@ class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framewo
 	}
 
 	/**
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 *
 	 * @param string $key
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function reset_capability( $key ) {
 		if ( in_array( $key, [
 			$this->get_filter_prefix() . 'editable_roles',
-		] ) ) {
+		], true ) ) {
 			$this->unset_capability();
 			$this->set_capability();
 		}
 	}
 
 	/**
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 *
 	 * @param bool $result
 	 *
 	 * @return bool
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function filter_wp_menu_nopriv( $result ) {
 		global $_wp_menu_nopriv, $_wp_submenu_nopriv, $pagenow, $typenow;
 		if ( 'edit.php' === $pagenow ) {

@@ -1,0 +1,75 @@
+language: php
+
+sudo: false
+dist: trusty
+
+git:
+  depth: 3
+
+notifications:
+  email: false
+  slack:
+    secure: qKhDgvUA5A1PuIFx+QUEa8r4lqVX8BjWts/J5LBJ2QxtkFrpZ1v3iFH1jbjmyzAnk19YKE048iHbWUMKaVnb5UF9Ban/Qo/+/J4mB3TNj48YRZ+EpqQFwbzBEhbVOy199Kofk6p5gowdtC08xe/Ys9/WV7jZzYQrCmbDfQjI9FSrOQGgBVPUW2tOnB3wN7h1DaQtNqfz1UjyDXFmqrFTcVB8lSKzh5Rq5klB2nAzxYZCP0aMAh4EZpKEEggGKQwxsEJ3P/z8cj6SdxcwHqAslR/qCgpkCwoQ4V5jnGWn2C3k4gT7ReBC+RMy1U9iFPi+ak91LZWjINtJIKSIuS9j4TIMutpXkUNER5u/aavJAIw5UpBUQROIVa7YPxyK2PziB/vVBqnhO1ZoAv6W1IPnSAbVJ+3SXiAKkQvDe+Kqave5nRAfq5VNpT3RNpZSzusrPJNEtmbFtHWsa3pRGeFgVBmmAHfDGj0XbiphJpGibRLGJv4/cWSdj/oao02E8mxbazsPN/14+DgL13PXRj6G3GRWF3ncmXjDriUMprfWRchDYfjMw3OatUVx45Io/6HXdpn1aiQu1/WBSCIpFS420bXdP7fSWQXAh1pUNzvfo9qG9BtqEGn612CGn/UBHkN6+JNyMnb1Djhu+ckztZ1SINT1IUInbXpPbEkwIHbB8Qg=
+
+branches:
+  only:
+    - master
+    - "/^v[0-9\\.]+/"
+
+cache:
+  yarn: true
+  directories:
+    - "${HOME}/.composer/cache"
+    - node_modules
+    - "${TRAVIS_BUILD_DIR}/.plugin"
+    - "${TRAVIS_BUILD_DIR}/.work/cache"
+
+stages:
+  - name: check
+    if: branch = master and tag IS blank and type IN (pull_request, api, cron)
+  - name: deploy
+    if: tag IS present
+
+before_script:
+  - git clone --depth=1 https://github.com/wp-content-framework/travis-ci.git travis-ci
+  - bash travis-ci/bin/prepare.sh
+
+jobs:
+  fast_finish: true
+  include:
+    - stage: check
+      language: php
+      php: '7.2'
+      script: bash travis-ci/bin/php/phpcs.sh
+    - stage: check
+      language: php
+      php: '7.2'
+      script: bash travis-ci/bin/php/phpmd.sh
+
+    - stage: check
+      language: node_js
+      node_js: '11'
+      dist: trusty
+      script: bash travis-ci/bin/js/js-lint.sh
+
+
+    - stage: deploy
+      language: node_js
+      node_js: '11'
+      dist: trusty
+      script: skip
+      before_deploy:
+        - source travis-ci/bin/deploy/env.sh
+        - bash travis-ci/bin/deploy/create.sh
+      deploy:
+        provider: releases
+        skip_cleanup: true
+        name: ${RELEASE_TITLE}
+        tag_name: ${RELEASE_TAG}
+        api_key:
+          secure: Z5HwZxgjzMtGvHYVfaZ08wHlBAjBeiO8OyaNcCAWbsSBfnbq2OEis/t6XVJWVjZ/rXZjl2UkIqL05PyU3ozEkjvSp02Smi0v5gqFBaMewPbzHp9Uncq+FfNcHfVOGmMl3dBj/nVWMKqlHi7t9sGL3Txh2yMNDRm9ynItXryJIoQmhNq+/n2MR08fYxW62KA3NKJv8nzv73AQ8n2dnXFNWjfWYQ6tnhkmg9l9TXEkADLd6I4QLi0U4Bb9KV9pxGB91XH8MHJD4TO1PKo30ISl3qGN8dxEEuYR2DKbA2PXpHLDvBw5A7epNcf7ULi+K6SJrVpoGQ6cK387m//fqbSCOaY7UPVWkvTDhZucghkdVhsSFygdx6aLJeLh5Fj37RSXF+/zpYLwSEGPwpdaQFAKmy19+Po7oKsj7DmQlvJthjkyvCXQ1klFiozl2MSW3aN+X15A4o+V/sZDOamgazrkv4N3DtfC2gQFZDmsvMf2PjRORfM6OeWn+pkxV5MDAniBGHWwTukG0bAGex4iGpkAhylADJ77XBa8gtkDhofRoFmAIlJHRyQxGrj/l9kxXepRY+IXg4VIfz0j4q+wdqeHKBJ6fQ9WalLC4fjtYafwLRW+omK+eQEpMeWasrjpNIEK8pmgHb0bBllRaEGlIOB/q8Epyty3eKfK3SF6wJV2B0k=
+        file: ${RELEASE_FILE}
+        body: ${RELEASE_BODY}
+        overwrite: true
+        on:
+          tags: true

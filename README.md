@@ -1,34 +1,41 @@
 # Contact Form 7 huge file upload
 
+[![Build Status](https://travis-ci.com/technote-space/contact-form-7-huge-file-upload.svg?branch=master)](https://travis-ci.com/technote-space/contact-form-7-huge-file-upload)
+[![CodeFactor](https://www.codefactor.io/repository/github/technote-space/contact-form-7-huge-file-upload/badge)](https://www.codefactor.io/repository/github/technote-space/contact-form-7-huge-file-upload)
 [![License: GPL v2+](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![PHP: >=5.6](https://img.shields.io/badge/PHP-%3E%3D5.6-orange.svg)](http://php.net/)
 [![WordPress: >=3.9.3](https://img.shields.io/badge/WordPress-%3E%3D3.9.3-brightgreen.svg)](https://wordpress.org/)
 
+![バナー](https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/images/assets/banner-772x250.png)
+
 Contact Form 7 の機能を拡張するプラグインです。  
 通常アップロードできないような大容量のファイルをアップロードできるようになります。
 
-## スクリーンショット
-- アップロード中
-
-![設定画面](https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/master/screenshot-1.png)
-
-- 管理画面でファイルの管理
-
-![処理中画面](https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/master/screenshot-2.png)
-
-- メールにはダウンロード用のリンク
-
-![有効化前](https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/master/screenshot-3.png)
-
+[最新バージョン](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/contact-form-7-huge-file-upload.zip)
 
 ## 要件
 - PHP 5.6 以上
 - WordPress 3.9.3 以上
 
+## スクリーンショット
+- アップロード中
+
+![設定画面](https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/images/assets/screenshot-1.png)
+
+- 管理画面でファイルの管理
+
+![処理中画面](https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/images/assets/screenshot-2.png)
+
+- メールにはダウンロード用のリンク
+
+![有効化前](https://raw.githubusercontent.com/technote-space/contact-form-7-huge-file-upload/images/assets/screenshot-3.png)
+
 ## 導入手順
-1. ZIPダウンロード  
-2. wp-content/plugins に展開  
-3. 管理画面から有効化  
+1. 最新版をGitHubからダウンロード  
+[contact-form-7-huge-file-upload.zip](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/contact-form-7-huge-file-upload.zip)
+2. 「プラグインのアップロード」からインストール
+![install](https://raw.githubusercontent.com/technote-space/screenshots/master/misc/install-wp-plugin.png)
+3. プラグインを有効化 
 4. Contact Form 7 のフォーム編集画面で対象のファイルに「fileupload」クラスを追加
 5. Contact Form 7 のメール編集画面でメッセージ本文にタグを挿入（ダウンロードURLになります）
 

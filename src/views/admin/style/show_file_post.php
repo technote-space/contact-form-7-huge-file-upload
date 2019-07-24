@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.7
  * @author Technote
- * @since 1.0.0.6
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -18,11 +16,11 @@ if ( ! defined( 'CF7_HFU' ) ) {
 ?>
 
 <style>
-    #adminmenuwrap <?php $instance->h($selector); ?> {
-        display: none;
-    }
+	#adminmenuwrap <?php $instance->h( $selector ); ?> {
+		display: none;
+	}
 
-    .locked-info {
-        display: none;
-    }
+	.locked-info {
+		display: none;
+	}
 </style>

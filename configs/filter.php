@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.5
  * @author Technote
- * @since 1.0.0.0
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -13,8 +11,7 @@ if ( ! defined( 'CF7_HFU' ) ) {
 }
 
 return [
-
-	'\Cf7_Hfu\Classes\Models\Upload' => [
+	'\Cf7_Hfu\Classes\Models\Upload'     => [
 		'template_redirect'                     => [
 			'setup_assets',
 		],
@@ -30,9 +27,11 @@ return [
 		'wp_ajax_nopriv_cf7_hfu_cancel_upload'  => [
 			'cancel_upload',
 		],
+		'${prefix}post_load_admin_page'         => [
+			'remove_setting',
+		],
 	],
-
-	'\Cf7_Hfu\Classes\Models\Contact' => [
+	'\Cf7_Hfu\Classes\Models\Contact'    => [
 		'wpcf7_validate_file'    => [
 			'wpcf7_file_validation_filter' => 9,
 		],
@@ -43,34 +42,40 @@ return [
 			'wpcf7_before_send_mail' => 9,
 		],
 	],
-
-	'\Cf7_Hfu\Classes\Models\File' => [
-		'${prefix}changed_option'             => [
+	'\Cf7_Hfu\Classes\Models\File'       => [
+		'${prefix}changed_option' => [
 			'changed_option',
 		],
-		'before_delete_post'                  => [
+		'before_delete_post'      => [
 			'delete_file',
 		],
-		'init'                                => [
+		'init'                    => [
 			'register_file_post_type' => 9,
 		],
+		'image_downsize'          => [
+			'image_downsize',
+		],
+	],
+	'\Cf7_Hfu\Classes\Models\Capability' => [
+		'${prefix}app_activated'   => [
+			'set_capability',
+		],
+		'${prefix}app_deactivated' => [
+			'unset_capability',
+		],
+		'${prefix}changed_option'  => [
+			'reset_capability',
+		],
+		'custom_menu_order'        => [
+			'filter_wp_menu_nopriv',
+		],
+	],
+	'\Cf7_Hfu\Classes\Models\Download'   => [
 		'wp_ajax_cf7hfu_file_download'        => [
 			'file_download',
 		],
 		'wp_ajax_nopriv_cf7hfu_file_download' => [
 			'file_download',
-		],
-		'image_downsize'                      => [
-			'image_downsize',
-		],
-		'admin_head-post.php'                 => [
-			'check_edit_post_file',
-		],
-		'wp_image_editors'                    => [
-			'wp_image_editors',
-		],
-		'edit_form_after_title'               => [
-			'edit_form_after_title',
 		],
 		'admin_menu'                          => [
 			'setup_download_page',
@@ -84,20 +89,14 @@ return [
 		'admin_init'                          => [
 			'redirect_to_download_page',
 		],
-	],
-
-	'\Cf7_Hfu\Classes\Models\Capability' => [
-		'${prefix}app_activated'   => [
-			'set_capability',
+		'admin_head-post.php'                 => [
+			'check_edit_post_file',
 		],
-		'${prefix}app_deactivated' => [
-			'unset_capability',
+		'wp_image_editors'                    => [
+			'wp_image_editors',
 		],
-		'${prefix}changed_option'  => [
-			'reset_capability',
-		],
-		'custom_menu_order'        => [
-			'filter_wp_menu_nopriv',
+		'edit_form_after_title'               => [
+			'edit_form_after_title',
 		],
 	],
 ];

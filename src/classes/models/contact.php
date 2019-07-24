@@ -1,8 +1,6 @@
 <?php
 /**
- * @version 1.3.7
  * @author Technote
- * @since 1.0.0.1
  * @copyright Technote All Rights Reserved
  * @license http://www.opensource.org/licenses/gpl-2.0.php GNU General Public License, version 2
  * @link https://technote.space
@@ -34,39 +32,38 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 
 	use Singleton, Hook, Nonce, Package;
 
-	/** @var File $_file */
-	private $_file = null;
+	/** @var File $file */
+	private $file = null;
 
-	/** @var Upload $_upload */
-	private $_upload = null;
+	/** @var Upload $upload */
+	private $upload = null;
 
-	/** @var array $_params */
-	private $_params = null;
+	/** @var array $params */
+	private $params = null;
 
 	/**
 	 * @return File|Singleton
 	 */
 	private function get_file() {
-		if ( ! isset( $this->_file ) ) {
-			$this->_file = File::get_instance( $this->app );
+		if ( ! isset( $this->file ) ) {
+			$this->file = File::get_instance( $this->app );
 		}
 
-		return $this->_file;
+		return $this->file;
 	}
 
 	/**
 	 * @return Upload|Singleton
 	 */
 	private function get_upload() {
-		if ( ! isset( $this->_upload ) ) {
-			$this->_upload = Upload::get_instance( $this->app );
+		if ( ! isset( $this->upload ) ) {
+			$this->upload = Upload::get_instance( $this->app );
 		}
 
-		return $this->_upload;
+		return $this->upload;
 	}
 
 	/**
-	 * @since 1.3.0 Added: #13
 	 * @return string
 	 */
 	public function get_nonce_slug() {
@@ -74,31 +71,31 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	}
 
 	/**
-	 * @since 1.3.0 Added: #13
 	 *
 	 * @param array $params
 	 *
 	 * @return array
 	 */
 	public function add_nonce_setting( $params ) {
-		$params['contact_nonce_key']   = $this->get_nonce_key();
-		$params['contact_nonce_value'] = $this->create_nonce( false );
+		$params['contactNonceKey']   = $this->get_nonce_key();
+		$params['contactNonceValue'] = $this->create_nonce( false );
 
 		return $params;
 	}
 
 	/**
-	 * @since 1.3.0 Changed: #13
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 *
 	 * @param WPCF7_Validation $result
 	 * @param WPCF7_FormTag $tag
 	 *
 	 * @return WPCF7_Validation
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function wpcf7_file_validation_filter( $result, $tag ) {
 		$name = $tag->name;
-		if ( isset( $_FILES[ $name ] ) ) {
+		$file = $this->app->input->file( $name );
+		if ( isset( $file ) ) {
 			return $result;
 		}
 
@@ -115,7 +112,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 		$process = $this->get_upload()->get_uploaded_file_process( $name );
 		$random  = $this->get_upload()->get_uploaded_file_random_key( $name );
 		$params  = $this->get_upload()->get_upload_params( $process, null, $random, $name );
-		$data    = $this->get_file()->find_file( $params['tmp_upload_dir'] );
+		$data    = $this->find_file( $params['tmp_upload_dir'] );
 		if ( false === $data ) {
 			return $result;
 		}
@@ -134,7 +131,6 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 		}
 
 		$file = $this->get_dummy_file( $params );
-
 		if ( ! $this->check_file_type_pattern( $tag, $file ) ) {
 			$result->invalidate( $tag, wpcf7_get_message( 'upload_file_type_invalid' ) );
 
@@ -146,21 +142,44 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 
 			return $result;
 		}
-		$_FILES[ $name ]        = $file;
-		$this->_params[ $name ] = $params;
+
+		$this->app->input->set_file( $name, $file );
+		$this->params[ $name ] = $params;
 
 		return $result;
 	}
 
 	/**
+	 * @param $directory_path
+	 *
+	 * @return false|array
+	 */
+	private function find_file( $directory_path ) {
+		foreach ( glob( $directory_path . '/*' ) as $path ) {
+			if ( $this->app->file->is_file( $path ) ) {
+				return [
+					'dir'  => $directory_path,
+					'file' => ltrim( str_replace( $directory_path, '', $path ), DS ),
+					'path' => $path,
+				];
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 *
 	 * @param WPCF7_ContactForm $contact_form
 	 * @param bool $abort
 	 * @param WPCF7_Submission $submission
 	 *
 	 * @return bool
 	 * @throws ReflectionException
+	 * @SuppressWarnings(PHPMD.UnusedFormalParameter)
 	 */
-	/** @noinspection PhpUnusedPrivateMethodInspection */
 	private function wpcf7_before_send_mail(
 		/** @noinspection PhpUnusedParameterInspection */
 		$contact_form, $abort, $submission
@@ -169,7 +188,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 			return $abort;
 		}
 
-		foreach ( $this->_params as $name => $param ) {
+		foreach ( $this->params as $name => $param ) {
 			try {
 				$params = $this->uploaded_process( $param );
 			} catch ( Exception $e ) {
