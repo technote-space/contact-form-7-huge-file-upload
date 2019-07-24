@@ -158,19 +158,19 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 			'cf7_hfu-fileupload',
 		] );
 		$params = [
-			'ajax_url'        => admin_url( 'admin-ajax.php' ),
-			'process_key'     => $this->get_process_key(),
-			'random_key'      => $this->get_random_key(),
-			'random_key_slug' => $this->get_uploaded_file_random_key_slug(),
-			'huge_file_class' => $this->get_huge_file_class(),
-			'max_chunk_size'  => $this->get_max_chunk_size(),
-			'nonce_key'       => $this->get_nonce_key(),
-			'nonce_value'     => $this->create_nonce( false ),
+			'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
+			'processKey'     => $this->get_process_key(),
+			'randomKey'      => $this->get_random_key(),
+			'randomKeySlug' => $this->get_uploaded_file_random_key_slug(),
+			'hugeFileClass' => $this->get_huge_file_class(),
+			'maxChunkSize'  => $this->get_max_chunk_size(),
+			'nonceKey'       => $this->get_nonce_key(),
+			'nonceValue'     => $this->create_nonce( false ),
 		];
 		/** @var Contact $contact */
 		$contact = Contact::get_instance( $this->app );
 		$params  = $contact->add_nonce_setting( $params );
-		$this->localize_script( 'cf7_hfu-upload-script', 'cf7_hfu', $params );
+		$this->localize_script( 'cf7_hfu-upload-script', 'cf7Hfu', $params );
 		wp_enqueue_style( 'cf7_hfu-upload-style', $this->app->define->plugin_assets_url . '/css/upload.css', [], $this->app->get_plugin_version() );
 
 		global $wp_scripts;

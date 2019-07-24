@@ -77,8 +77,8 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	 * @return array
 	 */
 	public function add_nonce_setting( $params ) {
-		$params['contact_nonce_key']   = $this->get_nonce_key();
-		$params['contact_nonce_value'] = $this->create_nonce( false );
+		$params['contactNonceKey']   = $this->get_nonce_key();
+		$params['contactNonceValue'] = $this->create_nonce( false );
 
 		return $params;
 	}
@@ -95,7 +95,7 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 	private function wpcf7_file_validation_filter( $result, $tag ) {
 		$name = $tag->name;
 		$file = $this->app->input->file( $name );
-		if ( empty( $file ) ) {
+		if ( isset( $file ) ) {
 			return $result;
 		}
 
