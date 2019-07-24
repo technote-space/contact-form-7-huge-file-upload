@@ -27,6 +27,9 @@ return [
 		'wp_ajax_nopriv_cf7_hfu_cancel_upload'  => [
 			'cancel_upload',
 		],
+		'${prefix}post_load_admin_page' => [
+			'remove_setting',
+		],
 	],
 	'\Cf7_Hfu\Classes\Models\Contact'    => [
 		'wpcf7_validate_file'    => [

@@ -52,6 +52,15 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	}
 
 	/**
+	 * remove setting
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 */
+	private function remove_setting() {
+		$this->app->setting->remove_setting( 'assets_version' );
+	}
+
+	/**
 	 * upload process
 	 * @noinspection PhpUnusedPrivateMethodInspection
 	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
@@ -158,14 +167,14 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 			'cf7_hfu-fileupload',
 		] );
 		$params = [
-			'ajaxUrl'        => admin_url( 'admin-ajax.php' ),
-			'processKey'     => $this->get_process_key(),
-			'randomKey'      => $this->get_random_key(),
+			'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+			'processKey'    => $this->get_process_key(),
+			'randomKey'     => $this->get_random_key(),
 			'randomKeySlug' => $this->get_uploaded_file_random_key_slug(),
 			'hugeFileClass' => $this->get_huge_file_class(),
 			'maxChunkSize'  => $this->get_max_chunk_size(),
-			'nonceKey'       => $this->get_nonce_key(),
-			'nonceValue'     => $this->create_nonce( false ),
+			'nonceKey'      => $this->get_nonce_key(),
+			'nonceValue'    => $this->create_nonce( false ),
 		];
 		/** @var Contact $contact */
 		$contact = Contact::get_instance( $this->app );
