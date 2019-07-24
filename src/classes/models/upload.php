@@ -162,7 +162,7 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 			], $this->app->get_plugin_version(), true
 		);
 
-		$this->enqueue_script( 'cf7_hfu-upload-script', 'upload.js', [
+		$this->enqueue_script( 'cf7_hfu-upload-script', 'index.min.js', [
 			'jquery',
 			'cf7_hfu-fileupload',
 		] );
