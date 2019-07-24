@@ -1,0 +1,15 @@
+{
+  "name": "contact-form-7-huge-file-upload",
+  "version": "1.3.8",
+  "description": "contact form 7 huge file upload",
+  "scripts": {
+    "test": "yarn lint",
+    "lint": "eslint ./*.js"
+  },
+  "author": "Technote <technote.space@gmail.com> (https://technote.space)",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "eslint": "^6.1.0",
+    "eslint-plugin-react": "^7.14.3"
+  }
+}
