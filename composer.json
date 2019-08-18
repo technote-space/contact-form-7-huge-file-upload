@@ -16,7 +16,7 @@
     "wp-content-framework/update": "^0.0.8",
     "wp-content-framework/update_check": "^0.0.5",
     "wp-content-framework/post": "^0.0.10",
-    "blueimp/jquery-file-upload": "^10.0",
+    "blueimp/jquery-file-upload": "^10.1",
     "php": ">=5.6"
   },
   "require-dev": {
@@ -62,7 +62,8 @@
     ],
     "bin:prepare": "TRAVIS_BUILD_DIR=$(cd $(dirname $0); pwd) bash ./travis-ci/bin/prepare.sh",
     "bin:update": [
-      "TRAVIS_BUILD_DIR=$(cd $(dirname $0); pwd) bash ./travis-ci/bin/update/composer.sh"
+      "TRAVIS_BUILD_DIR=$(cd $(dirname $0); pwd) bash ./travis-ci/bin/update/composer.sh",
+      "TRAVIS_BUILD_DIR=$(cd $(dirname $0); pwd) bash ./travis-ci/bin/update/package.sh"
     ]
   },
   "config": {

@@ -89,25 +89,32 @@ class Download implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework
 			] );
 			$this->add_script_view( 'admin/script/file_list' );
 			add_submenu_page( 'edit.php?post_type=' . $this->get_file()->get_file_post_type(), 'Download', 'Download', $this->app->user->user_role, $slug, function () {
-				$post_id = $this->app->input->get( 'post_id' );
-				if ( empty( $post_id ) || ! $this->check_can_download( $post_id ) ) {
-					$list = false;
-					$post = false;
-				} else {
-					$post = get_post( $post_id );
-					if ( empty( $post ) ) {
-						$list = false;
-						$post = false;
-					} else {
-						$list = $this->get_file_list( $post );
-					}
-				}
-				$this->get_view( 'admin/show_file_post', [
-					'list' => $list,
-					'post' => $post,
-				], true );
+				$this->submenu_page_function();
 			} );
 		}
+	}
+
+	/**
+	 * submenu page function
+	 */
+	private function submenu_page_function() {
+		$post_id = $this->app->input->get( 'post_id' );
+		if ( empty( $post_id ) || ! $this->check_can_download( $post_id ) ) {
+			$list = false;
+			$post = false;
+		} else {
+			$post = get_post( $post_id );
+			if ( empty( $post ) ) {
+				$list = false;
+				$post = false;
+			} else {
+				$list = $this->get_file_list( $post );
+			}
+		}
+		$this->get_view( 'admin/show_file_post', [
+			'list' => $list,
+			'post' => $post,
+		], true );
 	}
 
 	/**
