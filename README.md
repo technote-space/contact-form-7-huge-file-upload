@@ -11,7 +11,10 @@
 Contact Form 7 の機能を拡張するプラグインです。  
 通常アップロードできないような大容量のファイルをアップロードできるようになります。
 
-[最新バージョン](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/contact-form-7-huge-file-upload.zip)
+[最新バージョン](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/release.zip)
+
+<!-- START doctoc -->
+<!-- END doctoc -->
 
 ## 要件
 - PHP 5.6 以上
@@ -32,7 +35,7 @@ Contact Form 7 の機能を拡張するプラグインです。
 
 ## 導入手順
 1. 最新版をGitHubからダウンロード  
-[contact-form-7-huge-file-upload.zip](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/contact-form-7-huge-file-upload.zip)
+[release.zip](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/release.zip)
 2. 「プラグインのアップロード」からインストール
 ![install](https://raw.githubusercontent.com/technote-space/screenshots/master/misc/install-wp-plugin.png)
 3. プラグインを有効化 
