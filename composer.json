@@ -31,20 +31,38 @@
   },
   "scripts": {
     "setup": [
-      "composer install --no-dev"
+      "@prepare",
+      "@build"
+    ],
+    "prepare": [
+      "@prepare:php",
+      "@prepare:js"
+    ],
+    "build": [
+      "yarn --cwd assets/js build"
+    ],
+    "prepare:php": [
+      "composer install --no-interaction --prefer-dist --no-suggest"
+    ],
+    "prepare:js": [
+      "yarn --cwd assets/js install"
     ],
     "test": [
+      "@stage-lint"
+    ],
+    "stage-lint": [
       "@phpcs",
-      "@phpmd"
+      "@phpmd",
+      "@eslint"
     ],
     "phpcs": [
       "phpcs --standard=./phpcs.xml"
     ],
-    "fix": [
-      "phpcbf --standard=./phpcs.xml"
-    ],
     "phpmd": [
       "phpmd ./src/,./configs/ text phpmd.xml"
+    ],
+    "eslint": [
+      "yarn --cwd assets/js lint"
     ],
     "coveralls": [
       "php-coveralls -v"

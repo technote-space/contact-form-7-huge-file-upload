@@ -69,7 +69,6 @@ jobs:
         api_key:
           secure: Z5HwZxgjzMtGvHYVfaZ08wHlBAjBeiO8OyaNcCAWbsSBfnbq2OEis/t6XVJWVjZ/rXZjl2UkIqL05PyU3ozEkjvSp02Smi0v5gqFBaMewPbzHp9Uncq+FfNcHfVOGmMl3dBj/nVWMKqlHi7t9sGL3Txh2yMNDRm9ynItXryJIoQmhNq+/n2MR08fYxW62KA3NKJv8nzv73AQ8n2dnXFNWjfWYQ6tnhkmg9l9TXEkADLd6I4QLi0U4Bb9KV9pxGB91XH8MHJD4TO1PKo30ISl3qGN8dxEEuYR2DKbA2PXpHLDvBw5A7epNcf7ULi+K6SJrVpoGQ6cK387m//fqbSCOaY7UPVWkvTDhZucghkdVhsSFygdx6aLJeLh5Fj37RSXF+/zpYLwSEGPwpdaQFAKmy19+Po7oKsj7DmQlvJthjkyvCXQ1klFiozl2MSW3aN+X15A4o+V/sZDOamgazrkv4N3DtfC2gQFZDmsvMf2PjRORfM6OeWn+pkxV5MDAniBGHWwTukG0bAGex4iGpkAhylADJ77XBa8gtkDhofRoFmAIlJHRyQxGrj/l9kxXepRY+IXg4VIfz0j4q+wdqeHKBJ6fQ9WalLC4fjtYafwLRW+omK+eQEpMeWasrjpNIEK8pmgHb0bBllRaEGlIOB/q8Epyty3eKfK3SF6wJV2B0k=
         file: ${RELEASE_FILE}
-        body: ${RELEASE_BODY}
         overwrite: true
         on:
           tags: true
