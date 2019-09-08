@@ -11,7 +11,24 @@
 Contact Form 7 の機能を拡張するプラグインです。  
 通常アップロードできないような大容量のファイルをアップロードできるようになります。
 
-[最新バージョン](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/contact-form-7-huge-file-upload.zip)
+[最新バージョン](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/release.zip)
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**
+
+- [要件](#%E8%A6%81%E4%BB%B6)
+- [スクリーンショット](#%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88)
+- [導入手順](#%E5%B0%8E%E5%85%A5%E6%89%8B%E9%A0%86)
+- [特徴](#%E7%89%B9%E5%BE%B4)
+  - [大きいファイルを分割してアップロード](#%E5%A4%A7%E3%81%8D%E3%81%84%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E5%88%86%E5%89%B2%E3%81%97%E3%81%A6%E3%82%A2%E3%83%83%E3%83%97%E3%83%AD%E3%83%BC%E3%83%89)
+  - [アップロードされたファイルをサーバで管理](#%E3%82%A2%E3%83%83%E3%83%97%E3%83%AD%E3%83%BC%E3%83%89%E3%81%95%E3%82%8C%E3%81%9F%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%82%92%E3%82%B5%E3%83%BC%E3%83%90%E3%81%A7%E7%AE%A1%E7%90%86)
+  - [ファイルへのアクセス制限](#%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%81%B8%E3%81%AE%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B9%E5%88%B6%E9%99%90)
+- [Apache 以外の注意点](#apache-%E4%BB%A5%E5%A4%96%E3%81%AE%E6%B3%A8%E6%84%8F%E7%82%B9)
+- [Author](#author)
+- [プラグイン作成用フレームワーク](#%E3%83%97%E3%83%A9%E3%82%B0%E3%82%A4%E3%83%B3%E4%BD%9C%E6%88%90%E7%94%A8%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%83%AF%E3%83%BC%E3%82%AF)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## 要件
 - PHP 5.6 以上
@@ -32,7 +49,7 @@ Contact Form 7 の機能を拡張するプラグインです。
 
 ## 導入手順
 1. 最新版をGitHubからダウンロード  
-[contact-form-7-huge-file-upload.zip](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/contact-form-7-huge-file-upload.zip)
+[release.zip](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/latest/download/release.zip)
 2. 「プラグインのアップロード」からインストール
 ![install](https://raw.githubusercontent.com/technote-space/screenshots/master/misc/install-wp-plugin.png)
 3. プラグインを有効化 
