@@ -3,8 +3,8 @@ Contributors: technote0space
 Tags: contact, form, contact form, file upload
 Requires at least: 3.9.3
 Requires PHP: 5.6
-Tested up to: 5.2
-Stable tag: 1.3.10
+Tested up to: 5.2.3
+Stable tag: 1.4.0
 Donate link: https://paypal.me/technote0space
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -29,4 +29,11 @@ This plugin needs PHP5.6 or higher.
 
 == Upgrade Notice ==
 
+= 1.4.0 =
+* GitHub Actions の導入 [詳細](https://github.com/technote-space/contact-form-7-huge-file-upload/issues/65)
+* [すべての差分](https://github.com/technote-space/contact-form-7-huge-file-upload/pull/67)
+
 == Changelog ==
+
+= 1.4.0 (2019/9/9) =
+* [v1.4.0](https://github.com/technote-space/contact-form-7-huge-file-upload/releases/tag/v1.4.0)
