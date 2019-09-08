@@ -4,7 +4,7 @@
   "description": "contact form 7 huge file upload",
   "scripts": {
     "test": "yarn lint",
-    "lint": "eslint ./*.js",
+    "lint": "eslint src/**/**/*.js",
     "build": "webpack --mode production --config webpack.config.js"
   },
   "author": "Technote <technote.space@gmail.com> (https://technote.space)",
