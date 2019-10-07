@@ -1,6 +1,6 @@
 {
   "name": "contact-form-7-huge-file-upload",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "contact form 7 huge file upload",
   "scripts": {
     "test": "yarn lint",
