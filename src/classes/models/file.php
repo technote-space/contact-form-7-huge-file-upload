@@ -386,6 +386,7 @@ EOS;
 		if ( empty( $ext ) || empty( $type ) ) {
 			throw new Exception( 'Not allowed file type.' );
 		}
+
 		$access_key = $this->generate_file_access_key( $params );
 		$access_url = $this->get_access_url( $access_key );
 		$attach_id  = wp_insert_attachment( [
@@ -398,13 +399,16 @@ EOS;
 		if ( is_wp_error( $attach_id ) ) {
 			throw new Exception( $attach_id->get_error_message() );
 		}
+
 		$attach_data = wp_generate_attachment_metadata( $attach_id, $params['new_file'] );
-		if ( ! empty( $attach_data ) && false === wp_update_attachment_metadata( $attach_id, $attach_data ) ) {
-			throw new Exception( 'Failed to update attachment metadata.' );
+		if ( ! empty( $attach_data ) ) {
+			wp_update_attachment_metadata( $attach_id, $attach_data );
 		}
+
 		if ( false === update_attached_file( $attach_id, $params['new_file'] ) ) {
 			throw new Exception( 'Failed to update attached file.' );
 		}
+
 		$params['attach_id']  = $attach_id;
 		$params['access_url'] = $access_url;
 		$this->app->post->set( $attach_id, 'access_key', $access_key );
