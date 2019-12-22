@@ -61,19 +61,32 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	}
 
 	/**
-	 * upload process
-	 * @noinspection PhpUnusedPrivateMethodInspection
-	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 * @return array
 	 */
-	private function upload_process() {
+	private function check_validity() {
 		if ( ! $this->nonce_check( false ) ) {
 			$this->json_error( 403 );
 		}
 		$process  = $this->get_process();
 		$random   = $this->get_random();
 		$wpcf7_id = $this->get_wpcf7_id();
-		$files    = $this->app->input->file();
-		if ( empty( $process ) || empty( $random ) || empty( $files ) || empty( $wpcf7_id ) ) {
+		if ( empty( $process ) || empty( $random ) || empty( $wpcf7_id ) ) {
+			$this->json_error( 400 );
+		}
+
+		return [ $process, $wpcf7_id, $random ];
+	}
+
+	/**
+	 * upload process
+	 * @noinspection PhpUnusedPrivateMethodInspection
+	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
+	 */
+	private function upload_process() {
+		list( $process, $wpcf7_id, $random ) = $this->check_validity();
+
+		$files = $this->app->input->file();
+		if ( empty( $files ) ) {
 			$this->json_error( 400 );
 		}
 
@@ -101,16 +114,13 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
 	private function cancel_upload() {
-		if ( ! $this->nonce_check( false ) ) {
-			$this->json_error( 403 );
-		}
-		$process    = $this->get_process();
-		$random     = $this->get_random();
-		$wpcf7_id   = $this->get_wpcf7_id();
+		list( $process, $wpcf7_id, $random ) = $this->check_validity();
+
 		$param_name = $this->app->input->post( 'param_name' );
-		if ( empty( $process ) || empty( $random ) || empty( $param_name ) || empty( $wpcf7_id ) ) {
+		if ( empty( $param_name ) ) {
 			$this->json_error( 400 );
 		}
+
 		$params = $this->get_upload_params( $process, $wpcf7_id, $random, $param_name );
 		if ( empty( $params ) ) {
 			return;
@@ -358,8 +368,8 @@ class Upload implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_C
 	public function get_non_dynamic_upload_params() {
 		$wp_upload_dir = wp_upload_dir();
 		$url           = content_url() . '/uploads';
-		$year          = date( 'Y' );
-		$month         = date( 'm' );
+		$year          = gmdate( 'Y' );
+		$month         = gmdate( 'm' );
 		$path          = $this->apply_filters( 'upload_path', 'cf7_hfu' );
 		$base_dir      = "{$wp_upload_dir['basedir']}/{$path}";
 		$tmp_base_dir  = "{$base_dir}/tmp";
