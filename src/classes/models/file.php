@@ -54,14 +54,14 @@ class File implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_Cor
 	 * @noinspection PhpUnusedPrivateMethodInspection
 	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 *
-	 * @param string $key
+	 * @param string[] $keys
 	 */
-	private function changed_option( $key ) {
-		if ( in_array( $key, [
-			$this->get_filter_prefix() . 'max_chunk_size',
-			$this->get_filter_prefix() . 'max_filesize',
-			$this->get_filter_prefix() . 'output_max_size_settings',
-		], true ) ) {
+	private function changed_options( $keys ) {
+		if ( ! empty( array_intersect( $keys, [
+			'max_chunk_size',
+			'max_filesize',
+			'output_max_size_settings',
+		] ) ) ) {
 			$this->delete_hook_cache( 'max_chunk_size' );
 			$this->delete_hook_cache( 'max_filesize' );
 			$this->delete_hook_cache( 'output_max_size_settings' );
@@ -565,8 +565,9 @@ EOS;
 	 * @return int|null
 	 */
 	public function parse_filesize( $size, $default = null ) {
-		$limit_pattern = '/^([1-9][0-9]*)([kKmM][bB]?)?$/';
+		$limit_pattern = '/\A([1-9][0-9]*)([kKmM][bB]?)?\z/';
 		$result        = $default;
+		$matches       = null;
 		if ( preg_match( $limit_pattern, $size, $matches ) ) {
 			$result = (int) $matches[1];
 			if ( ! empty( $matches[2] ) ) {
@@ -586,13 +587,13 @@ EOS;
 	 * @return int
 	 */
 	public function get_default_max_filesize() {
-		return $this->apply_filters( 'default_max_filesize', 1 * 1024 * 1024 );
+		return $this->apply_filters( 'default_max_filesize', $this->parse_filesize( $this->app->array->get( $this->app->setting->get_setting( 'max_filesize' ), 'default', '1M' ) ) );
 	}
 
 	/**
 	 * @return int
 	 */
 	public function get_default_max_chunk_size() {
-		return $this->apply_filters( 'default_max_chunk_size', 100 * 1024 );
+		return $this->apply_filters( 'default_max_chunk_size', $this->parse_filesize( $this->app->array->get( $this->app->setting->get_setting( 'max_chunk_size' ), 'default', '100K' ) ) );
 	}
 }
