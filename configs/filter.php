@@ -43,16 +43,16 @@ return [
 		],
 	],
 	'\Cf7_Hfu\Classes\Models\File'       => [
-		'${prefix}changed_option' => [
-			'changed_option',
+		'${prefix}changed_options' => [
+			'changed_options',
 		],
-		'before_delete_post'      => [
+		'before_delete_post'       => [
 			'delete_file',
 		],
-		'init'                    => [
+		'init'                     => [
 			'register_file_post_type' => 9,
 		],
-		'image_downsize'          => [
+		'image_downsize'           => [
 			'image_downsize',
 		],
 	],
@@ -63,7 +63,7 @@ return [
 		'${prefix}app_deactivated' => [
 			'unset_capability',
 		],
-		'${prefix}changed_option'  => [
+		'${prefix}changed_options' => [
 			'reset_capability',
 		],
 		'custom_menu_order'        => [

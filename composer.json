@@ -11,18 +11,18 @@
     }
   ],
   "require": {
-    "wp-content-framework/core": "^0.0.59",
-    "wp-content-framework/log": "^0.0.16",
-    "wp-content-framework/update": "^0.0.8",
-    "wp-content-framework/update_check": "^0.0.5",
-    "wp-content-framework/post": "^0.0.10",
-    "blueimp/jquery-file-upload": "^10.5",
+    "wp-content-framework/core": "^1.0",
+    "wp-content-framework/log": "^1.0",
+    "wp-content-framework/update": "^1.0",
+    "wp-content-framework/update_check": "^1.0",
+    "wp-content-framework/post": "^1.0",
+    "blueimp/jquery-file-upload": "^10.7",
     "php": ">=5.6"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "*",
     "wp-coding-standards/wpcs": "*",
-    "phpmd/phpmd": "^2.6",
+    "phpmd/phpmd": "^2.8",
     "phpcompatibility/phpcompatibility-wp": "*",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
     "roave/security-advisories": "dev-master",
@@ -58,7 +58,7 @@
       "phpcs --standard=./phpcs.xml"
     ],
     "phpmd": [
-      "phpmd ./src/,./configs/ text phpmd.xml"
+      "phpmd ./src/,./configs/ ansi phpmd.xml"
     ],
     "eslint": [
       "yarn --cwd assets/js lint"
