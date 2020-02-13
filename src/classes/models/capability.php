@@ -53,7 +53,6 @@ class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framewo
 
 	/**
 	 * set capability
-	 * @noinspection PhpUnusedPrivateMethodInspection
 	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
 	private function set_capability() {
@@ -77,7 +76,6 @@ class Capability implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framewo
 
 	/**
 	 * unset capability
-	 * @noinspection PhpUnusedPrivateMethodInspection
 	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 */
 	private function unset_capability() {
