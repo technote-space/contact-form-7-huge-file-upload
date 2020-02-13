@@ -27,7 +27,7 @@ jobs:
           fi
 
       - name: Check version
-        uses: technote-space/wp-version-check-action@gh-actions
+        uses: technote-space/wp-version-check-action@v1
         with:
           GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
           BRANCH_PREFIX: release/
