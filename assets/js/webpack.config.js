@@ -1,14 +1,14 @@
-const SpeedMeasurePlugin = require( 'speed-measure-webpack-plugin' );
-const DuplicatePackageCheckerPlugin = require( 'duplicate-package-checker-webpack-plugin' );
-const smp = new SpeedMeasurePlugin();
-const webpack = require( 'webpack' );
-const pkg = require( './package' );
-const path = require( 'path' );
+const SpeedMeasurePlugin            = require('speed-measure-webpack-plugin');
+const DuplicatePackageCheckerPlugin = require('duplicate-package-checker-webpack-plugin');
+const smp                           = new SpeedMeasurePlugin();
+const webpack                       = require('webpack');
+const pkg                           = require('./package');
+const path                          = require('path');
 
-const banner = `${ pkg.name } ${ pkg.version }\nCopyright (c) ${ new Date().getFullYear() } ${ pkg.author }\nLicense: ${ pkg.license }`;
+const banner = `${pkg.name} ${pkg.version}\nCopyright (c) ${new Date().getFullYear()} ${pkg.author.name}\nLicense: ${pkg.license}`;
 
 const webpackConfig = {
-	context: path.resolve( __dirname, 'src' ),
+	context: path.resolve(__dirname, 'src'),
 	entry: './index.js',
 	output: {
 		path: __dirname,
@@ -27,9 +27,9 @@ const webpackConfig = {
 		jquery: 'jQuery',
 	},
 	plugins: [
-		new webpack.BannerPlugin( banner ),
+		new webpack.BannerPlugin(banner),
 		new DuplicatePackageCheckerPlugin(),
 	],
 };
 
-module.exports = smp.wrap( webpackConfig );
+module.exports = smp.wrap(webpackConfig);

@@ -7,7 +7,11 @@
     "lint": "eslint 'src/**/*.js'",
     "build": "webpack --mode production --config webpack.config.js"
   },
-  "author": "Technote <technote.space@gmail.com> (https://technote.space)",
+  "author": {
+    "name": "Technote",
+    "email": "technote.space@gmail.com",
+    "url": "https://technote.space"
+  },
   "license": "GPL-3.0",
   "devDependencies": {
     "@babel/core": "^7.9.0",
