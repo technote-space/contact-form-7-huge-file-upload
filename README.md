@@ -1,7 +1,6 @@
 # Contact Form 7 huge file upload
 
 [![CI Status](https://github.com/technote-space/contact-form-7-huge-file-upload/workflows/CI/badge.svg)](https://github.com/technote-space/contact-form-7-huge-file-upload/actions)
-[![Build Status](https://travis-ci.com/technote-space/contact-form-7-huge-file-upload.svg?branch=master)](https://travis-ci.com/technote-space/contact-form-7-huge-file-upload)
 [![CodeFactor](https://www.codefactor.io/repository/github/technote-space/contact-form-7-huge-file-upload/badge)](https://www.codefactor.io/repository/github/technote-space/contact-form-7-huge-file-upload)
 [![License: GPL v2+](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](http://www.gnu.org/licenses/gpl-2.0.html)
 [![PHP: >=5.6](https://img.shields.io/badge/PHP-%3E%3D5.6-orange.svg)](http://php.net/)
