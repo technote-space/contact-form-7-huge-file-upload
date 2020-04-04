@@ -89,10 +89,10 @@ $(() => {
 			maxChunkSize: cf7Hfu.maxChunkSize - 0, // eslint-disable-line no-magic-numbers
 			formData: cf7Hfu.getFormData(index),
 		}).on('fileuploadstart', function(event) {
-			const $target          = $(event.currentTarget),
-			      $wrap            = $target.closest('.wpcf7-form-control-wrap'),
-			      progressbarIndex = $wrap.attr('data-progressbar_index'),
-			      $progress        = progressbars[ progressbarIndex ];
+			const $target          = $(event.currentTarget);
+			const $wrap            = $target.closest('.wpcf7-form-control-wrap');
+			const progressbarIndex = $wrap.attr('data-progressbar_index');
+			const $progress        = progressbars[ progressbarIndex ];
 			// ファイル選択を消してアップロードを表示
 			$target.prop('disabled', true).hide();
 			$wrap.find('.file-uploading').show();
@@ -103,9 +103,9 @@ $(() => {
 			canceled[ progressbarIndex ] = false;
 			$('.wpcf7-submit').addClass('disabled').prop('disabled', true);
 		}).on('fileuploadadd', function(event, data) {
-			const $target          = $(event.currentTarget),
-			      $wrap            = $target.closest('.wpcf7-form-control-wrap'),
-			      progressbarIndex = $wrap.attr('data-progressbar_index');
+			const $target          = $(event.currentTarget);
+			const $wrap            = $target.closest('.wpcf7-form-control-wrap');
+			const progressbarIndex = $wrap.attr('data-progressbar_index');
 			// アップロードにファイル名を表示
 			// キャンセル用のxhrを保存
 			abortFunctions[ progressbarIndex ] = data.submit();
@@ -153,8 +153,8 @@ $(() => {
 			$wrap.find('.file-data').html(html);
 			$wrap.addClass('uploaded').removeClass('uploading');
 		}).on('fileuploadfail', function(event) {
-			const $target = $(event.currentTarget),
-			      $wrap   = $target.closest('.wpcf7-form-control-wrap');
+			const $target = $(event.currentTarget);
+			const $wrap   = $target.closest('.wpcf7-form-control-wrap');
 			// 失敗（中断）の場合、アップロード中フラグを下げる
 			$wrap.removeClass('uploading');
 			// PHP側の処理を考慮して少し遅らせて中断したファイル削除
