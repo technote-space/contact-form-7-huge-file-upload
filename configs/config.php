@@ -12,6 +12,9 @@ if ( ! defined( 'CF7_HFU' ) ) {
 
 return [
 
+	// required wordpress version
+	'required_wordpress_version'     => '5.0',
+
 	// main menu title
 	'main_menu_title'                => 'Contact Form 7 huge file upload',
 
