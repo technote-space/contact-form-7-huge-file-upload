@@ -48,6 +48,7 @@ class Download implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework
 	 * @noinspection PhpUnusedPrivateMethodInspection
 	 * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
 	 * @SuppressWarnings(PHPMD.ExitExpression)
+	 * @SuppressWarnings(PHPMD.ErrorControlOperator)
 	 */
 	private function file_download() {
 		list( $file, $name ) = $this->get_download_file_info();
