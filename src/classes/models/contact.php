@@ -191,8 +191,8 @@ class Contact implements \WP_Framework_Core\Interfaces\Singleton, \WP_Framework_
 		foreach ( $this->params as $name => $param ) {
 			try {
 				$params = $this->uploaded_process( $param );
-			} catch ( Exception $e ) {
-				$this->app->log( $e );
+			} catch ( Exception $error ) {
+				$this->app->log( $error );
 				$this->set_contact_form_post_data( $submission, $name, null );
 				continue;
 			}
